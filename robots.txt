@@ -1,0 +1,11 @@
+# robots.txt for WaterApps
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://www.waterapps.com.au/sitemap.xml
+
+# Disallow any admin or private sections (add as needed)
+# Disallow: /admin/
+# Disallow: /private/
