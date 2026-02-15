@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WaterApps | Enterprise DevOps & Cloud Consulting for Regulated Industries | Sydney</title>
-    <meta name="description" content="Enterprise DevOps transformation, platform engineering, and compliance automation for banking, government, and regulated industries. 20+ years delivering for RBA, Commonwealth Bank, Westpac.">
-    <meta name="keywords" content="DevOps consulting Sydney, enterprise DevOps Australia, compliance automation, platform engineering, Kubernetes consulting, AWS Azure GCP, APRA compliance, government DevOps, banking DevOps">
+    <title>WaterApps | Enterprise DevSecOps, AIOps & Cloud Consulting for Regulated Industries | Sydney</title>
+    <meta name="description" content="Enterprise DevSecOps transformation, AIOps, platform engineering, and compliance automation for banking, government, and regulated industries. 20+ years delivering for RBA, Commonwealth Bank, Westpac.">
+    <meta name="keywords" content="DevSecOps consulting Sydney, AIOps Australia, enterprise DevOps Australia, compliance automation, platform engineering, Kubernetes consulting, AWS Azure GCP, APRA compliance, government DevOps, banking DevSecOps, AI operations">
+    <link rel="icon" type="image/png" href="logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -83,13 +84,34 @@
             background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
             margin: 4rem 0;
         }
+        
+        /* Wave logo animation */
+        @keyframes wave-flow {
+            0%, 100% { 
+                stroke-dashoffset: 0;
+                opacity: 1;
+            }
+            50% { 
+                stroke-dashoffset: -10;
+                opacity: 0.8;
+            }
+        }
+        
+        .wave-animated {
+            stroke-dasharray: 40;
+            animation: wave-flow 3s ease-in-out infinite;
+        }
+        
+        .wave-1 { animation-delay: 0s; }
+        .wave-2 { animation-delay: 0.3s; }
+        .wave-3 { animation-delay: 0.6s; }
     </style>
 </head>
 <body class="bg-gray-50">
     <!-- Trust Bar -->
     <div class="bg-blue-600 text-white py-2 px-4 text-center text-sm">
         <i class="fas fa-shield-alt mr-2"></i>
-        <strong>Experience delivering for Australia's most regulated institutions:</strong> Reserve Bank of Australia • Commonwealth Bank • Westpac • Telstra
+        <strong>DevSecOps & AIOps expertise across Australia's most regulated institutions:</strong> Reserve Bank of Australia • Commonwealth Bank • Westpac • Telstra
     </div>
 
     <!-- Navigation -->
@@ -97,9 +119,60 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center">
-                    <div class="text-2xl font-bold text-blue-600">
-                        <i class="fas fa-water mr-2"></i>WaterApps
-                    </div>
+                    <a href="#" class="flex items-center group">
+                        <svg width="50" height="50" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" class="mr-3">
+                            <defs>
+                                <!-- Gradient for waves -->
+                                <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#1e40af;stop-opacity:1" />
+                                    <stop offset="50%" style="stop-color:#2563eb;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+                                </linearGradient>
+                                <!-- Glow effect -->
+                                <filter id="glow">
+                                    <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                            
+                            <!-- Circular background -->
+                            <circle cx="25" cy="25" r="23" fill="#eff6ff" stroke="url(#waveGradient)" stroke-width="1.5"/>
+                            
+                            <!-- Three flowing wave lines -->
+                            <g transform="translate(10, 15)" filter="url(#glow)">
+                                <!-- Top wave -->
+                                <path class="wave-animated wave-1"
+                                      d="M 0 6 Q 3.5 3, 7 6 T 14 6 T 21 6 T 28 6 T 35 6" 
+                                      stroke="url(#waveGradient)" 
+                                      stroke-width="2.5" 
+                                      fill="none" 
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"/>
+                                
+                                <!-- Middle wave -->
+                                <path class="wave-animated wave-2"
+                                      d="M 0 13 Q 3.5 10, 7 13 T 14 13 T 21 13 T 28 13 T 35 13" 
+                                      stroke="url(#waveGradient)" 
+                                      stroke-width="2.5" 
+                                      fill="none" 
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"/>
+                                
+                                <!-- Bottom wave -->
+                                <path class="wave-animated wave-3"
+                                      d="M 0 20 Q 3.5 17, 7 20 T 14 20 T 21 20 T 28 20 T 35 20" 
+                                      stroke="url(#waveGradient)" 
+                                      stroke-width="2.5" 
+                                      fill="none" 
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"/>
+                            </g>
+                        </svg>
+                        <span class="text-2xl font-bold bg-gradient-to-r from-blue-700 via-blue-600 to-blue-500 bg-clip-text text-transparent">WaterApps</span>
+                    </a>
                 </div>
                 <div class="hidden md:flex space-x-8">
                     <a href="#services" class="nav-link text-gray-700 hover:text-blue-600">Services</a>
@@ -121,13 +194,13 @@
             <div class="grid md:grid-cols-2 gap-12 items-center">
                 <div>
                     <div class="inline-block bg-blue-500 text-white px-4 py-2 rounded-full text-sm mb-6">
-                        <i class="fas fa-award mr-2"></i>20+ Years Enterprise DevOps Experience
+                        <i class="fas fa-award mr-2"></i>20+ Years DevSecOps & AIOps Experience
                     </div>
                     <h1 class="text-5xl font-bold mb-6 leading-tight">
-                        Enterprise DevOps for <span class="text-blue-400">Regulated Industries</span>
+                        Enterprise DevSecOps & AIOps for <span class="text-blue-400">Regulated Industries</span>
                     </h1>
                     <p class="text-xl text-gray-300 mb-8 leading-relaxed">
-                        AI-enabled DevOps transformation, platform engineering, and compliance automation for organizations where reliability and audit readiness are mission-critical.
+                        AI-enabled DevSecOps transformation, AIOps intelligence, platform engineering, and compliance automation for organizations where security, reliability, and audit readiness are mission-critical.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4">
                         <a href="#contact" class="bg-blue-500 hover:bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold text-center transition">
@@ -141,7 +214,7 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div class="metric-card p-6 rounded-lg">
                         <div class="text-4xl font-bold text-blue-600 mb-2">20+</div>
-                        <div class="text-gray-700 font-medium">Years Enterprise DevOps</div>
+                        <div class="text-gray-700 font-medium">Years DevSecOps & AIOps</div>
                     </div>
                     <div class="metric-card p-6 rounded-lg">
                         <div class="text-4xl font-bold text-blue-600 mb-2">5+</div>
@@ -197,9 +270,9 @@
     <section id="services" class="py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-gray-900 mb-4">Enterprise-Grade DevOps Built for Compliance</h2>
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Enterprise DevSecOps & AIOps Built for Compliance</h2>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    We help financial services, government, and telecommunications teams modernize delivery without weakening security posture
+                    We help financial services, government, and telecommunications teams modernize delivery with security-first automation and AI-powered operations—without weakening security posture
                 </p>
             </div>
 
@@ -211,7 +284,7 @@
                             <i class="fas fa-cogs text-3xl text-blue-600"></i>
                         </div>
                         <div>
-                            <h3 class="text-2xl font-bold text-gray-900 mb-2">DevOps & Cloud Transformation</h3>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-2">DevSecOps & Cloud Transformation</h3>
                             <div class="flex flex-wrap gap-2 mb-4">
                                 <span class="bg-gray-100 px-3 py-1 rounded-full text-sm">AWS</span>
                                 <span class="bg-gray-100 px-3 py-1 rounded-full text-sm">Azure</span>
@@ -222,7 +295,7 @@
                         </div>
                     </div>
                     <p class="text-gray-600 mb-4">
-                        End-to-end delivery modernization: CI/CD design, branching strategies, artifact management, environment promotion, and multi-cloud landing zones. Built for real constraints—approvals, controls, and legacy dependencies.
+                        End-to-end delivery modernization with security built-in from day one: CI/CD design with automated security gates, branching strategies, artifact management, environment promotion, and multi-cloud landing zones. Built for real constraints—approvals, controls, and legacy dependencies.
                     </p>
                     <ul class="space-y-2 text-gray-700">
                         <li><i class="fas fa-check text-blue-600 mr-2"></i>Multi-cloud architecture & migration</li>
@@ -293,22 +366,23 @@
                             <i class="fas fa-robot text-3xl text-blue-600"></i>
                         </div>
                         <div>
-                            <h3 class="text-2xl font-bold text-gray-900 mb-2">AI & Intelligent Automation</h3>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-2">AIOps & Intelligent Automation</h3>
                             <div class="flex flex-wrap gap-2 mb-4">
-                                <span class="bg-gray-100 px-3 py-1 rounded-full text-sm">AI/ML Ops</span>
+                                <span class="bg-gray-100 px-3 py-1 rounded-full text-sm">AIOps</span>
+                                <span class="bg-gray-100 px-3 py-1 rounded-full text-sm">ML Ops</span>
                                 <span class="bg-gray-100 px-3 py-1 rounded-full text-sm">LLM Integration</span>
-                                <span class="bg-gray-100 px-3 py-1 rounded-full text-sm">RAG</span>
+                                <span class="bg-gray-100 px-3 py-1 rounded-full text-sm">Intelligent Monitoring</span>
                             </div>
                         </div>
                     </div>
                     <p class="text-gray-600 mb-4">
-                        AI-assisted pipeline optimization, intelligent incident triage, and LLM-powered documentation. Practical AI integration that augments your engineering teams—not science fiction.
+                        AI-powered operations and intelligent automation: ML-driven incident prediction, automated root cause analysis, intelligent alerting with noise reduction, and LLM-powered documentation generation. Practical AIOps that augments your engineering teams with actionable intelligence.
                     </p>
                     <ul class="space-y-2 text-gray-700">
-                        <li><i class="fas fa-check text-blue-600 mr-2"></i>AI-powered incident analysis & triage</li>
-                        <li><i class="fas fa-check text-blue-600 mr-2"></i>Automated documentation generation</li>
-                        <li><i class="fas fa-check text-blue-600 mr-2"></i>Pipeline optimization using ML</li>
+                        <li><i class="fas fa-check text-blue-600 mr-2"></i>AI-powered incident prediction & prevention</li>
+                        <li><i class="fas fa-check text-blue-600 mr-2"></i>Automated root cause analysis (RCA)</li>
                         <li><i class="fas fa-check text-blue-600 mr-2"></i>Intelligent alerting & noise reduction</li>
+                        <li><i class="fas fa-check text-blue-600 mr-2"></i>ML-driven capacity planning & optimization</li>
                     </ul>
                 </div>
             </div>
@@ -778,16 +852,59 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-4 gap-8 mb-8">
                 <div>
-                    <h4 class="text-xl font-bold mb-4"><i class="fas fa-water mr-2"></i>WaterApps</h4>
-                    <p class="text-gray-400 text-sm">Enterprise DevOps & Cloud Consulting for Regulated Industries</p>
+                    <div class="flex items-center mb-4">
+                        <svg width="45" height="45" viewBox="0 0 45 45" xmlns="http://www.w3.org/2000/svg" class="mr-3">
+                            <defs>
+                                <!-- Gradient for footer waves -->
+                                <linearGradient id="footerWaveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.9" />
+                                    <stop offset="50%" style="stop-color:#60a5fa;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#93c5fd;stop-opacity:0.9" />
+                                </linearGradient>
+                            </defs>
+                            
+                            <!-- Circular background with subtle glow -->
+                            <circle cx="22.5" cy="22.5" r="20" fill="#1e3a8a" opacity="0.2"/>
+                            <circle cx="22.5" cy="22.5" r="20" fill="none" stroke="url(#footerWaveGradient)" stroke-width="1.5" opacity="0.6"/>
+                            
+                            <!-- Three flowing wave lines -->
+                            <g transform="translate(8, 13)">
+                                <!-- Top wave -->
+                                <path d="M 0 5 Q 3 2.5, 6 5 T 12 5 T 18 5 T 24 5 T 30 5" 
+                                      stroke="url(#footerWaveGradient)" 
+                                      stroke-width="2.2" 
+                                      fill="none" 
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"/>
+                                
+                                <!-- Middle wave -->
+                                <path d="M 0 11 Q 3 8.5, 6 11 T 12 11 T 18 11 T 24 11 T 30 11" 
+                                      stroke="url(#footerWaveGradient)" 
+                                      stroke-width="2.2" 
+                                      fill="none" 
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"/>
+                                
+                                <!-- Bottom wave -->
+                                <path d="M 0 17 Q 3 14.5, 6 17 T 12 17 T 18 17 T 24 17 T 30 17" 
+                                      stroke="url(#footerWaveGradient)" 
+                                      stroke-width="2.2" 
+                                      fill="none" 
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"/>
+                            </g>
+                        </svg>
+                        <span class="text-xl font-bold text-transparent bg-gradient-to-r from-blue-400 via-blue-300 to-blue-200 bg-clip-text">WaterApps</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">Enterprise DevSecOps, AIOps & Cloud Consulting for Regulated Industries</p>
                 </div>
                 <div>
                     <h5 class="font-bold mb-4">Services</h5>
                     <ul class="space-y-2 text-gray-400 text-sm">
-                        <li><a href="#services" class="hover:text-white">DevOps Transformation</a></li>
+                        <li><a href="#services" class="hover:text-white">DevSecOps Transformation</a></li>
                         <li><a href="#services" class="hover:text-white">Platform Engineering</a></li>
                         <li><a href="#services" class="hover:text-white">Security & Compliance</a></li>
-                        <li><a href="#services" class="hover:text-white">AI Automation</a></li>
+                        <li><a href="#services" class="hover:text-white">AIOps & Automation</a></li>
                     </ul>
                 </div>
                 <div>
