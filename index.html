@@ -1177,6 +1177,102 @@
     </footer>
 
     <script>
+        function trackEvent(eventName, params) {
+            if (typeof window.gtag === 'function') {
+                window.gtag('event', eventName, params || {});
+            }
+        }
+
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (!href || href === '#') {
+                    return;
+                }
+
+                const target = document.querySelector(href);
+                if (!target) {
+                    return;
+                }
+
+                e.preventDefault();
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            });
+        });
+
+        // Track CTA/contact clicks (GA4)
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function () {
+                const href = this.getAttribute('href') || '';
+                const text = (this.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 80);
+                const section = this.closest('section')?.id || (this.closest('footer') ? 'footer' : 'global');
+
+                if (text.includes('Book Discovery Call')) {
+                    trackEvent('cta_click', {
+                        cta_type: 'book_discovery_call',
+                        cta_section: section,
+                        link_text: text
+                    });
+                }
+
+                if (href.startsWith('mailto:')) {
+                    trackEvent('contact_click', {
+                        contact_type: 'email',
+                        contact_section: section,
+                        link_text: text
+                    });
+                }
+
+                if (href.startsWith('tel:')) {
+                    trackEvent('contact_click', {
+                        contact_type: 'phone',
+                        contact_section: section,
+                        link_text: text
+                    });
+                }
+
+                if (href.includes('linkedin.com')) {
+                    trackEvent('contact_click', {
+                        contact_type: 'linkedin',
+                        contact_section: section,
+                        link_text: text
+                    });
+                }
+
+                if (href.includes('enterprise-readiness.html')) {
+                    trackEvent('cta_click', {
+                        cta_type: 'enterprise_readiness',
+                        cta_section: section,
+                        link_text: text
+                    });
+                }
+
+                if (text.includes('Request Documentation')) {
+                    trackEvent('cta_click', {
+                        cta_type: 'request_documentation',
+                        cta_section: section,
+                        link_text: text
+                    });
+                }
+            });
+        });
+
+        // Track case study technical detail expansions
+        document.querySelectorAll('#case-studies details').forEach((detailsEl, index) => {
+            detailsEl.addEventListener('toggle', function () {
+                if (!this.open) return;
+                const title = this.closest('.case-study-card')?.querySelector('h3')?.textContent?.trim() || `case_study_${index + 1}`;
+                trackEvent('case_study_expand', {
+                    case_study: title,
+                    section: 'case-studies',
+                    detail_type: 'technical_depth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
