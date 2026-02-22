@@ -177,6 +177,7 @@
                 <div class="hidden md:flex space-x-8">
                     <a href="#services" class="nav-link text-gray-700 hover:text-blue-600">Services</a>
                     <a href="#case-studies" class="nav-link text-gray-700 hover:text-blue-600">Case Studies</a>
+                    <a href="insights.html" class="nav-link text-gray-700 hover:text-blue-600">Insights</a>
                     <a href="#credentials" class="nav-link text-gray-700 hover:text-blue-600">Credentials</a>
                     <a href="enterprise-readiness.html" class="nav-link text-gray-700 hover:text-blue-600">Enterprise Readiness</a>
                     <a href="#approach" class="nav-link text-gray-700 hover:text-blue-600">Our Approach</a>
@@ -1193,6 +1194,7 @@
                     <h5 class="font-bold mb-4">Company</h5>
                     <ul class="space-y-2 text-gray-400 text-sm">
                         <li><a href="#case-studies" class="hover:text-white">Case Studies</a></li>
+                        <li><a href="insights.html" class="hover:text-white">Insights</a></li>
                         <li><a href="#credentials" class="hover:text-white">Credentials</a></li>
                         <li><a href="capability-statement.html" class="hover:text-white">Capability Statement</a></li>
                         <li><a href="enterprise-readiness.html" class="hover:text-white">Enterprise Readiness</a></li>
@@ -1317,6 +1319,14 @@
                 if (text.includes('Request Documentation')) {
                     trackEvent('cta_click', {
                         cta_type: 'request_documentation',
+                        cta_section: section,
+                        link_text: text
+                    });
+                }
+
+                if (href.includes('insights.html')) {
+                    trackEvent('cta_click', {
+                        cta_type: 'insights',
                         cta_section: section,
                         link_text: text
                     });
