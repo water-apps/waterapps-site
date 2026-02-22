@@ -509,42 +509,44 @@
                                 <i class="fas fa-building-columns mr-2"></i>Tier-1 Banking
                             </div>
                             <h3 class="text-2xl font-bold text-gray-900 mb-2">Westpac AKS Platform Modernization</h3>
-                            <p class="text-gray-600">Enterprise Kubernetes platform uplift and release orchestration</p>
+                            <p class="text-gray-600">Enterprise AKS platform architecture for data science workloads in banking</p>
                         </div>
                     </div>
 
                     <div class="grid lg:grid-cols-2 gap-8 mb-6">
                         <div>
                             <h4 class="font-semibold text-gray-900 mb-2">Challenge</h4>
-                            <p class="text-gray-700 mb-4">Modernize a bank-scale AKS delivery platform used by multiple teams while improving release speed, platform consistency, and operational reliability.</p>
+                            <p class="text-gray-700 mb-4">Architect and operate an enterprise-scale AKS platform supporting 500+ data scientists processing terabytes of banking data daily, while improving release speed and platform reliability.</p>
                             <h4 class="font-semibold text-gray-900 mb-2">Constraints</h4>
-                            <p class="text-gray-700 mb-4">Strict change control, audit traceability, cross-team coordination, and regulated release approvals.</p>
+                            <p class="text-gray-700 mb-4">Strict banking controls, audit traceability, multi-environment consistency (dev/UAT/prod), and enterprise availability expectations.</p>
                             <h4 class="font-semibold text-gray-900 mb-2">Tools</h4>
                             <div class="flex flex-wrap gap-2">
                                 <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">AKS</span>
                                 <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">Kubernetes</span>
                                 <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">GitOps</span>
-                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">CI/CD Automation</span>
+                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">Jenkins + Azure DevOps</span>
                                 <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">Release Guardrails</span>
+                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">Terraform (45 modules)</span>
+                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">Helm 3.13.x</span>
                             </div>
                         </div>
                         <div class="bg-white p-6 rounded-lg">
                             <h4 class="font-semibold text-gray-900 mb-3">Results & Business Impact</h4>
                             <div class="grid grid-cols-3 gap-4 mb-4">
                                 <div class="border-l-4 border-blue-600 pl-3">
-                                    <div class="text-2xl font-bold text-blue-600">3×</div>
-                                    <div class="text-xs text-gray-600">release frequency</div>
+                                    <div class="text-2xl font-bold text-blue-600">500+</div>
+                                    <div class="text-xs text-gray-600">data scientists supported</div>
                                 </div>
                                 <div class="border-l-4 border-green-600 pl-3">
-                                    <div class="text-2xl font-bold text-green-600">45%</div>
-                                    <div class="text-xs text-gray-600">manual effort reduction</div>
+                                    <div class="text-2xl font-bold text-green-600">90%</div>
+                                    <div class="text-xs text-gray-600">deployment time reduction</div>
                                 </div>
                                 <div class="border-l-4 border-purple-600 pl-3">
-                                    <div class="text-2xl font-bold text-purple-600">12</div>
-                                    <div class="text-xs text-gray-600">teams onboarded</div>
+                                    <div class="text-2xl font-bold text-purple-600">99.9%</div>
+                                    <div class="text-xs text-gray-600">platform availability</div>
                                 </div>
                             </div>
-                            <p class="text-gray-700 text-sm">Improved engineering throughput and platform consistency while preserving controls expected in banking change governance.</p>
+                            <p class="text-gray-700 text-sm">Reduced deployment time from 4.5 hours to 45 minutes while delivering a zero-downtime AKS platform with observability and enterprise security controls.</p>
                         </div>
                     </div>
 
@@ -553,15 +555,15 @@
                         <div class="mt-4 grid md:grid-cols-2 gap-6 text-sm text-gray-700">
                             <div>
                                 <h5 class="font-semibold text-gray-900 mb-2">Architecture</h5>
-                                <p class="mb-3">AKS-based platform with standardized namespaces, release guardrails, shared CI/CD templates, and environment promotion paths for multiple application teams.</p>
+                                <p class="mb-3">Enterprise AKS platform across dev/UAT/prod with Terraform IaC (15,000+ lines across 45 modules), Helm templates, and standardized deployment patterns for repeatable releases.</p>
                                 <h5 class="font-semibold text-gray-900 mb-2">Security Controls</h5>
-                                <p>RBAC patterns, gated releases, pipeline approvals, artifact traceability, and policy-driven platform defaults to reduce configuration drift.</p>
+                                <p>Azure Private Link, network policies, pod security controls, audit logging, RBAC patterns, and gated pipeline releases for enterprise banking workloads.</p>
                             </div>
                             <div>
                                 <h5 class="font-semibold text-gray-900 mb-2">Compliance Alignment</h5>
-                                <p class="mb-3">Banking change-control evidence, release traceability, and auditable handoffs embedded in delivery workflow design.</p>
+                                <p class="mb-3">Banking change-control evidence and release traceability embedded in CI/CD workflows, observability, and environment promotion design.</p>
                                 <h5 class="font-semibold text-gray-900 mb-2">Deployment Model & Toolchain</h5>
-                                <p>GitOps-style promotion workflows, Kubernetes platform automation, CI/CD pipeline templates, release orchestration, and operational runbooks.</p>
+                                <p>Jenkins integrated with Azure DevOps, Terraform, AKS, Helm 3.13.x, Prometheus, Grafana, Application Insights, and PagerDuty with 35+ custom dashboards.</p>
                             </div>
                         </div>
                     </details>
@@ -575,42 +577,42 @@
                                 <i class="fas fa-university mr-2"></i>Central Banking
                             </div>
                             <h3 class="text-2xl font-bold text-gray-900 mb-2">Reserve Bank Automation & Audit-Ready Delivery</h3>
-                            <p class="text-gray-600">Critical infrastructure modernization with compliance automation and traceability</p>
+                            <p class="text-gray-600">Senior DevOps consulting for secure platform engineering in a highly regulated environment</p>
                         </div>
                     </div>
 
                     <div class="grid lg:grid-cols-2 gap-8 mb-6">
                         <div>
                             <h4 class="font-semibold text-gray-900 mb-2">Challenge</h4>
-                            <p class="text-gray-700 mb-4">Accelerate delivery on critical systems while preserving full evidence trails, approvals, and operational resilience in a high-assurance environment.</p>
+                            <p class="text-gray-700 mb-4">Strengthen platform engineering and data centre automation while improving consistency, governance alignment, and audit readiness in a central banking environment.</p>
                             <h4 class="font-semibold text-gray-900 mb-2">Constraints</h4>
-                            <p class="text-gray-700 mb-4">High regulatory scrutiny, strict segregation controls, and limited tolerance for release risk.</p>
+                            <p class="text-gray-700 mb-4">High regulatory scrutiny, infrastructure governance standards, and low tolerance for platform defects or drift.</p>
                             <h4 class="font-semibold text-gray-900 mb-2">Tools</h4>
                             <div class="flex flex-wrap gap-2">
-                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">Secure CI/CD</span>
-                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">Automation Controls</span>
-                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">Evidence Capture</span>
-                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">Environment Orchestration</span>
-                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">Compliance Checks</span>
+                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">Puppet IaC</span>
+                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">Puppet CD4PE</span>
+                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">GitLab</span>
+                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">VMware Private Cloud</span>
+                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">Shell Scripting</span>
                             </div>
                         </div>
                         <div class="bg-white p-6 rounded-lg">
                             <h4 class="font-semibold text-gray-900 mb-3">Results & Business Impact</h4>
                             <div class="grid grid-cols-3 gap-4 mb-4">
                                 <div class="border-l-4 border-blue-600 pl-3">
-                                    <div class="text-2xl font-bold text-blue-600">70%</div>
-                                    <div class="text-xs text-gray-600">faster deployments</div>
+                                    <div class="text-2xl font-bold text-blue-600">CIS</div>
+                                    <div class="text-xs text-gray-600">hardening enforced via Puppet</div>
                                 </div>
                                 <div class="border-l-4 border-green-600 pl-3">
-                                    <div class="text-2xl font-bold text-green-600">Zero</div>
-                                    <div class="text-xs text-gray-600">major audit issues</div>
+                                    <div class="text-2xl font-bold text-green-600">Faster</div>
+                                    <div class="text-xs text-gray-600">deployment cycles</div>
                                 </div>
                                 <div class="border-l-4 border-purple-600 pl-3">
-                                    <div class="text-2xl font-bold text-purple-600">100%</div>
-                                    <div class="text-xs text-gray-600">audit trail coverage</div>
+                                    <div class="text-2xl font-bold text-purple-600">Higher</div>
+                                    <div class="text-xs text-gray-600">platform governance & control</div>
                                 </div>
                             </div>
-                            <p class="text-gray-700 text-sm">Reduced release friction and improved audit readiness by embedding controls into delivery workflows rather than relying on post-hoc checks.</p>
+                            <p class="text-gray-700 text-sm">Improved infrastructure consistency and audit readiness through modular Puppet design, version-controlled deployments, and governance-aligned platform automation.</p>
                         </div>
                     </div>
 
@@ -619,15 +621,15 @@
                         <div class="mt-4 grid md:grid-cols-2 gap-6 text-sm text-gray-700">
                             <div>
                                 <h5 class="font-semibold text-gray-900 mb-2">Architecture</h5>
-                                <p class="mb-3">Environment orchestration across dev/stage/prod with controlled promotions, audit evidence capture, and secure pipeline execution for critical systems.</p>
+                                <p class="mb-3">Platform engineering and data centre infrastructure automation using Puppet modules and multi-environment deployments with version isolation and controlled lifecycle management.</p>
                                 <h5 class="font-semibold text-gray-900 mb-2">Security Controls</h5>
-                                <p>Segregation-aware approvals, secure CI/CD gates, change traceability, and embedded controls to support high-assurance release operations.</p>
+                                <p>Puppet IaC enforcement, modular control repositories, QA/testing for Puppet modules, and CIS hardening benchmarks across Linux infrastructure.</p>
                             </div>
                             <div>
                                 <h5 class="font-semibold text-gray-900 mb-2">Compliance Alignment</h5>
-                                <p class="mb-3">Designed for audit readiness with evidence capture and control enforcement integrated into routine engineering delivery.</p>
+                                <p class="mb-3">Security and compliance partnership to embed audit readiness and governance standards into infrastructure delivery workflows.</p>
                                 <h5 class="font-semibold text-gray-900 mb-2">Deployment Model & Toolchain</h5>
-                                <p>Automated compliance checks, secure pipeline workflows, environment promotion controls, and release orchestration with documented change trails.</p>
+                                <p>Puppet IaC, Puppet CD4PE, GitLab, VMware Private Cloud, Shell scripts, YAML/JSON, and module testing across controlled environments.</p>
                             </div>
                         </div>
                     </details>
@@ -641,42 +643,42 @@
                                 <i class="fas fa-broadcast-tower mr-2"></i>Telecommunications
                             </div>
                             <h3 class="text-2xl font-bold text-gray-900 mb-2">Telstra Cloud Migration & DevSecOps Uplift</h3>
-                            <p class="text-gray-600">Multi-team CI/CD modernization with integrated security controls</p>
+                            <p class="text-gray-600">Fulfilment API Services cloud migration to AWS with zero-downtime deployment patterns</p>
                         </div>
                     </div>
 
                     <div class="grid lg:grid-cols-2 gap-8 mb-6">
                         <div>
                             <h4 class="font-semibold text-gray-900 mb-2">Challenge</h4>
-                            <p class="text-gray-700 mb-4">Modernize delivery pipelines during cloud migration while coordinating multiple teams, stacks, and security requirements.</p>
+                            <p class="text-gray-700 mb-4">Migrate Telstra Fulfilment API Services to AWS while preserving service continuity, improving scalability, and enabling cloud-native operations.</p>
                             <h4 class="font-semibold text-gray-900 mb-2">Constraints</h4>
-                            <p class="text-gray-700 mb-4">Legacy systems, parallel delivery streams, and the need to improve security posture without slowing release throughput.</p>
+                            <p class="text-gray-700 mb-4">Critical services for new connections, zero-downtime rollout expectations, and migration coordination across infrastructure and application changes.</p>
                             <h4 class="font-semibold text-gray-900 mb-2">Tools</h4>
                             <div class="flex flex-wrap gap-2">
-                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">CI/CD Pipelines</span>
-                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">SAST/DAST</span>
-                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">Policy as Code</span>
-                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">Vulnerability Workflow</span>
-                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">Cloud Landing Zones</span>
+                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">AWS (ECS/EKS, IAM, VPC)</span>
+                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">CloudFormation</span>
+                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">Terraform</span>
+                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">Docker + Kubernetes</span>
+                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">Blue/Green Deployments</span>
                             </div>
                         </div>
                         <div class="bg-white p-6 rounded-lg">
                             <h4 class="font-semibold text-gray-900 mb-3">Results & Business Impact</h4>
                             <div class="grid grid-cols-3 gap-4 mb-4">
                                 <div class="border-l-4 border-blue-600 pl-3">
-                                    <div class="text-2xl font-bold text-blue-600">90%</div>
-                                    <div class="text-xs text-gray-600">security checks automated</div>
+                                    <div class="text-2xl font-bold text-blue-600">AWS</div>
+                                    <div class="text-xs text-gray-600">microservices migration completed</div>
                                 </div>
                                 <div class="border-l-4 border-green-600 pl-3">
-                                    <div class="text-2xl font-bold text-green-600">40%</div>
-                                    <div class="text-xs text-gray-600">vulnerabilities reduced</div>
+                                    <div class="text-2xl font-bold text-green-600">Zero</div>
+                                    <div class="text-xs text-gray-600">downtime rollouts (Blue/Green)</div>
                                 </div>
                                 <div class="border-l-4 border-purple-600 pl-3">
-                                    <div class="text-2xl font-bold text-purple-600">8</div>
-                                    <div class="text-xs text-gray-600">teams aligned</div>
+                                    <div class="text-2xl font-bold text-purple-600">Lower</div>
+                                    <div class="text-xs text-gray-600">cost via autoscaling optimization</div>
                                 </div>
                             </div>
-                            <p class="text-gray-700 text-sm">Enabled safer migration velocity by integrating security and evidence generation into the normal engineering workflow.</p>
+                            <p class="text-gray-700 text-sm">Migrated fulfilment services to AWS with improved scalability and reliability while enabling team upskilling on cloud-native delivery patterns.</p>
                         </div>
                     </div>
 
@@ -685,15 +687,15 @@
                         <div class="mt-4 grid md:grid-cols-2 gap-6 text-sm text-gray-700">
                             <div>
                                 <h5 class="font-semibold text-gray-900 mb-2">Architecture</h5>
-                                <p class="mb-3">Multi-team CI/CD modernization aligned to cloud migration streams, with standardized pipeline stages and centralized security integrations.</p>
+                                <p class="mb-3">AWS cloud migration architecture for fulfilment APIs using VPC, IAM, ECS/EKS, ECR, and CloudFormation with cloud-native deployment patterns.</p>
                                 <h5 class="font-semibold text-gray-900 mb-2">Security Controls</h5>
-                                <p>SAST/DAST integration, vulnerability workflow routing, policy-as-code checks, and release gates to support shift-left practices.</p>
+                                <p>IAM role/policy design, zero-downtime Blue/Green deployments, and controlled CI/CD processes for critical API services.</p>
                             </div>
                             <div>
                                 <h5 class="font-semibold text-gray-900 mb-2">Compliance Alignment</h5>
-                                <p class="mb-3">Operational evidence and security checks were embedded in delivery pipelines to improve consistency across teams and audits.</p>
+                                <p class="mb-3">Delivery and migration practices aligned to enterprise operational reliability and secure access management requirements.</p>
                                 <h5 class="font-semibold text-gray-900 mb-2">Deployment Model & Toolchain</h5>
-                                <p>Pipeline templates, scanning integrations, policy checks, vulnerability management workflows, and cloud migration delivery coordination.</p>
+                                <p>AWS ECS/EKS, CloudFormation, Terraform, Docker, Kubernetes, Python, shell scripts, Postman, and cloud migration runbooks coordinated via Jira stories.</p>
                             </div>
                         </div>
                     </details>
@@ -707,42 +709,42 @@
                                 <i class="fas fa-landmark mr-2"></i>Major Banking
                             </div>
                             <h3 class="text-2xl font-bold text-gray-900 mb-2">CBA Platform Modernisation & Delivery Standardisation</h3>
-                            <p class="text-gray-600">Enterprise platform patterns, release controls, and team enablement at scale</p>
+                            <p class="text-gray-600">Enterprise DevOps modernization across CI/CD, artifacts, GitHub Enterprise, and observability</p>
                         </div>
                     </div>
 
                     <div class="grid lg:grid-cols-2 gap-8 mb-6">
                         <div>
                             <h4 class="font-semibold text-gray-900 mb-2">Challenge</h4>
-                            <p class="text-gray-700 mb-4">Standardize delivery practices across teams to improve release reliability, onboarding speed, and operational consistency in a large banking environment.</p>
+                            <p class="text-gray-700 mb-4">Modernize enterprise delivery platforms and CI/CD operations while improving automation, resilience, and governance across build, artifact, and source control systems.</p>
                             <h4 class="font-semibold text-gray-900 mb-2">Constraints</h4>
-                            <p class="text-gray-700 mb-4">Heterogeneous toolchains, governance requirements, and the need to support teams at different maturity levels.</p>
+                            <p class="text-gray-700 mb-4">Large-scale enterprise toolchain operations, secure identity integration, and the need to reduce manual effort while improving reliability.</p>
                             <h4 class="font-semibold text-gray-900 mb-2">Tools</h4>
                             <div class="flex flex-wrap gap-2">
-                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">Platform Engineering</span>
-                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">Golden Paths</span>
-                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">Release Automation</span>
-                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">Runbooks</span>
-                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">Governance Controls</span>
+                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">Artifactory Enterprise (10TB)</span>
+                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">TeamCity + Docker Agents</span>
+                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">GitHub Enterprise</span>
+                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">Splunk + AppDynamics</span>
+                                <span class="bg-white border px-3 py-1 rounded-full text-sm text-gray-700">Ansible/Python/Bash</span>
                             </div>
                         </div>
                         <div class="bg-white p-6 rounded-lg">
                             <h4 class="font-semibold text-gray-900 mb-3">Results & Business Impact</h4>
                             <div class="grid grid-cols-3 gap-4 mb-4">
                                 <div class="border-l-4 border-blue-600 pl-3">
-                                    <div class="text-2xl font-bold text-blue-600">12+</div>
-                                    <div class="text-xs text-gray-600">teams enabled</div>
+                                    <div class="text-2xl font-bold text-blue-600">10TB</div>
+                                    <div class="text-xs text-gray-600">artifacts managed securely</div>
                                 </div>
                                 <div class="border-l-4 border-green-600 pl-3">
-                                    <div class="text-2xl font-bold text-green-600">Faster</div>
-                                    <div class="text-xs text-gray-600">onboarding to standards</div>
+                                    <div class="text-2xl font-bold text-green-600">40%</div>
+                                    <div class="text-xs text-gray-600">manual setup reduction</div>
                                 </div>
                                 <div class="border-l-4 border-purple-600 pl-3">
-                                    <div class="text-2xl font-bold text-purple-600">Lower</div>
-                                    <div class="text-xs text-gray-600">release variance</div>
+                                    <div class="text-2xl font-bold text-purple-600">30%</div>
+                                    <div class="text-xs text-gray-600">faster incident resolution</div>
                                 </div>
                             </div>
-                            <p class="text-gray-700 text-sm">Improved consistency across teams and reduced delivery risk by codifying proven platform patterns and release disciplines.</p>
+                            <p class="text-gray-700 text-sm">Reduced manual setup and incident resolution time while improving pipeline resilience, artifact governance, and enterprise CI/CD operations.</p>
                         </div>
                     </div>
 
@@ -751,15 +753,15 @@
                         <div class="mt-4 grid md:grid-cols-2 gap-6 text-sm text-gray-700">
                             <div>
                                 <h5 class="font-semibold text-gray-900 mb-2">Architecture</h5>
-                                <p class="mb-3">Platform standardization patterns and reusable delivery pathways designed to reduce variance across teams with different maturity levels.</p>
+                                <p class="mb-3">Enterprise CI/CD and developer platform operations spanning TeamCity, Artifactory, GitHub Enterprise, Docker agents, and automation for provisioning and runtime support.</p>
                                 <h5 class="font-semibold text-gray-900 mb-2">Security Controls</h5>
-                                <p>Governance-aligned release controls, standardized runbooks, and platform guardrails to improve consistency and reduce operational surprises.</p>
+                                <p>Secure configurations for artifact repositories, LDAP/SSO integration for GitHub Enterprise, and governance-aware automation for provisioning and release workflows.</p>
                             </div>
                             <div>
                                 <h5 class="font-semibold text-gray-900 mb-2">Compliance Alignment</h5>
-                                <p class="mb-3">Delivery standards and evidence expectations encoded into team onboarding and platform practices for auditable operations.</p>
+                                <p class="mb-3">Platform operations and delivery workflows aligned to enterprise governance with improved monitoring, forensic visibility, and operational control.</p>
                                 <h5 class="font-semibold text-gray-900 mb-2">Deployment Model & Toolchain</h5>
-                                <p>Platform engineering patterns, release automation, golden paths, runbooks, and governance controls supporting enterprise-scale team enablement.</p>
+                                <p>TeamCity, Artifactory Enterprise, GitHub Enterprise, Docker, Splunk, AppDynamics, Ansible, Python, Bash, and CI/CD automation tooling.</p>
                             </div>
                         </div>
                     </details>
