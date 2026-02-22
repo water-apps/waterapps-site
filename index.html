@@ -496,6 +496,26 @@
                     </a>
                 </div>
             </div>
+
+            <!-- Procurement / Capability CTA (mid-page) -->
+            <div class="bg-white border border-gray-200 rounded-xl p-8 mt-10 shadow-sm">
+                <div class="grid md:grid-cols-3 gap-6 items-center">
+                    <div class="md:col-span-2">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Need a Capability Statement Before Booking a Call?</h3>
+                        <p class="text-gray-700">
+                            Procurement and platform teams can review a concise capability summary and request supporting documentation before scheduling discovery.
+                        </p>
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <a href="capability-statement.html" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold text-center transition">
+                            <i class="fas fa-download mr-2"></i>Download Capability Statement
+                        </a>
+                        <a href="enterprise-readiness.html" class="bg-gray-100 hover:bg-gray-200 text-gray-900 px-6 py-3 rounded-lg font-semibold text-center transition">
+                            <i class="fas fa-shield-alt mr-2"></i>Enterprise Readiness
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -1140,6 +1160,7 @@
                     <ul class="space-y-2 text-gray-400 text-sm">
                         <li><a href="#case-studies" class="hover:text-white">Case Studies</a></li>
                         <li><a href="#credentials" class="hover:text-white">Credentials</a></li>
+                        <li><a href="capability-statement.html" class="hover:text-white">Capability Statement</a></li>
                         <li><a href="enterprise-readiness.html" class="hover:text-white">Enterprise Readiness</a></li>
                         <li><a href="#approach" class="hover:text-white">Our Approach</a></li>
                         <li><a href="#contact" class="hover:text-white">Contact</a></li>
@@ -1246,6 +1267,14 @@
                 if (href.includes('enterprise-readiness.html')) {
                     trackEvent('cta_click', {
                         cta_type: 'enterprise_readiness',
+                        cta_section: section,
+                        link_text: text
+                    });
+                }
+
+                if (href.includes('capability-statement.html') || text.includes('Capability Statement')) {
+                    trackEvent('cta_click', {
+                        cta_type: 'capability_statement',
                         cta_section: section,
                         link_text: text
                     });
