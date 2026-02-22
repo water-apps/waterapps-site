@@ -1,0 +1,19 @@
+name: Site Quality
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Make check script executable
+        run: chmod +x scripts/check-site.sh
+
+      - name: Run static site quality checks
+        run: ./scripts/check-site.sh
