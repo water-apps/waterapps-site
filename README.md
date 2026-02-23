@@ -109,6 +109,17 @@ The frontend expects JSON responses and handles:
 - `429` throttling
 - `500` fallback message
 
+### Email Deliverability / Trust Notice (In Progress)
+
+The contact form is live and sending to `varun@waterapps.com.au`, but some mailbox providers may show "sender can't be verified" or similar warnings until domain email authentication is fully configured for `waterapps.com.au`.
+
+This is a DNS/email-authentication rollout task (SPF/DKIM/DMARC), not a frontend form bug.
+
+Team note:
+- Treat this as an active deliverability hardening item
+- Do not remove the contact form because of this warning alone
+- Coordinate changes with the backend SES configuration in `waterapps-contact-form`
+
 Smoke test checklist after deployment:
 - Submit a valid message from `https://www.waterapps.com.au` and confirm success UI
 - Submit invalid fields and confirm inline validation messages
