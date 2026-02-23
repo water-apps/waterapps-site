@@ -1098,6 +1098,70 @@
                 for details.
             </p>
 
+            <div class="bg-white rounded-lg p-6 sm:p-8 mb-10 max-w-3xl mx-auto text-left shadow-xl">
+                <div class="flex items-start justify-between gap-4 mb-6">
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900">Send a Message</h3>
+                        <p class="text-sm text-gray-600 mt-1">Use this form for project enquiries. For urgent matters, call or email directly.</p>
+                    </div>
+                    <span class="text-xs font-semibold uppercase tracking-wide text-blue-700 bg-blue-50 border border-blue-100 rounded-full px-3 py-1">Secure Form</span>
+                </div>
+
+                <form id="contact-form" data-api-endpoint="" novalidate class="space-y-4">
+                    <div id="contact-form-status" class="hidden rounded-lg px-4 py-3 text-sm" role="status" aria-live="polite"></div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="contact-name" class="block text-sm font-medium text-gray-800 mb-1">Name <span class="text-red-600">*</span></label>
+                            <input id="contact-name" name="name" type="text" autocomplete="name" required maxlength="120"
+                                class="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Jane Smith">
+                            <p id="contact-error-name" class="mt-1 text-sm text-red-700 hidden"></p>
+                        </div>
+                        <div>
+                            <label for="contact-email" class="block text-sm font-medium text-gray-800 mb-1">Work Email <span class="text-red-600">*</span></label>
+                            <input id="contact-email" name="email" type="email" autocomplete="email" required maxlength="254"
+                                class="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="jane@company.com">
+                            <p id="contact-error-email" class="mt-1 text-sm text-red-700 hidden"></p>
+                        </div>
+                        <div>
+                            <label for="contact-company" class="block text-sm font-medium text-gray-800 mb-1">Company</label>
+                            <input id="contact-company" name="company" type="text" autocomplete="organization" maxlength="120"
+                                class="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Acme Corp">
+                            <p id="contact-error-company" class="mt-1 text-sm text-red-700 hidden"></p>
+                        </div>
+                        <div>
+                            <label for="contact-phone" class="block text-sm font-medium text-gray-800 mb-1">Phone</label>
+                            <input id="contact-phone" name="phone" type="tel" autocomplete="tel" maxlength="40"
+                                class="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="+61 400 000 000">
+                            <p id="contact-error-phone" class="mt-1 text-sm text-red-700 hidden"></p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="contact-message" class="block text-sm font-medium text-gray-800 mb-1">Message <span class="text-red-600">*</span></label>
+                        <textarea id="contact-message" name="message" required rows="5" maxlength="5000"
+                            class="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Tell us about your current platform, constraints, and what outcome you need."></textarea>
+                        <p id="contact-error-message" class="mt-1 text-sm text-red-700 hidden"></p>
+                        <p class="mt-1 text-xs text-gray-500">Please keep messages under 4000 characters.</p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-3 pt-2">
+                        <button id="contact-submit" type="submit"
+                            class="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition disabled:opacity-60 disabled:cursor-not-allowed">
+                            Send Message
+                        </button>
+                        <p class="text-xs text-gray-500">
+                            If the form is unavailable, email <a class="text-blue-700 underline" href="mailto:varun@waterapps.com.au?subject=WaterApps%20Enquiry">varun@waterapps.com.au</a>.
+                        </p>
+                    </div>
+                </form>
+            </div>
+
             <div class="grid md:grid-cols-3 gap-6 mb-12">
                 <a href="mailto:varun@waterapps.com.au?subject=WaterApps%20Discovery%20Call%20Enquiry" class="bg-white text-gray-900 p-6 rounded-lg hover:shadow-xl transition">
                     <i class="fas fa-envelope text-4xl text-blue-600 mb-4"></i>
@@ -1239,6 +1303,159 @@
                 window.gtag('event', eventName, params || {});
             }
         }
+
+        (function setupContactForm() {
+            const form = document.getElementById('contact-form');
+            if (!form) return;
+
+            const statusEl = document.getElementById('contact-form-status');
+            const submitButton = document.getElementById('contact-submit');
+            const fieldNames = ['name', 'email', 'company', 'phone', 'message'];
+            const endpoint = (
+                form.dataset.apiEndpoint ||
+                (window.WATERAPPS_CONFIG && window.WATERAPPS_CONFIG.contactApiEndpoint) ||
+                window.WATERAPPS_CONTACT_API_ENDPOINT ||
+                ''
+            ).trim();
+
+            function setStatus(kind, message) {
+                if (!statusEl) return;
+                statusEl.className = 'rounded-lg px-4 py-3 text-sm';
+                if (kind === 'success') {
+                    statusEl.classList.add('bg-green-50', 'text-green-800', 'border', 'border-green-200');
+                } else if (kind === 'warn') {
+                    statusEl.classList.add('bg-amber-50', 'text-amber-900', 'border', 'border-amber-200');
+                } else {
+                    statusEl.classList.add('bg-red-50', 'text-red-800', 'border', 'border-red-200');
+                }
+                statusEl.textContent = message;
+                statusEl.classList.remove('hidden');
+            }
+
+            function clearStatus() {
+                if (!statusEl) return;
+                statusEl.textContent = '';
+                statusEl.classList.add('hidden');
+            }
+
+            function clearFieldErrors() {
+                fieldNames.forEach((name) => {
+                    const input = form.elements.namedItem(name);
+                    const errorEl = document.getElementById(`contact-error-${name}`);
+                    if (input && typeof input.removeAttribute === 'function') {
+                        input.removeAttribute('aria-invalid');
+                    }
+                    if (errorEl) {
+                        errorEl.textContent = '';
+                        errorEl.classList.add('hidden');
+                    }
+                });
+            }
+
+            function applyFieldErrors(fieldErrors) {
+                if (!fieldErrors || typeof fieldErrors !== 'object') return;
+                Object.entries(fieldErrors).forEach(([name, message]) => {
+                    const input = form.elements.namedItem(name);
+                    const errorEl = document.getElementById(`contact-error-${name}`);
+                    if (input && typeof input.setAttribute === 'function') {
+                        input.setAttribute('aria-invalid', 'true');
+                    }
+                    if (errorEl) {
+                        errorEl.textContent = String(message || 'Please check this field.');
+                        errorEl.classList.remove('hidden');
+                    }
+                });
+            }
+
+            function setSubmitting(isSubmitting) {
+                if (!submitButton) return;
+                submitButton.disabled = isSubmitting;
+                submitButton.textContent = isSubmitting ? 'Sending...' : 'Send Message';
+            }
+
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                clearStatus();
+                clearFieldErrors();
+
+                if (!endpoint) {
+                    setStatus('warn', 'Contact form API is not configured yet. Please email varun@waterapps.com.au or use the booking link above.');
+                    trackEvent('contact_form_submit', {
+                        result: 'blocked',
+                        reason: 'endpoint_not_configured',
+                        section: 'contact'
+                    });
+                    return;
+                }
+
+                const formData = new FormData(form);
+                const payload = {
+                    name: (formData.get('name') || '').toString(),
+                    email: (formData.get('email') || '').toString(),
+                    company: (formData.get('company') || '').toString(),
+                    phone: (formData.get('phone') || '').toString(),
+                    message: (formData.get('message') || '').toString()
+                };
+
+                setSubmitting(true);
+
+                try {
+                    const response = await fetch(endpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    let data = null;
+                    try {
+                        data = await response.json();
+                    } catch {
+                        data = null;
+                    }
+
+                    if (response.ok) {
+                        setStatus('success', data?.message || "Thank you for contacting WaterApps. We'll be in touch shortly.");
+                        form.reset();
+                        trackEvent('contact_form_submit', {
+                            result: 'success',
+                            section: 'contact'
+                        });
+                        return;
+                    }
+
+                    if (response.status === 400 && data?.fieldErrors) {
+                        applyFieldErrors(data.fieldErrors);
+                        setStatus('error', data?.message || 'Please correct the highlighted fields and try again.');
+                    } else if (response.status === 403) {
+                        setStatus('error', 'This form cannot be submitted from the current site origin. Please email varun@waterapps.com.au directly.');
+                    } else if (response.status === 429) {
+                        setStatus('error', 'Too many requests. Please wait a moment and try again.');
+                    } else {
+                        setStatus('error', data?.message || 'Something went wrong. Please email varun@waterapps.com.au directly.');
+                    }
+
+                    trackEvent('contact_form_submit', {
+                        result: 'error',
+                        status_code: response.status,
+                        error_code: data?.code || 'unknown',
+                        section: 'contact'
+                    });
+                } catch (err) {
+                    setStatus('error', 'Unable to submit the form right now. Please check your connection or email varun@waterapps.com.au directly.');
+                    trackEvent('contact_form_submit', {
+                        result: 'error',
+                        status_code: 0,
+                        error_code: 'network_error',
+                        section: 'contact'
+                    });
+                    console.error('Contact form submit failed', err);
+                } finally {
+                    setSubmitting(false);
+                }
+            });
+        })();
 
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {

@@ -92,6 +92,30 @@ GitHub Pages auto-deploys on every push to `main`. Changes go live within 1–2 
 
 ---
 
+## Contact Form API Integration (Serverless Backend)
+
+The site now includes a browser-submitted contact form UI in `index.html` that can post to the WaterApps serverless contact-form API.
+
+Before promoting to production, configure the API endpoint in one of these ways:
+
+1. Set the form attribute `data-api-endpoint` on `#contact-form` in `index.html`
+2. Or define `window.WATERAPPS_CONFIG = { contactApiEndpoint: "https://.../contact" }` before the inline script runs
+3. Or define `window.WATERAPPS_CONTACT_API_ENDPOINT = "https://.../contact"`
+
+The frontend expects JSON responses and handles:
+- `200` success
+- `400` validation failures with `fieldErrors`
+- `403` origin errors (misconfigured allowlist/origin)
+- `429` throttling
+- `500` fallback message
+
+Smoke test checklist after deployment:
+- Submit a valid message from `https://www.waterapps.com.au` and confirm success UI
+- Submit invalid fields and confirm inline validation messages
+- Confirm the backend `ALLOWED_ORIGINS` includes `https://www.waterapps.com.au` and `https://waterapps.com.au`
+
+---
+
 ## Key Sections to Personalise
 
 Before going live, update these in `index.html`:
