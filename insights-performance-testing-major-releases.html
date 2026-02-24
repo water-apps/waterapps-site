@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Testing Before Major Releases: A Practical Readiness Checklist | WaterApps</title>
+    <meta name="description" content="A practical performance testing readiness checklist for major enterprise releases, covering scope, thresholds, environments, dependencies, and release evidence.">
+    <link rel="canonical" href="https://www.waterapps.com.au/insights-performance-testing-major-releases.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Performance Testing Before Major Releases: A Practical Readiness Checklist">
+    <meta property="og:description" content="A practical checklist for scoping load, resilience, and dependency testing before high-impact enterprise releases.">
+    <meta property="og:url" content="https://www.waterapps.com.au/insights-performance-testing-major-releases.html">
+    <meta property="og:image" content="https://www.waterapps.com.au/logo.png">
+    <meta property="og:image:alt" content="WaterApps logo">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Performance Testing Before Major Releases: A Practical Readiness Checklist">
+    <meta name="twitter:description" content="A practical checklist for scoping load, resilience, and dependency testing before high-impact enterprise releases.">
+    <meta name="twitter:image" content="https://www.waterapps.com.au/logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="mb-8">
+            <a href="insights.html" class="text-blue-600 hover:text-blue-700 text-sm">&larr; Back to Insights</a>
+            <div class="mt-4 text-xs uppercase tracking-wide text-blue-600 font-semibold">Performance & Reliability</div>
+            <h1 class="text-4xl font-bold mt-2 mb-3">Performance Testing Before Major Releases: A Practical Readiness Checklist</h1>
+            <p class="text-lg text-gray-600">
+                How to scope performance validation for enterprise releases when time, environment parity, and dependency control are limited.
+            </p>
+            <div class="mt-4 text-sm text-gray-500">Published: February 24, 2026</div>
+        </div>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <p class="text-gray-700 mb-4">
+                Performance testing often gets compressed into the final days before a major release, then quietly downgraded when environments are unstable or dependencies are missing. That pattern produces a false sense of confidence: the team "did performance testing", but the results were not meaningful enough to support a production decision.
+            </p>
+            <p class="text-gray-700">
+                A better approach is to treat performance testing as release-readiness evidence. You do not need perfect load labs to make better decisions. You need a clear scope, explicit thresholds, and a documented interpretation of results tied to release risk.
+            </p>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Use This Checklist Before You Schedule Test Runs</h2>
+            <div class="space-y-5 text-gray-700">
+                <div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">1. Define the release risk profile</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>What changed: code path, infrastructure, configuration, data volume, or third-party dependency behavior?</li>
+                        <li>What is the potential blast radius if response time or error rate degrades?</li>
+                        <li>Is this a peak-period release or a high-visibility business event window?</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">2. Pick the minimum viable test scope</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>Identify 3-5 critical user or API journeys that represent production risk.</li>
+                        <li>Prioritize system boundaries where queueing, retries, or downstream contention occur.</li>
+                        <li>Decide whether this release needs baseline load only, peak load, stress, soak, or resilience checks.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">3. Validate environment realism (and document the gaps)</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>Compare instance sizing, autoscaling, connection pools, and throttling settings to production.</li>
+                        <li>Confirm realistic data shape and volume, not just record count.</li>
+                        <li>Record missing integrations or mocked dependencies so test results are interpreted correctly.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="grid md:grid-cols-2 gap-6 mb-8">
+            <article class="bg-white rounded-xl border border-gray-200 p-8">
+                <h2 class="text-2xl font-semibold mb-4">Thresholds to Agree Up Front</h2>
+                <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                    <li>P95 / P99 latency targets for critical endpoints or workflows</li>
+                    <li>Error-rate limits (overall and by endpoint/transaction type)</li>
+                    <li>Resource saturation thresholds (CPU, memory, connection pools, queue depth)</li>
+                    <li>Autoscaling response expectations and warm-up behavior</li>
+                    <li>Recovery time after traffic spikes or dependency slowdowns</li>
+                </ul>
+                <p class="text-sm text-gray-500 mt-4">
+                    If thresholds are unclear, align to customer impact and operational response capacity, not generic benchmark numbers.
+                </p>
+            </article>
+
+            <article class="bg-white rounded-xl border border-gray-200 p-8">
+                <h2 class="text-2xl font-semibold mb-4">Data to Capture During Runs</h2>
+                <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                    <li>Application metrics, traces, and logs for the tested workflows</li>
+                    <li>Infrastructure metrics and autoscaling events</li>
+                    <li>Dependency response times and retry behavior</li>
+                    <li>Test script version, config, and traffic profile</li>
+                    <li>Environment settings and known deviations from production</li>
+                </ul>
+                <p class="text-sm text-gray-500 mt-4">
+                    Capture enough information to explain failures and make a release decision, not just produce a graph screenshot.
+                </p>
+            </article>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Common Reasons Performance Results Are Misleading</h2>
+            <div class="space-y-4 text-gray-700">
+                <p><span class="font-semibold text-gray-900">Unrealistic traffic shape:</span> Constant throughput tests can hide concurrency spikes, burst behavior, and retry storms that cause production incidents.</p>
+                <p><span class="font-semibold text-gray-900">Missing dependency load:</span> If downstream systems are mocked or underloaded, the bottleneck can shift and invalidate conclusions.</p>
+                <p><span class="font-semibold text-gray-900">No baseline comparison:</span> Teams call results "good" or "bad" without comparing to the previous release or a known stable build.</p>
+                <p><span class="font-semibold text-gray-900">Pass/fail without operational context:</span> A minor threshold miss may be acceptable with mitigation; a small error-rate increase may be unacceptable during peak business windows.</p>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Release Readiness Summary Template (What Decision-Makers Need)</h2>
+            <ol class="list-decimal pl-6 text-gray-700 space-y-3">
+                <li><span class="font-semibold text-gray-900">Release scope and risk summary:</span> What changed and why performance testing was required.</li>
+                <li><span class="font-semibold text-gray-900">Test scope and coverage:</span> Workflows tested, traffic profiles used, and what was intentionally excluded.</li>
+                <li><span class="font-semibold text-gray-900">Environment notes:</span> Key differences from production that affect result confidence.</li>
+                <li><span class="font-semibold text-gray-900">Results vs thresholds:</span> Pass/fail by metric, with trend comparison to baseline if available.</li>
+                <li><span class="font-semibold text-gray-900">Open risks and mitigations:</span> Residual issues, rollback considerations, monitoring alerts to watch post-release.</li>
+                <li><span class="font-semibold text-gray-900">Recommendation:</span> Proceed, proceed with constraints, or defer.</li>
+            </ol>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">A Practical Sequence for Teams with Limited Time</h2>
+            <ol class="list-decimal pl-6 text-gray-700 space-y-3">
+                <li>Baseline one stable build for the top critical journey.</li>
+                <li>Run a targeted comparison on the release candidate.</li>
+                <li>Add one stress or resilience scenario focused on the highest dependency risk.</li>
+                <li>Publish a short readiness summary with explicit confidence limits.</li>
+                <li>Define post-release monitoring thresholds before deployment.</li>
+            </ol>
+            <p class="text-sm text-gray-500 mt-4">
+                This is not a full performance engineering program. It is a repeatable decision-support pattern for high-impact releases.
+            </p>
+        </section>
+
+        <section class="bg-blue-900 text-white rounded-xl p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-3">Related Service: Quality Engineering & Release Assurance</h2>
+            <p class="text-blue-100 mb-6">
+                WaterApps helps enterprise teams define performance readiness criteria, integrate release evidence into CI/CD workflows, and improve release confidence without building heavyweight testing processes that the team cannot sustain.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a href="quality-engineering.html" class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-lg font-semibold text-center">
+                    Explore the Service
+                </a>
+                <a href="insights-test-automation-regulated-cicd.html" class="bg-white text-gray-900 px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-100">
+                    Read the Test Automation Article
+                </a>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8">
+            <h2 class="text-2xl font-semibold mb-4">Need a Release-Specific Checklist?</h2>
+            <p class="text-gray-700 mb-4">
+                WaterApps can tailor a performance readiness checklist to your release model, environments, and dependencies (for example: APIs on Kubernetes, cloud-native services, or control-heavy enterprise release processes).
+            </p>
+            <a href="mailto:varun@waterapps.com.au?subject=WaterApps%20Performance%20Readiness%20Checklist%20Enquiry" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold">
+                Request a Tailored Checklist
+            </a>
+            <p class="text-xs text-gray-500 mt-4">
+                Examples in this article are generalized to respect confidentiality obligations.
+            </p>
+        </section>
+    </main>
+</body>
+</html>
