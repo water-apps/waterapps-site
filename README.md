@@ -109,23 +109,33 @@ The frontend expects JSON responses and handles:
 - `429` throttling
 - `500` fallback message
 
-### Email Deliverability / Trust Notice (In Progress: DNS Publish Pending)
+### Email Deliverability / Trust Notice (Completed: DNS Auth Active)
 
 The contact form is live and sending to `varun@waterapps.com.au`, but some mailbox providers may show "sender can't be verified" or similar warnings until domain email authentication is fully configured for `waterapps.com.au`.
 
 This is a DNS/email-authentication rollout task (SPF/DKIM/DMARC), not a frontend form bug.
 
 Current status (2026-02-24):
-- SES domain identity for `waterapps.com.au` was created in AWS (`ap-southeast-2`)
-- Easy DKIM tokens were generated and are waiting on DNS publication/propagation
-- DNS is hosted in GoDaddy (not Route 53), so records must be added there manually
-- DMARC exists; SPF is still missing and must be added
+- SES domain identity for `waterapps.com.au` is verified in AWS (`ap-southeast-2`)
+- Easy DKIM is active (`SUCCESS`)
+- SPF is published at the domain apex
+- DMARC remains published
+- Some mailbox-provider warnings may linger temporarily due to provider caching/learning
 
 Team note:
 - Treat this as an active deliverability hardening item
 - Do not remove the contact form because of this warning alone
 - Coordinate changes with the backend SES configuration in `waterapps-contact-form`
-- Publish the DKIM CNAMEs and SPF TXT in GoDaddy, then re-test delivery headers after propagation
+- Re-test delivery headers after provider cache refresh if mailbox warnings persist
+
+### Website Security Header Grade (Cloudflare Rollout Required)
+
+The website is served from GitHub Pages, which does not support custom response security headers needed for common security-header grading tools (for example, CSP/HSTS/X-Content-Type-Options).
+
+To improve the website security-header grade, route traffic through Cloudflare and inject headers there (Worker or Transform Rules).
+
+Runbook:
+- `/Users/varunau/Projects/waterapps/waterapps-site/docs/cloudflare-security-headers-rollout.md`
 
 Smoke test checklist after deployment:
 - Submit a valid message from `https://www.waterapps.com.au` and confirm success UI
