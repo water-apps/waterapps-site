@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Automation in Regulated CI/CD: What to Automate First | WaterApps</title>
+    <meta name="description" content="A risk-based framework for sequencing test automation in regulated CI/CD environments, including quality gates, evidence capture, and a 90-day rollout plan.">
+    <link rel="icon" type="image/png" href="logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="mb-8">
+            <a href="insights.html" class="text-blue-600 hover:text-blue-700 text-sm">&larr; Back to Insights</a>
+            <div class="mt-4 text-xs uppercase tracking-wide text-blue-600 font-semibold">Quality Engineering</div>
+            <h1 class="text-4xl font-bold mt-2 mb-3">Test Automation in Regulated CI/CD: What to Automate First</h1>
+            <p class="text-lg text-gray-600">
+                A practical sequencing approach for teams that need faster releases and stronger controls, without building a brittle automation program.
+            </p>
+            <div class="mt-4 text-sm text-gray-500">Published: February 24, 2026</div>
+        </div>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <p class="text-gray-700 mb-4">
+                Teams in regulated or control-heavy environments often know they need more automation, but the common advice is too generic: "increase coverage", "shift left", "automate everything repeatable". In practice, that creates expensive suites that fail frequently, run too slowly, and do not improve release confidence.
+            </p>
+            <p class="text-gray-700">
+                A better approach is to automate according to change risk, blast radius, and decision points in your release process. The goal is not maximum automation. The goal is faster, safer release decisions with evidence that engineering and governance stakeholders can trust.
+            </p>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Start with Release Decisions, Not Test Types</h2>
+            <p class="text-gray-700 mb-4">
+                Before choosing frameworks or expanding UI automation, map the actual release decisions your team makes:
+            </p>
+            <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                <li>Can this change move from development to test?</li>
+                <li>Can this build be promoted to staging or pre-production?</li>
+                <li>Is the release safe enough for production?</li>
+                <li>Does the change need additional approval due to risk level?</li>
+            </ul>
+            <p class="text-gray-700 mt-4">
+                Each decision should have explicit evidence requirements. Test automation is one part of that evidence, alongside static analysis, deployment checks, change metadata, and approval records.
+            </p>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">What to Automate First (Priority Order)</h2>
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">1. Critical-path API and integration checks</h3>
+                    <p class="text-gray-700">
+                        Start with the smallest set of automated checks that prove the system can execute the highest-risk business workflows. API and integration tests usually provide better signal-to-runtime ratio than UI tests and fail in more diagnosable ways.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">2. Smoke tests tied to deployment validation</h3>
+                    <p class="text-gray-700">
+                        Build fast deployment smoke tests that confirm service availability, key endpoints, and core dependencies after each deployment. These should support rollback decisions and environment promotion, not replace deeper regression coverage.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">3. Targeted UI tests for revenue/risk journeys</h3>
+                    <p class="text-gray-700">
+                        Use UI automation selectively for journeys where end-user behavior, rendering, or browser-specific interactions materially affect business risk. Keep the suite small, stable, and explicitly owned.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">4. Performance readiness checks for release windows</h3>
+                    <p class="text-gray-700">
+                        For major changes or peak-season releases, automate repeatable performance baselines and threshold checks. These do not need to run on every commit, but they should be part of release readiness for high-impact changes.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="grid md:grid-cols-2 gap-6 mb-8">
+            <article class="bg-white rounded-xl border border-gray-200 p-8">
+                <h2 class="text-2xl font-semibold mb-4">Quality Gates That Actually Help</h2>
+                <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                    <li>Use risk-tiered thresholds (not one global pass/fail rule)</li>
+                    <li>Differentiate blocking vs non-blocking checks</li>
+                    <li>Track flaky test rate separately from genuine failures</li>
+                    <li>Gate environment promotion, not just pipeline completion</li>
+                    <li>Time-box manual approvals and require rationale capture</li>
+                </ul>
+            </article>
+
+            <article class="bg-white rounded-xl border border-gray-200 p-8">
+                <h2 class="text-2xl font-semibold mb-4">Evidence Capture for Control-Heavy Teams</h2>
+                <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                    <li>Link commit, build, and deployment IDs to test runs</li>
+                    <li>Persist test reports for release-level retention periods</li>
+                    <li>Record waivers/exceptions with owner and expiry date</li>
+                    <li>Publish release-readiness summaries for approvals</li>
+                    <li>Retain trend metrics for defect escape analysis</li>
+                </ul>
+            </article>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Common Failure Modes to Avoid</h2>
+            <div class="space-y-4 text-gray-700">
+                <p><span class="font-semibold text-gray-900">Automating unstable processes:</span> If environments, test data, or ownership are inconsistent, automation amplifies noise instead of reducing risk.</p>
+                <p><span class="font-semibold text-gray-900">UI-first strategy for everything:</span> Large end-to-end suites are expensive to maintain and often fail for non-product reasons. Start lower in the stack where possible.</p>
+                <p><span class="font-semibold text-gray-900">Coverage metrics without decision value:</span> Coverage numbers are useful only when tied to critical workflows and release decisions.</p>
+                <p><span class="font-semibold text-gray-900">No flaky-test operating model:</span> Teams lose confidence quickly if failures are not triaged, quarantined, and fixed with ownership.</p>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">A Practical 90-Day Rollout Pattern</h2>
+            <ol class="list-decimal pl-6 text-gray-700 space-y-3">
+                <li><span class="font-semibold text-gray-900">Weeks 1-2:</span> Map release decisions, identify top-risk workflows, and baseline current lead time / failure rate / manual effort.</li>
+                <li><span class="font-semibold text-gray-900">Weeks 3-6:</span> Implement smoke tests and critical API/integration regression in CI for one representative service or product area.</li>
+                <li><span class="font-semibold text-gray-900">Weeks 7-10:</span> Define promotion criteria and add quality gates with exception handling, ownership, and reporting.</li>
+                <li><span class="font-semibold text-gray-900">Weeks 11-13:</span> Add targeted UI or performance validation for high-risk releases and formalize release-readiness evidence templates.</li>
+            </ol>
+            <p class="text-sm text-gray-500 mt-5">
+                The exact sequence varies by system architecture, test environment maturity, and governance model.
+            </p>
+        </section>
+
+        <section class="bg-blue-900 text-white rounded-xl p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-3">Related Service: Quality Engineering & Release Assurance</h2>
+            <p class="text-blue-100 mb-6">
+                If your team is dealing with flaky regression suites, slow release approvals, or late performance surprises, WaterApps can help design a practical quality engineering roadmap and implement the first phase with your delivery teams.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a href="quality-engineering.html" class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-lg font-semibold text-center">
+                    Explore the Service
+                </a>
+                <a href="index.html#contact" class="bg-white text-gray-900 px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-100">
+                    Book Discovery Call
+                </a>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8">
+            <h2 class="text-2xl font-semibold mb-4">Need a More Specific Version of This Guide?</h2>
+            <p class="text-gray-700 mb-4">
+                WaterApps can tailor this framework to your environment (for example: Azure DevOps, GitHub Actions, Jenkins, Kubernetes platforms, or control-heavy enterprise release processes) and produce a phased rollout plan.
+            </p>
+            <a href="mailto:varun@waterapps.com.au?subject=WaterApps%20Test%20Automation%20Framework%20Enquiry" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold">
+                Request a Tailored Review
+            </a>
+            <p class="text-xs text-gray-500 mt-4">
+                Examples in this article are generalized to respect confidentiality obligations.
+            </p>
+        </section>
+    </main>
+</body>
+</html>
