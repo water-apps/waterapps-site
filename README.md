@@ -157,7 +157,8 @@ Before going live, update these in `index.html`:
 
 ## Tech Stack
 
-- Pure HTML/CSS/JS — no build tools, no dependencies
+- Static HTML/CSS/JS website (GitHub Pages)
+- Tailwind CSS utilities compiled to a checked-in stylesheet (`assets/css/tailwind.generated.css`) using a small local build script (`npm run build:css`)
 - Google Fonts (DM Sans + Instrument Serif)
 - Scroll-reveal animations via Intersection Observer
 - Fully responsive (mobile, tablet, desktop)
