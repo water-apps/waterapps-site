@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>n8n as an AIOps Platform: Replacing $50k/yr Tools with Open Source | WaterApps</title>
+    <meta name="description" content="How WaterApps uses n8n to build intelligent automation workflows for regulated enterprises — replacing expensive commercial AIOps tools with self-hosted, auditable open source.">
+    <link rel="canonical" href="https://www.waterapps.com.au/insights-n8n-aiops-platform.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="n8n as an AIOps Platform: Replacing $50k/yr Tools with Open Source | WaterApps">
+    <meta property="og:description" content="Self-hosted n8n as an enterprise AIOps platform — integration patterns, deployment architecture, and real automation use cases for regulated environments.">
+    <meta property="og:url" content="https://www.waterapps.com.au/insights-n8n-aiops-platform.html">
+    <meta property="og:image" content="https://www.waterapps.com.au/logo.png">
+    <meta property="og:image:alt" content="WaterApps logo">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="n8n as an AIOps Platform: Replacing $50k/yr Tools with Open Source | WaterApps">
+    <meta name="twitter:description" content="How to use self-hosted n8n as an enterprise AIOps and automation platform for regulated industries.">
+    <meta name="twitter:image" content="https://www.waterapps.com.au/logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="mb-8">
+            <a href="insights.html" class="text-blue-600 hover:text-blue-700 text-sm">&larr; Back to Insights</a>
+            <h1 class="text-4xl font-bold mt-4 mb-4">n8n as an AIOps Platform: Replacing $50k/yr Tools with Open Source</h1>
+            <p class="text-lg text-gray-600">
+                Enterprise AIOps and automation platforms carry large licensing costs and opaque data handling. Self-hosted n8n delivers comparable workflow orchestration at infrastructure cost — with full auditability and data sovereignty.
+            </p>
+            <div class="mt-4 flex flex-wrap gap-2 text-sm">
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">AIOps</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">n8n</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">Automation</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">DevSecOps</span>
+            </div>
+        </div>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">The Commercial AIOps Problem</h2>
+            <p class="text-gray-700 mb-4">
+                The enterprise automation and AIOps market is dominated by platforms that charge per seat, per workflow, or per event at scale. For a mid-size regulated enterprise running dozens of operational workflows — incident enrichment, deployment notifications, compliance evidence collection, change ticket automation — the annual cost of commercial platforms can exceed $50,000 before adding AI features.
+            </p>
+            <p class="text-gray-700 mb-4">
+                Beyond cost, regulated enterprises face a second problem: data sovereignty. Many commercial automation platforms route workflow data through US or EU infrastructure. For Australian financial institutions with APRA obligations, passing operational data — even metadata about incidents or change events — through foreign infrastructure requires explicit assessment and often generates findings.
+            </p>
+            <p class="text-gray-700 mb-4">
+                n8n solves both. It's a source-available workflow automation tool that runs entirely on your own infrastructure, stores workflow execution data in your own PostgreSQL database, and costs nothing in licensing.
+            </p>
+            <p class="text-sm text-gray-500">WaterApps operates n8n internally and deploys it for clients. Workflow examples are generalized to respect confidentiality.</p>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Deployment Architecture</h2>
+            <p class="text-gray-700 mb-4">
+                WaterApps runs n8n on Docker Compose with PostgreSQL for workflow storage and Traefik for automatic TLS. This setup can run on a single $20/mo VPS or within a private subnet on AWS — the architecture scales horizontally with queue mode for production workloads.
+            </p>
+            <div class="bg-gray-900 text-green-400 rounded-lg p-6 font-mono text-sm overflow-x-auto mb-4">
+                <pre>
+# docker-compose.yml (simplified)
+services:
+  n8n:
+    image: n8nio/n8n:latest
+    restart: unless-stopped
+    environment:
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}   # from .env, never hardcoded
+      - N8N_HOST=${N8N_HOST}
+      - N8N_PROTOCOL=https
+      - EXECUTIONS_DATA_SAVE_ON_ERROR=all
+      - EXECUTIONS_DATA_SAVE_ON_SUCCESS=all         # full audit trail
+    volumes:
+      - n8n_data:/home/node/.n8n
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.n8n.rule=Host(`${N8N_HOST}`)"
+      - "traefik.http.routers.n8n.tls.certresolver=letsencrypt"
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}      # from .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  traefik:
+    image: traefik:v3
+    command:
+      - "--certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL}"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - letsencrypt:/letsencrypt</pre>
+            </div>
+            <p class="text-gray-700">Traefik handles TLS certificate provisioning automatically via Let's Encrypt. No manual certificate management, no expiry surprises.</p>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-5">AIOps Workflow Patterns</h2>
+            <p class="text-gray-700 mb-5">These are the automation categories that deliver the most operational value in regulated environments:</p>
+
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">1. Incident Enrichment and Routing</h3>
+                    <p class="text-gray-700 mb-2">When an alert fires from CloudWatch or Datadog, a webhook triggers n8n. The workflow queries AWS CloudWatch Logs Insights for recent errors in the affected service, fetches the last 5 deployments from GitHub, checks PagerDuty for any open related incidents, and posts a single enriched Slack message with context — before an engineer has even opened the alert.</p>
+                    <p class="text-gray-700">With Claude or GPT-4 integrated as a step, the workflow can generate a natural-language incident summary: "RDS connection pool exhausted. Last deployment 23 minutes ago added a new query in the payments service. 3 similar incidents in the last 90 days, all resolved by restarting the app tier."</p>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">2. Change Management Automation</h3>
+                    <p class="text-gray-700 mb-2">Regulated environments require change tickets for production deployments. n8n listens to GitHub deployment events and automatically creates ServiceNow or Jira change requests, populates the risk fields from the PR description, attaches the tfsec/trivy scan results, and links the change ticket back to the GitHub deployment.</p>
+                    <p class="text-gray-700">The workflow runs in seconds. The alternative — an engineer manually creating and linking tickets for every deployment — takes 10–15 minutes and introduces transcription errors.</p>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">3. Compliance Evidence Collection</h3>
+                    <p class="text-gray-700 mb-2">At the end of each sprint or before an audit, n8n runs a scheduled workflow that pulls deployment records from GitHub Actions, security scan results from S3, change ticket status from Jira, and CloudTrail events for production API calls. It compiles a structured JSON report and posts it to a compliance S3 bucket with a timestamp and SHA256 hash.</p>
+                    <p class="text-gray-700">Auditors get a structured evidence pack instead of a manual evidence collection exercise. The hash proves the report wasn't modified after generation.</p>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">4. Cost Anomaly Response</h3>
+                    <p class="text-gray-700">AWS Cost Anomaly Detection publishes SNS events when spending spikes unexpectedly. n8n catches these events, queries the AWS Cost Explorer API to identify the specific service and account causing the spike, cross-references with recent deployments, and notifies the relevant team with a root-cause hypothesis before the bill arrives.</p>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">5. Security Posture Reporting</h3>
+                    <p class="text-gray-700">A weekly scheduled workflow queries AWS Security Hub for open findings above HIGH severity, correlates them with the responsible team (via resource tags), and generates a prioritized remediation report. The AI step writes a concise executive summary suitable for inclusion in the weekly security review — something that used to require a security analyst's time to compile.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-blue-50 border border-blue-200 rounded-xl p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">n8n vs Commercial Alternatives</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-gray-800">
+                    <thead>
+                        <tr class="border-b border-blue-200">
+                            <th class="text-left py-2 pr-4 font-semibold">Capability</th>
+                            <th class="text-center py-2 pr-4 font-semibold">n8n (self-hosted)</th>
+                            <th class="text-center py-2 font-semibold">Commercial AIOps</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-blue-100">
+                        <tr><td class="py-2 pr-4">Annual licensing cost</td><td class="text-center pr-4 text-green-700 font-semibold">$0</td><td class="text-center text-red-700">$20k–80k+</td></tr>
+                        <tr><td class="py-2 pr-4">Data sovereignty (ap-southeast-2)</td><td class="text-center pr-4 text-green-700">Full control</td><td class="text-center text-yellow-700">Vendor-dependent</td></tr>
+                        <tr><td class="py-2 pr-4">Workflow auditability</td><td class="text-center pr-4 text-green-700">JSON in git</td><td class="text-center text-yellow-700">Proprietary</td></tr>
+                        <tr><td class="py-2 pr-4">Custom integrations</td><td class="text-center pr-4 text-green-700">HTTP + JS nodes</td><td class="text-center text-yellow-700">Connector marketplace</td></tr>
+                        <tr><td class="py-2 pr-4">AI model integration</td><td class="text-center pr-4 text-green-700">Any API</td><td class="text-center text-yellow-700">Bundled / limited</td></tr>
+                        <tr><td class="py-2 pr-4">Execution history</td><td class="text-center pr-4 text-green-700">PostgreSQL, self-managed</td><td class="text-center text-yellow-700">Vendor cloud</td></tr>
+                        <tr><td class="py-2 pr-4">No-code UI for non-engineers</td><td class="text-center pr-4 text-green-700">Yes</td><td class="text-center text-green-700">Yes</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-10">
+            <h2 class="text-2xl font-semibold mb-4">Security Considerations for Regulated Deployments</h2>
+            <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                <li><strong>Credentials:</strong> All integration credentials (API keys, OAuth tokens) are stored as n8n credentials, which are encrypted with the <code class="bg-gray-100 px-1 rounded">N8N_ENCRYPTION_KEY</code>. Never embed credentials in workflow nodes directly.</li>
+                <li><strong>Network:</strong> n8n should run in a private subnet. Traefik reverse proxy handles public TLS termination. Direct database access should be restricted to the n8n container only.</li>
+                <li><strong>Access control:</strong> Use n8n's built-in user management with SSO (SAML/OIDC) for production deployments. Don't share admin credentials.</li>
+                <li><strong>Workflow versioning:</strong> Export all production workflows to a git repository. This gives you version history, code review before deployment, and a recovery path if the n8n database is lost.</li>
+                <li><strong>Execution data retention:</strong> For regulated environments, retain execution logs for 90 days minimum. Configure PostgreSQL archiving to S3 for long-term compliance evidence.</li>
+            </ul>
+        </section>
+
+        <section class="bg-blue-900 text-white rounded-xl p-8">
+            <h2 class="text-2xl font-semibold mb-3">Want an AIOps Platform Built on Open Source?</h2>
+            <p class="text-blue-100 mb-6">
+                WaterApps designs and deploys n8n-based automation platforms for regulated enterprises — incident enrichment, compliance automation, change management, and AI-augmented operations workflows that run in your own infrastructure.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a href="index.html#contact" class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-lg font-semibold text-center">Book a Discovery Call</a>
+                <a href="capability-statement.html" class="bg-transparent border border-blue-300 text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-blue-800">Capability Statement</a>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
