@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terraform Module Design for APRA-Regulated Environments | WaterApps</title>
+    <meta name="description" content="How to structure Terraform for APRA CPS 234 compliance — remote state, data sovereignty, audit trails, and module patterns that survive a regulator's scrutiny.">
+    <link rel="canonical" href="https://www.waterapps.com.au/insights-terraform-apra-regulated.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Terraform Module Design for APRA-Regulated Environments | WaterApps">
+    <meta property="og:description" content="Opinionated Terraform patterns for APRA compliance — state management, data sovereignty, IAM constraints, and audit trail artifacts.">
+    <meta property="og:url" content="https://www.waterapps.com.au/insights-terraform-apra-regulated.html">
+    <meta property="og:image" content="https://www.waterapps.com.au/logo.png">
+    <meta property="og:image:alt" content="WaterApps logo">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Terraform Module Design for APRA-Regulated Environments | WaterApps">
+    <meta name="twitter:description" content="Opinionated Terraform patterns for APRA compliance — state, data sovereignty, IAM, audit trails.">
+    <meta name="twitter:image" content="https://www.waterapps.com.au/logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="mb-8">
+            <a href="insights.html" class="text-blue-600 hover:text-blue-700 text-sm">&larr; Back to Insights</a>
+            <h1 class="text-4xl font-bold mt-4 mb-4">Terraform Module Design for APRA-Regulated Environments</h1>
+            <p class="text-lg text-gray-600">
+                Infrastructure as code in a regulated context isn't just about provisioning resources — it's about producing audit evidence, enforcing data sovereignty, and building modules that a compliance team can actually review.
+            </p>
+            <div class="mt-4 flex flex-wrap gap-2 text-sm">
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">Terraform</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">APRA CPS 234</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">IaC</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">Cloud Security</span>
+            </div>
+        </div>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Why Generic Terraform Advice Falls Short in Regulated Environments</h2>
+            <p class="text-gray-700 mb-4">
+                Most Terraform tutorials are written for startups deploying to dev accounts. The advice is perfectly fine for that context: use modules, pin versions, don't commit state. For a financial institution deploying to an APRA-regulated production environment, that's the floor — not the ceiling.
+            </p>
+            <p class="text-gray-700 mb-4">
+                In regulated environments, the infrastructure code itself becomes a compliance artifact. Auditors ask: who approved this change? What was deployed? When? Was it encrypted? Was it in Australia? Can you prove it? If your Terraform codebase can't answer those questions from its own git history, CI/CD logs, and state files, you'll be reconstructing evidence manually at audit time — an expensive and error-prone process.
+            </p>
+            <p class="text-sm text-gray-500">
+                Patterns here are drawn from enterprise engagements in financial services and government. Examples are generalized to respect confidentiality obligations.
+            </p>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-5">Module Structure</h2>
+            <p class="text-gray-700 mb-4">
+                Organize modules around compliance boundaries, not just technical concerns. A module that mixes network, compute, and IAM is hard to review and harder to audit. The goal is modules small enough for a single reviewer to own.
+            </p>
+            <div class="bg-gray-900 text-green-400 rounded-lg p-6 font-mono text-sm overflow-x-auto mb-4">
+                <pre>
+modules/
+  networking/          # VPC, subnets, NACLs, flow logs
+  iam/                 # Roles, policies, boundary policies
+  compute/             # ECS clusters, task definitions
+  database/            # RDS, parameter groups, KMS keys
+  observability/       # CloudWatch, alarms, log groups
+  kms/                 # CMKs, key policies, aliases
+
+environments/
+  dev/
+    main.tf            # calls modules with dev vars
+    backend.tf         # remote state config
+  prod/
+    main.tf
+    backend.tf</pre>
+            </div>
+            <p class="text-gray-700 mb-2">Rules that matter in practice:</p>
+            <ul class="list-disc pl-6 text-gray-700 space-y-1">
+                <li>Keep modules under 200 lines of HCL. If a module grows past that, it's doing too much.</li>
+                <li>One module per concern. Never bundle IAM with compute — they have different review cadences and different approvers.</li>
+                <li>Version-pin module sources. <code class="bg-gray-100 px-1 rounded">source = "./modules/networking"</code> is fine for internal modules; remote modules must be pinned to a tag.</li>
+            </ul>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Data Sovereignty: Force <code class="bg-gray-100 px-1 rounded text-gray-800">ap-southeast-2</code></h2>
+            <p class="text-gray-700 mb-4">
+                APRA expects regulated entities to maintain data within Australian jurisdiction unless a specific exemption applies. The simplest way to enforce this in Terraform is at the variable level, not as a runtime check.
+            </p>
+            <div class="bg-gray-900 text-green-400 rounded-lg p-6 font-mono text-sm overflow-x-auto mb-4">
+                <pre>
+variable "aws_region" {
+  description = "AWS region. APRA CPS 235 requires data to remain in Australian jurisdiction."
+  type        = string
+  default     = "ap-southeast-2"
+
+  validation {
+    condition     = contains(["ap-southeast-2"], var.aws_region)
+    error_message = "Only ap-southeast-2 is approved for regulated workloads."
+  }
+}
+
+locals {
+  # APRA CPS 235: all production data must remain in ap-southeast-2 (Sydney).
+  # Any change to this value requires a CRB approval and updated data flow register.
+  primary_region = var.aws_region
+}</pre>
+            </div>
+            <p class="text-gray-700">Baking this into a <code class="bg-gray-100 px-1 rounded">validation</code> block means the plan fails immediately if someone accidentally targets a US region. You get a compliance guardrail that runs before any resource is created.</p>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Remote State: The Non-Negotiable</h2>
+            <p class="text-gray-700 mb-4">
+                Local state is incompatible with regulated environments for three reasons: no locking (race conditions on concurrent applies), no audit trail (changes don't go through version control), and no DR (state file lives on a laptop). Use S3 with DynamoDB locking as a minimum.
+            </p>
+            <div class="bg-gray-900 text-green-400 rounded-lg p-6 font-mono text-sm overflow-x-auto mb-4">
+                <pre>
+# backend.tf — partial config, credentials injected at init time
+terraform {
+  backend "s3" {
+    bucket         = "waterapps-prod-tfstate"
+    key            = "networking/terraform.tfstate"
+    region         = "ap-southeast-2"
+    encrypt        = true            # server-side encryption required
+    kms_key_id     = "alias/tfstate-cmk"
+    dynamodb_table = "waterapps-prod-tfstate-lock"
+  }
+}</pre>
+            </div>
+            <ul class="list-disc pl-6 text-gray-700 space-y-1">
+                <li>Use a customer-managed KMS key for state encryption, not the default S3-managed key. This lets you demonstrate key management controls at audit time.</li>
+                <li>Enable S3 versioning on the state bucket. You get a complete history of every state change — equivalent to git history for your infrastructure.</li>
+                <li>Lock down bucket access with a policy that denies public access and restricts <code class="bg-gray-100 px-1 rounded">s3:GetObject</code> to the CI/CD role only.</li>
+            </ul>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Tagging: Your Audit Trail at the Resource Level</h2>
+            <p class="text-gray-700 mb-4">
+                Tags are underused as compliance controls. A consistently tagged estate lets you answer "who owns this resource?", "what environment is it in?", and "when was it last changed?" from a Cost Explorer or Config query — without hunting through git logs.
+            </p>
+            <div class="bg-gray-900 text-green-400 rounded-lg p-6 font-mono text-sm overflow-x-auto mb-4">
+                <pre>
+locals {
+  common_tags = {
+    Project      = var.project_name
+    Environment  = var.environment
+    ManagedBy    = "terraform"
+    Owner        = "waterapps"
+    CostCentre   = var.cost_centre
+    DataClass    = var.data_classification   # PUBLIC, INTERNAL, CONFIDENTIAL
+    Repository   = "waterapps/infra-prod"
+    LastModified = formatdate("YYYY-MM-DD", timestamp())
+  }
+}
+
+# Apply to every resource
+resource "aws_vpc" "main" {
+  cidr_block = var.vpc_cidr
+  tags       = local.common_tags
+}</pre>
+            </div>
+            <p class="text-gray-700">The <code class="bg-gray-100 px-1 rounded">DataClass</code> tag is particularly useful — it allows AWS Config rules to flag when a CONFIDENTIAL resource accidentally gets a public ACL or security group rule.</p>
+        </section>
+
+        <section class="bg-blue-50 border border-blue-200 rounded-xl p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Pre-Merge Security Checklist</h2>
+            <p class="text-gray-700 mb-5">Every pull request touching infrastructure should pass these gates before merge to <code class="bg-gray-100 px-1 rounded">main</code>:</p>
+            <div class="grid md:grid-cols-2 gap-6 text-gray-800">
+                <div>
+                    <h3 class="font-semibold mb-2">Automated Gates (CI)</h3>
+                    <ul class="list-disc pl-6 space-y-1 text-sm">
+                        <li><code class="bg-gray-100 px-1 rounded">terraform validate</code> — syntax and type checks</li>
+                        <li><code class="bg-gray-100 px-1 rounded">terraform plan</code> — drift detection, change summary</li>
+                        <li><code class="bg-gray-100 px-1 rounded">tflint</code> — provider-specific best practices</li>
+                        <li><code class="bg-gray-100 px-1 rounded">tfsec</code> or <code class="bg-gray-100 px-1 rounded">checkov</code> — CRITICAL/HIGH = PR blocked</li>
+                        <li><code class="bg-gray-100 px-1 rounded">infracost</code> — cost delta on every PR</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-2">Human Review Checklist</h3>
+                    <ul class="list-disc pl-6 space-y-1 text-sm">
+                        <li>No <code class="bg-gray-100 px-1 rounded">Resource: "*"</code> in any IAM policy</li>
+                        <li>Every new resource has common_tags applied</li>
+                        <li>Encryption enabled on all storage resources</li>
+                        <li>No hardcoded values — all through variables</li>
+                        <li>Cost impact noted if &gt; $50/month delta</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-10">
+            <h2 class="text-2xl font-semibold mb-4">Anti-Patterns That Fail Audits</h2>
+            <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                <li><strong>Local state committed to git:</strong> State contains sensitive values in plaintext and changes aren't tracked through the PR process.</li>
+                <li><strong>Wildcard IAM:</strong> <code class="bg-gray-100 px-1 rounded">"Resource": "*"</code> in a deployed policy is an immediate finding in any security review. It will appear in tfsec output and in a penetration test report.</li>
+                <li><strong>Untagged resources:</strong> Auditors can't validate ownership or data classification. Config rules can't enforce policies. Cost allocation breaks.</li>
+                <li><strong>Provider versions unpinned:</strong> A <code class="bg-gray-100 px-1 rounded">terraform init</code> run six months later pulls a different provider version. Infrastructure that worked before may plan differently — in production.</li>
+                <li><strong>Module versions unpinned:</strong> Same problem. If a module is updated upstream with a breaking change, your next plan is a surprise.</li>
+                <li><strong>No plan output archived:</strong> You can't prove what was applied without the plan artifact. Store plan outputs in S3 or attach them to the CI run as artifacts.</li>
+            </ul>
+        </section>
+
+        <section class="bg-blue-900 text-white rounded-xl p-8">
+            <h2 class="text-2xl font-semibold mb-3">Need a Terraform Foundation Built to Regulatory Standards?</h2>
+            <p class="text-blue-100 mb-6">
+                WaterApps designs and builds Terraform module libraries for regulated enterprises — including remote state configuration, CI/CD integration, security scanning, and audit trail generation that satisfies APRA requirements.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a href="index.html#contact" class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-lg font-semibold text-center">Book a Discovery Call</a>
+                <a href="capability-statement.html" class="bg-transparent border border-blue-300 text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-blue-800">Capability Statement</a>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Australian Banks Should Stop Using IAM Access Keys in CI/CD | WaterApps</title>
+    <meta name="description" content="Long-lived AWS IAM access keys in CI/CD pipelines are a persistent APRA compliance risk. Here's how to replace them with GitHub OIDC federation — and why it matters for regulated environments.">
+    <link rel="canonical" href="https://www.waterapps.com.au/insights-iam-access-keys-cicd.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Why Australian Banks Should Stop Using IAM Access Keys in CI/CD | WaterApps">
+    <meta property="og:description" content="Long-lived IAM access keys are a hidden compliance risk. Replace them with GitHub OIDC federation — a practical guide for regulated environments.">
+    <meta property="og:url" content="https://www.waterapps.com.au/insights-iam-access-keys-cicd.html">
+    <meta property="og:image" content="https://www.waterapps.com.au/logo.png">
+    <meta property="og:image:alt" content="WaterApps logo">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Why Australian Banks Should Stop Using IAM Access Keys in CI/CD | WaterApps">
+    <meta name="twitter:description" content="Replace long-lived IAM access keys with GitHub OIDC federation. Practical guide for APRA-regulated environments.">
+    <meta name="twitter:image" content="https://www.waterapps.com.au/logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="mb-8">
+            <a href="insights.html" class="text-blue-600 hover:text-blue-700 text-sm">&larr; Back to Insights</a>
+            <h1 class="text-4xl font-bold mt-4 mb-4">Why Australian Banks Should Stop Using IAM Access Keys in CI/CD</h1>
+            <p class="text-lg text-gray-600">
+                Long-lived AWS access keys sitting in GitHub Secrets are a persistent, preventable risk. OIDC federation eliminates them entirely — and it's not complicated to implement.
+            </p>
+            <div class="mt-4 flex flex-wrap gap-2 text-sm">
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">AWS Security</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">APRA Compliance</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">CI/CD</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">DevSecOps</span>
+            </div>
+        </div>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">The Problem: Static Credentials in Dynamic Pipelines</h2>
+            <p class="text-gray-700 mb-4">
+                Most CI/CD pipelines that deploy to AWS still authenticate with a static <code class="bg-gray-100 px-1 rounded">AWS_ACCESS_KEY_ID</code> and <code class="bg-gray-100 px-1 rounded">AWS_SECRET_ACCESS_KEY</code> stored as repository secrets. On the surface this looks like a solved problem — secrets are encrypted, scoped to the repo, not visible in logs. Good enough, right?
+            </p>
+            <p class="text-gray-700 mb-4">
+                It isn't. Long-lived credentials have a fundamental property that makes them dangerous regardless of where they're stored: they don't expire. A key created in 2022 and forgotten is still valid in 2026. A key rotated manually every 90 days is still a 90-day window of exposure. Any engineer with admin access to the repo can read the secret. Any dependency compromise can exfiltrate it.
+            </p>
+            <p class="text-gray-700 mb-4">
+                For APRA-regulated entities, this creates a direct tension with CPS 234 requirements around credential lifecycle management and privileged access controls. Auditors increasingly ask: "Can you demonstrate that no long-lived programmatic credentials exist with deployment rights?" With static IAM keys in a secret store, the honest answer is no.
+            </p>
+            <p class="text-sm text-gray-500">
+                Examples are generalized from enterprise and regulated-sector engagements to respect confidentiality obligations.
+            </p>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">The Fix: GitHub OIDC Federation with AWS</h2>
+            <p class="text-gray-700 mb-4">
+                GitHub Actions supports OpenID Connect (OIDC). Instead of storing a long-lived AWS key as a secret, your pipeline requests a short-lived token from GitHub, presents it to AWS STS, and gets temporary credentials that expire when the job ends. No static key. No rotation policy. No 90-day window.
+            </p>
+            <p class="text-gray-700 mb-6">The architecture is straightforward:</p>
+
+            <ol class="list-decimal pl-6 text-gray-700 space-y-3 mb-6">
+                <li>GitHub acts as an OIDC identity provider. Each job gets a signed JWT asserting <em>which repo, which branch, which environment</em> triggered the workflow.</li>
+                <li>AWS IAM is configured to trust GitHub's OIDC endpoint. You create an IAM role with a trust policy that specifies exactly which repos and branches can assume it.</li>
+                <li>The workflow requests credentials using <code class="bg-gray-100 px-1 rounded">aws-actions/configure-aws-credentials</code> with <code class="bg-gray-100 px-1 rounded">role-to-assume</code>. AWS validates the JWT against GitHub's JWKS endpoint and issues 15-minute temporary credentials.</li>
+                <li>The rest of the workflow runs with those temporary credentials. When the job ends, they're gone.</li>
+            </ol>
+
+            <div class="bg-gray-900 text-green-400 rounded-lg p-6 font-mono text-sm overflow-x-auto mb-4">
+                <pre>
+# Before: static key sitting in GitHub Secrets
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+# After: no stored credentials at all
+permissions:
+  id-token: write   # required for OIDC token request
+  contents: read
+
+steps:
+  - uses: aws-actions/configure-aws-credentials@v4
+    with:
+      role-to-assume: arn:aws:iam::123456789012:role/github-actions-deploy
+      aws-region: ap-southeast-2</pre>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-5">IAM Trust Policy: Scope It Tightly</h2>
+            <p class="text-gray-700 mb-4">
+                The trust policy is where you control blast radius. A loose policy that trusts any GitHub repo is nearly as bad as a shared key. A well-scoped policy locks down which repo, which branch, and which environment can assume the role.
+            </p>
+            <div class="bg-gray-900 text-green-400 rounded-lg p-6 font-mono text-sm overflow-x-auto mb-4">
+                <pre>
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::123456789012:oidc-provider/token.actions.githubusercontent.com"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+          "token.actions.githubusercontent.com:sub":
+            "repo:waterapps/infra-prod:ref:refs/heads/main"
+        }
+      }
+    }
+  ]
+}</pre>
+            </div>
+            <p class="text-gray-700 mb-2">Key constraints to enforce:</p>
+            <ul class="list-disc pl-6 text-gray-700 space-y-1">
+                <li>Lock <code class="bg-gray-100 px-1 rounded">sub</code> to a specific repo and branch — never use a wildcard <code class="bg-gray-100 px-1 rounded">repo:org/*</code> for production roles.</li>
+                <li>Use separate roles per environment (dev, staging, prod). The prod role should only be assumable from <code class="bg-gray-100 px-1 rounded">refs/heads/main</code>.</li>
+                <li>Attach minimal IAM permissions to each role. A deploy role does not need <code class="bg-gray-100 px-1 rounded">iam:*</code>. Spell out exactly what it needs.</li>
+                <li>Enable CloudTrail. Every <code class="bg-gray-100 px-1 rounded">AssumeRoleWithWebIdentity</code> call is logged — you now have a full audit trail of what ran, when, from which commit.</li>
+            </ul>
+        </section>
+
+        <section class="bg-blue-50 border border-blue-200 rounded-xl p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">APRA CPS 234 Alignment</h2>
+            <p class="text-gray-700 mb-5">OIDC federation directly addresses several CPS 234 control areas:</p>
+            <div class="grid md:grid-cols-2 gap-6 text-gray-800">
+                <div>
+                    <h3 class="font-semibold mb-2">Credential Lifecycle</h3>
+                    <p class="text-sm text-gray-700">No long-lived programmatic credentials exist. There's nothing to rotate, nothing to leak, and nothing to audit for staleness. Credentials are ephemeral by architecture.</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-2">Privileged Access Controls</h3>
+                    <p class="text-sm text-gray-700">Access to production is conditional on a signed assertion from GitHub's identity layer, scoped to a specific repo and branch. No human can assume the role interactively without going through the pipeline.</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-2">Audit Trail</h3>
+                    <p class="text-sm text-gray-700">Every credential issuance is logged in CloudTrail with the GitHub Actions run ID. You can reconstruct exactly what was deployed, when, and by which workflow run — directly linkable to a commit and PR.</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-2">Third-Party Risk</h3>
+                    <p class="text-sm text-gray-700">If a third-party action or dependency in the pipeline is compromised, it cannot exfiltrate a reusable credential. The temporary token is useless after the job completes.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Common Objections</h2>
+            <div class="space-y-4">
+                <div>
+                    <p class="font-semibold text-gray-800">"We already rotate keys every 90 days."</p>
+                    <p class="text-gray-700 mt-1">Rotation reduces exposure windows but doesn't eliminate the attack surface. A key valid for 90 days is still a 90-day lateral movement opportunity. OIDC gives you zero-day credentials — they expire in 15 minutes.</p>
+                </div>
+                <div>
+                    <p class="font-semibold text-gray-800">"Our self-hosted runners can't use OIDC."</p>
+                    <p class="text-gray-700 mt-1">Self-hosted runners support OIDC since GitHub Actions runner v2.285.0. If you're running older runner versions, the upgrade path is straightforward and the security benefit is immediate.</p>
+                </div>
+                <div>
+                    <p class="font-semibold text-gray-800">"It's more complex to set up."</p>
+                    <p class="text-gray-700 mt-1">The initial setup — OIDC provider registration in AWS, one IAM role with a trust policy, one workflow change — takes under an hour. After that, it's simpler to operate than key rotation, because there's nothing to rotate.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-10">
+            <h2 class="text-2xl font-semibold mb-4">Migration Checklist</h2>
+            <ol class="list-decimal pl-6 text-gray-700 space-y-2">
+                <li>Register GitHub's OIDC provider in your AWS account (<code class="bg-gray-100 px-1 rounded">token.actions.githubusercontent.com</code>).</li>
+                <li>Create one IAM role per environment with a tightly scoped trust policy (repo + branch condition).</li>
+                <li>Attach least-privilege permissions to each role — no more than the pipeline actually needs.</li>
+                <li>Update workflows to use <code class="bg-gray-100 px-1 rounded">aws-actions/configure-aws-credentials@v4</code> with <code class="bg-gray-100 px-1 rounded">role-to-assume</code>.</li>
+                <li>Add <code class="bg-gray-100 px-1 rounded">permissions: id-token: write</code> to each job that needs AWS access.</li>
+                <li>Verify CloudTrail is capturing <code class="bg-gray-100 px-1 rounded">AssumeRoleWithWebIdentity</code> events.</li>
+                <li>Delete the old IAM access keys. Do not leave them inactive — delete them.</li>
+                <li>Document the role ARNs and trust policy conditions in your runbook for audit evidence.</li>
+            </ol>
+        </section>
+
+        <section class="bg-blue-900 text-white rounded-xl p-8">
+            <h2 class="text-2xl font-semibold mb-3">Ready to Eliminate Static Credentials?</h2>
+            <p class="text-blue-100 mb-6">
+                WaterApps helps regulated enterprises migrate from long-lived IAM keys to OIDC federation — and build CI/CD pipelines that satisfy APRA audit requirements from day one.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a href="index.html#contact" class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-lg font-semibold text-center">Book a Discovery Call</a>
+                <a href="capability-statement.html" class="bg-transparent border border-blue-300 text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-blue-800">Capability Statement</a>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

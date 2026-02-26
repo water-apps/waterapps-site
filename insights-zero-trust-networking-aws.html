@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zero-Trust Networking on AWS for Financial Services | WaterApps</title>
+    <meta name="description" content="Practical zero-trust network architecture on AWS for APRA-regulated financial services — private subnets, VPC endpoints, Security Groups as code, NACLs, and PrivateLink patterns.">
+    <link rel="canonical" href="https://www.waterapps.com.au/insights-zero-trust-networking-aws.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Zero-Trust Networking on AWS for Financial Services | WaterApps">
+    <meta property="og:description" content="Zero-trust network architecture on AWS for APRA-regulated environments — private subnets, VPC endpoints, Security Groups as code, PrivateLink.">
+    <meta property="og:url" content="https://www.waterapps.com.au/insights-zero-trust-networking-aws.html">
+    <meta property="og:image" content="https://www.waterapps.com.au/logo.png">
+    <meta property="og:image:alt" content="WaterApps logo">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Zero-Trust Networking on AWS for Financial Services | WaterApps">
+    <meta name="twitter:description" content="Zero-trust AWS networking for APRA-regulated environments. Practical patterns, not theory.">
+    <meta name="twitter:image" content="https://www.waterapps.com.au/logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="mb-8">
+            <a href="insights.html" class="text-blue-600 hover:text-blue-700 text-sm">&larr; Back to Insights</a>
+            <h1 class="text-4xl font-bold mt-4 mb-4">Zero-Trust Networking on AWS for Financial Services</h1>
+            <p class="text-lg text-gray-600">
+                Zero trust isn't a product you buy — it's a set of network design decisions. Here's what those decisions look like in a real AWS deployment for a regulated financial services workload.
+            </p>
+            <div class="mt-4 flex flex-wrap gap-2 text-sm">
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">Network Security</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">AWS VPC</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">APRA CPS 234</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">Zero Trust</span>
+            </div>
+        </div>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">What Zero Trust Actually Means for a VPC</h2>
+            <p class="text-gray-700 mb-4">
+                "Zero trust" is overloaded to the point of near-meaninglessness in vendor marketing. In the context of AWS network design for a financial services workload, it has a concrete definition: <strong>no service trusts any other service by default, and every connection must be explicitly permitted</strong>.
+            </p>
+            <p class="text-gray-700 mb-4">
+                In practice, this translates to four design principles:
+            </p>
+            <ol class="list-decimal pl-6 text-gray-700 space-y-2 mb-4">
+                <li><strong>Private by default.</strong> Nothing is internet-reachable unless there's a specific reason. Databases, internal APIs, container tasks — all in private subnets with no public IP.</li>
+                <li><strong>Explicit allow at every layer.</strong> Security Groups define what can talk to what. The default answer is "no". Every permitted connection is named and documented.</li>
+                <li><strong>Traffic never transits the internet.</strong> AWS service calls (S3, ECR, SSM, KMS) use VPC endpoints, not the public internet. Traffic stays within the AWS backbone.</li>
+                <li><strong>All traffic is logged.</strong> VPC Flow Logs capture every accepted and rejected connection. You can reconstruct any lateral movement path from logs.</li>
+            </ol>
+            <p class="text-sm text-gray-500">Network patterns described here are drawn from financial services and government engagements. Specifics are generalized to respect confidentiality obligations.</p>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">VPC Subnet Architecture</h2>
+            <p class="text-gray-700 mb-4">
+                A three-tier subnet design gives you the right blast radius control for each layer of the stack:
+            </p>
+            <div class="space-y-4 mb-6">
+                <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <h3 class="font-semibold text-red-800 mb-1">Public Subnets — Internet-facing only</h3>
+                    <p class="text-sm text-gray-700">Application Load Balancers, NAT Gateways, Bastion hosts (if used — prefer SSM Session Manager instead). Nothing with access to data lives here.</p>
+                </div>
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <h3 class="font-semibold text-yellow-800 mb-1">Private Subnets — Application layer</h3>
+                    <p class="text-sm text-gray-700">ECS Fargate tasks, Lambda functions, application containers. Outbound internet via NAT Gateway. No inbound from internet — only from the ALB Security Group.</p>
+                </div>
+                <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <h3 class="font-semibold text-green-800 mb-1">Isolated Subnets — Data layer</h3>
+                    <p class="text-sm text-gray-700">RDS databases, ElastiCache, internal services. No NAT Gateway — no outbound internet access at all. Inbound only from application subnet Security Groups. AWS service access via VPC endpoints.</p>
+                </div>
+            </div>
+            <div class="bg-gray-900 text-green-400 rounded-lg p-6 font-mono text-sm overflow-x-auto">
+                <pre>
+# Simplified VPC subnet layout across 3 AZs
+resource "aws_subnet" "public" {
+  count             = 3
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = cidrsubnet(var.vpc_cidr, 4, count.index)
+  availability_zone = data.aws_availability_zones.available.names[count.index]
+  # No public IP assignment by default — ALB is the only resource here
+  map_public_ip_on_launch = false
+  tags = merge(local.common_tags, { Tier = "public" })
+}
+
+resource "aws_subnet" "private" {
+  count             = 3
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = cidrsubnet(var.vpc_cidr, 4, count.index + 3)
+  availability_zone = data.aws_availability_zones.available.names[count.index]
+  tags = merge(local.common_tags, { Tier = "private" })
+}
+
+resource "aws_subnet" "isolated" {
+  count             = 3
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = cidrsubnet(var.vpc_cidr, 4, count.index + 6)
+  availability_zone = data.aws_availability_zones.available.names[count.index]
+  tags = merge(local.common_tags, { Tier = "isolated" })
+  # No route to NAT Gateway — completely isolated from internet
+}</pre>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Security Groups as Code: Explicit Over Permissive</h2>
+            <p class="text-gray-700 mb-4">
+                Security Group rules in a zero-trust design reference other Security Groups, not CIDR ranges. This means "allow traffic from ECS tasks" rather than "allow traffic from 10.0.0.0/16" — the latter grows to include everything in the VPC over time.
+            </p>
+            <div class="bg-gray-900 text-green-400 rounded-lg p-6 font-mono text-sm overflow-x-auto mb-4">
+                <pre>
+# RDS Security Group — only accepts connections from ECS tasks
+resource "aws_security_group" "rds" {
+  name        = "${var.project}-${var.env}-rds"
+  description = "RDS PostgreSQL — accepts connections from ECS tasks only"
+  vpc_id      = aws_vpc.main.id
+  tags        = local.common_tags
+}
+
+resource "aws_security_group_rule" "rds_from_ecs" {
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.rds.id
+  source_security_group_id = aws_security_group.ecs_tasks.id  # named reference
+  description              = "PostgreSQL from ECS application tasks"
+}
+
+resource "aws_security_group_rule" "rds_no_egress" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  cidr_blocks       = ["127.0.0.1/32"]  # effectively blocks all egress
+  security_group_id = aws_security_group.rds.id
+  description       = "No egress — database does not initiate connections"
+}</pre>
+            </div>
+            <p class="text-gray-700">Every Security Group rule has a <code class="bg-gray-100 px-1 rounded">description</code> explaining why the connection is permitted. This is the inline documentation for your network access model — reviewable in Terraform diffs during PR review.</p>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">VPC Endpoints: Keep AWS Traffic Off the Internet</h2>
+            <p class="text-gray-700 mb-4">
+                Without VPC endpoints, traffic to S3, ECR, KMS, and SSM transits the public internet via the NAT Gateway. This means your container pulling an image from ECR, your Lambda reading a parameter from SSM, or your application uploading to S3 is generating internet egress traffic — with associated costs, latency, and exposure surface.
+            </p>
+            <p class="text-gray-700 mb-4">
+                VPC endpoints route this traffic through the AWS private backbone. No internet gateway, no NAT Gateway charge, no public exposure. For regulated environments, VPC endpoints also simplify the data flow documentation — you can demonstrate to auditors that data never left the AWS private network.
+            </p>
+            <div class="grid md:grid-cols-2 gap-4 mb-4">
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h3 class="font-semibold mb-2 text-sm">Gateway Endpoints (free)</h3>
+                    <ul class="list-disc pl-4 text-sm text-gray-700 space-y-1">
+                        <li>S3</li>
+                        <li>DynamoDB</li>
+                    </ul>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h3 class="font-semibold mb-2 text-sm">Interface Endpoints (~$7/mo each)</h3>
+                    <ul class="list-disc pl-4 text-sm text-gray-700 space-y-1">
+                        <li>ECR API + ECR DKR</li>
+                        <li>KMS</li>
+                        <li>SSM + SSM Messages</li>
+                        <li>Secrets Manager</li>
+                        <li>CloudWatch Logs</li>
+                    </ul>
+                </div>
+            </div>
+            <p class="text-gray-700 text-sm">Interface endpoints cost ~$7/mo each per AZ. A full set for an isolated workload is $50–100/mo — cheaper than the NAT Gateway charges for the same traffic volume, and eliminates the internet exposure entirely.</p>
+        </section>
+
+        <section class="bg-blue-50 border border-blue-200 rounded-xl p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">APRA CPS 234 Network Controls Mapping</h2>
+            <div class="space-y-4 text-gray-800">
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="bg-white rounded-lg p-4 border border-blue-100">
+                        <h3 class="font-semibold text-sm mb-1">Network Segmentation</h3>
+                        <p class="text-xs text-gray-600">3-tier subnet design ensures databases are never accessible from the internet. Public tier limited to load balancers only.</p>
+                        <p class="text-xs text-blue-700 mt-2 font-medium">Controls: CPS 234 §36(c)</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-4 border border-blue-100">
+                        <h3 class="font-semibold text-sm mb-1">Access Controls</h3>
+                        <p class="text-xs text-gray-600">Security Group rules reference named groups, not CIDR ranges. Every permitted connection is explicit and version-controlled.</p>
+                        <p class="text-xs text-blue-700 mt-2 font-medium">Controls: CPS 234 §36(b)</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-4 border border-blue-100">
+                        <h3 class="font-semibold text-sm mb-1">Incident Detection</h3>
+                        <p class="text-xs text-gray-600">VPC Flow Logs capture all accepted and rejected connections, retained for 90 days minimum. CloudWatch alarms on unusual traffic patterns.</p>
+                        <p class="text-xs text-blue-700 mt-2 font-medium">Controls: CPS 234 §38</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-4 border border-blue-100">
+                        <h3 class="font-semibold text-sm mb-1">Data in Transit</h3>
+                        <p class="text-xs text-gray-600">TLS 1.2+ enforced at ALB and RDS. VPC endpoints eliminate plaintext AWS API calls over the public internet.</p>
+                        <p class="text-xs text-blue-700 mt-2 font-medium">Controls: CPS 234 §36(d)</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-4 border border-blue-100">
+                        <h3 class="font-semibold text-sm mb-1">Third-Party Access</h3>
+                        <p class="text-xs text-gray-600">No standing SSH or RDP access. SSM Session Manager for break-glass access, logged to CloudTrail. No bastion hosts in the network path.</p>
+                        <p class="text-xs text-blue-700 mt-2 font-medium">Controls: CPS 234 §36(e)</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-4 border border-blue-100">
+                        <h3 class="font-semibold text-sm mb-1">Change Management</h3>
+                        <p class="text-xs text-gray-600">All Security Group changes go through Terraform pull requests. No manual console changes to production. Drift detection in CI.</p>
+                        <p class="text-xs text-blue-700 mt-2 font-medium">Controls: CPS 234 §36(a)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Eliminating Bastion Hosts</h2>
+            <p class="text-gray-700 mb-4">
+                Bastion hosts are a common pattern for operational access to private resources, but they represent a standing attack surface: a publicly accessible EC2 instance that, if compromised, provides a pivot point into the private network. For regulated environments, this is an unnecessary risk.
+            </p>
+            <p class="text-gray-700 mb-4">
+                AWS Systems Manager Session Manager provides interactive shell access to EC2 instances and ECS tasks without any inbound security group rules, no SSH keys, no public IP, and no bastion. Access is authenticated through IAM, all sessions are logged to CloudTrail and optionally to CloudWatch Logs, and sessions can be time-limited.
+            </p>
+            <ul class="list-disc pl-6 text-gray-700 space-y-1">
+                <li>No inbound Security Group rules required — eliminates the open SSH port entirely</li>
+                <li>All session activity logged — satisfies privileged access monitoring requirements</li>
+                <li>Access controlled by IAM policy — integrates with your existing access management</li>
+                <li>Works through VPC endpoints — traffic stays on the AWS private network</li>
+            </ul>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-10">
+            <h2 class="text-2xl font-semibold mb-4">Zero-Trust Network Checklist</h2>
+            <ol class="list-decimal pl-6 text-gray-700 space-y-2">
+                <li>VPC has 3-tier subnet design: public (ALB only), private (compute), isolated (data).</li>
+                <li>No RDS or internal service instance has a public IP address.</li>
+                <li>All Security Group rules reference named Security Groups, not CIDR ranges.</li>
+                <li>Every Security Group rule has a description explaining the permitted flow.</li>
+                <li>VPC endpoints deployed for S3, DynamoDB, ECR, KMS, SSM, Secrets Manager, CloudWatch Logs.</li>
+                <li>VPC Flow Logs enabled on all VPCs, sent to S3 or CloudWatch Logs, retained 90+ days.</li>
+                <li>No bastion hosts — SSM Session Manager used for operational access.</li>
+                <li>ALB listener policy enforces TLS 1.2 minimum. HTTP redirects to HTTPS.</li>
+                <li>RDS security group denies all egress.</li>
+                <li>All Security Group changes managed through Terraform — no manual console modifications.</li>
+            </ol>
+        </section>
+
+        <section class="bg-blue-900 text-white rounded-xl p-8">
+            <h2 class="text-2xl font-semibold mb-3">Need a Network Architecture Review?</h2>
+            <p class="text-blue-100 mb-6">
+                WaterApps reviews and redesigns AWS network architectures for regulated enterprises — identifying compliance gaps, reducing attack surface, and producing the documentation that satisfies APRA CPS 234 requirements.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a href="index.html#contact" class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-lg font-semibold text-center">Book a Discovery Call</a>
+                <a href="capability-statement.html" class="bg-transparent border border-blue-300 text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-blue-800">Capability Statement</a>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
