@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The $400/Month Enterprise AWS Stack — What's Actually In It | WaterApps</title>
+    <meta name="description" content="A transparent cost breakdown of a production-ready AWS stack for regulated workloads — VPC, ECS Fargate, RDS, CloudFront, KMS, monitoring, and CI/CD for $100–400/month.">
+    <link rel="canonical" href="https://www.waterapps.com.au/insights-400-enterprise-aws-stack.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="The $400/Month Enterprise AWS Stack — What's Actually In It | WaterApps">
+    <meta property="og:description" content="Transparent cost breakdown of a production-ready AWS stack for regulated workloads: VPC, ECS Fargate, RDS, CloudFront, KMS, monitoring, CI/CD.">
+    <meta property="og:url" content="https://www.waterapps.com.au/insights-400-enterprise-aws-stack.html">
+    <meta property="og:image" content="https://www.waterapps.com.au/logo.png">
+    <meta property="og:image:alt" content="WaterApps logo">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="The $400/Month Enterprise AWS Stack — What's Actually In It | WaterApps">
+    <meta name="twitter:description" content="Transparent cost breakdown: production-ready AWS stack for $100–400/month.">
+    <meta name="twitter:image" content="https://www.waterapps.com.au/logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="mb-8">
+            <a href="insights.html" class="text-blue-600 hover:text-blue-700 text-sm">&larr; Back to Insights</a>
+            <h1 class="text-4xl font-bold mt-4 mb-4">The $400/Month Enterprise AWS Stack — What's Actually In It</h1>
+            <p class="text-lg text-gray-600">
+                A transparent, line-by-line breakdown of what a production-ready, APRA-grade AWS infrastructure footprint actually costs — and what you get for it.
+            </p>
+            <div class="mt-4 flex flex-wrap gap-2 text-sm">
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">AWS Architecture</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">Cost Optimization</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">Enterprise Infrastructure</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">Regulated Cloud</span>
+            </div>
+        </div>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Why Cost Transparency Matters in Procurement</h2>
+            <p class="text-gray-700 mb-4">
+                One of the most common friction points in cloud adoption conversations with regulated enterprises isn't security, compliance, or architecture — it's cost uncertainty. "What will this actually cost us?" is the question that stalls projects.
+            </p>
+            <p class="text-gray-700 mb-4">
+                Most cloud vendors quote aspirational figures. Most consultants are vague. This article names specific numbers for a specific stack, built to enterprise-grade standards, that WaterApps uses as a reference architecture for client engagements.
+            </p>
+            <p class="text-gray-700 mb-4">
+                The range is <strong>$100–400 USD/month</strong> depending on traffic, data volume, and environment size. Here's what you get — and why each component is in the stack.
+            </p>
+            <p class="text-sm text-gray-500">Costs are estimates based on ap-southeast-2 (Sydney) pricing as of 2026. Actual costs vary with usage patterns. All figures in USD.</p>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-5">The Stack: 7 Modules</h2>
+
+            <div class="space-y-6">
+                <div class="border-l-4 border-blue-400 pl-4">
+                    <div class="flex justify-between items-start mb-1">
+                        <h3 class="text-xl font-semibold">1. Networking (VPC)</h3>
+                        <span class="text-blue-700 font-semibold bg-blue-50 px-3 py-1 rounded-full text-sm">~$15–30/mo</span>
+                    </div>
+                    <p class="text-gray-700 mb-2">3-tier VPC with public, private, and isolated subnets across 3 Availability Zones. NAT Gateways for outbound traffic from private subnets. VPC Flow Logs to S3 for network audit trail.</p>
+                    <ul class="list-disc pl-6 text-gray-600 text-sm space-y-1">
+                        <li>NAT Gateway: ~$10–20/mo (2 AZs for HA) — largest networking cost</li>
+                        <li>VPC Flow Logs storage: ~$2–5/mo depending on traffic volume</li>
+                        <li>VPC endpoints for S3, ECR, SSM: free after transfer savings</li>
+                    </ul>
+                </div>
+
+                <div class="border-l-4 border-green-400 pl-4">
+                    <div class="flex justify-between items-start mb-1">
+                        <h3 class="text-xl font-semibold">2. Compute (ECS Fargate)</h3>
+                        <span class="text-green-700 font-semibold bg-green-50 px-3 py-1 rounded-full text-sm">~$30–80/mo</span>
+                    </div>
+                    <p class="text-gray-700 mb-2">ECS Fargate for containerized workloads. No EC2 instances to patch, no bastion hosts to manage. Application Load Balancer in the public subnet, tasks in private subnets.</p>
+                    <ul class="list-disc pl-6 text-gray-600 text-sm space-y-1">
+                        <li>Fargate: 0.25 vCPU / 0.5 GB RAM running 24/7 ≈ $10–12/mo per task</li>
+                        <li>Application Load Balancer: ~$18/mo base + LCU usage</li>
+                        <li>ECR private registry: ~$0.10/GB/mo for image storage</li>
+                    </ul>
+                </div>
+
+                <div class="border-l-4 border-yellow-400 pl-4">
+                    <div class="flex justify-between items-start mb-1">
+                        <h3 class="text-xl font-semibold">3. Database (RDS PostgreSQL)</h3>
+                        <span class="text-yellow-700 font-semibold bg-yellow-50 px-3 py-1 rounded-full text-sm">~$50–120/mo</span>
+                    </div>
+                    <p class="text-gray-700 mb-2">RDS PostgreSQL in Multi-AZ for production resilience. db.t3.medium is the smallest instance we deploy to production — anything smaller creates operational risk in regulated environments. Encrypted at rest with a customer-managed KMS key.</p>
+                    <ul class="list-disc pl-6 text-gray-600 text-sm space-y-1">
+                        <li>db.t3.medium Multi-AZ: ~$80–100/mo (the biggest cost driver)</li>
+                        <li>Storage: 20 GB gp3 ≈ $3/mo</li>
+                        <li>Automated backups: included in storage costs</li>
+                        <li>Single-AZ for dev/staging saves ~50% but is not acceptable for production</li>
+                    </ul>
+                </div>
+
+                <div class="border-l-4 border-purple-400 pl-4">
+                    <div class="flex justify-between items-start mb-1">
+                        <h3 class="text-xl font-semibold">4. CDN & Edge (CloudFront)</h3>
+                        <span class="text-purple-700 font-semibold bg-purple-50 px-3 py-1 rounded-full text-sm">~$5–20/mo</span>
+                    </div>
+                    <p class="text-gray-700 mb-2">CloudFront distribution in front of the ALB for TLS termination, DDoS protection via AWS Shield Standard, and edge caching of static assets. WAF with managed rule groups for OWASP Top 10 protection.</p>
+                    <ul class="list-disc pl-6 text-gray-600 text-sm space-y-1">
+                        <li>CloudFront: ~$1–10/mo for low-moderate traffic (first 10TB free tier applies)</li>
+                        <li>WAF: ~$5/mo base + $1/mo per rule group</li>
+                        <li>ACM certificate: free when used with CloudFront</li>
+                    </ul>
+                </div>
+
+                <div class="border-l-4 border-red-400 pl-4">
+                    <div class="flex justify-between items-start mb-1">
+                        <h3 class="text-xl font-semibold">5. Key Management (KMS)</h3>
+                        <span class="text-red-700 font-semibold bg-red-50 px-3 py-1 rounded-full text-sm">~$5–10/mo</span>
+                    </div>
+                    <p class="text-gray-700 mb-2">Customer-managed KMS keys for RDS, S3 (Terraform state, logs, backups), ECS secrets. CMKs are non-negotiable for regulated workloads — they give you key ownership and enable key policy controls that AWS-managed keys don't.</p>
+                    <ul class="list-disc pl-6 text-gray-600 text-sm space-y-1">
+                        <li>$1/mo per CMK + $0.03 per 10,000 API calls</li>
+                        <li>Typically 3–5 keys in a standard stack: RDS, S3, application secrets</li>
+                        <li>Key rotation: automated, no additional cost</li>
+                    </ul>
+                </div>
+
+                <div class="border-l-4 border-orange-400 pl-4">
+                    <div class="flex justify-between items-start mb-1">
+                        <h3 class="text-xl font-semibold">6. Monitoring & Observability</h3>
+                        <span class="text-orange-700 font-semibold bg-orange-50 px-3 py-1 rounded-full text-sm">~$10–30/mo</span>
+                    </div>
+                    <p class="text-gray-700 mb-2">CloudWatch Log Groups for application and infrastructure logs, with 90-day retention (APRA minimum). CloudWatch Alarms on RDS CPU, ECS memory, ALB 5xx errors, and KMS usage. CloudTrail enabled across all regions.</p>
+                    <ul class="list-disc pl-6 text-gray-600 text-sm space-y-1">
+                        <li>CloudWatch Logs: ~$0.57/GB ingested, $0.03/GB stored</li>
+                        <li>CloudWatch Alarms: $0.10/alarm/mo — typically 10–20 alarms in a base stack</li>
+                        <li>CloudTrail: first trail free, S3 storage ~$2–5/mo</li>
+                        <li>SNS for alerting: negligible at low volume</li>
+                    </ul>
+                </div>
+
+                <div class="border-l-4 border-teal-400 pl-4">
+                    <div class="flex justify-between items-start mb-1">
+                        <h3 class="text-xl font-semibold">7. CI/CD Pipeline</h3>
+                        <span class="text-teal-700 font-semibold bg-teal-50 px-3 py-1 rounded-full text-sm">~$0–15/mo</span>
+                    </div>
+                    <p class="text-gray-700 mb-2">GitHub Actions with OIDC federation to AWS. No CodePipeline, no CodeBuild unless client mandates it — GitHub Actions is cheaper and more flexible for most regulated workloads. Workflows for plan, apply, and security scanning.</p>
+                    <ul class="list-disc pl-6 text-gray-600 text-sm space-y-1">
+                        <li>GitHub Actions: included in GitHub Team/Enterprise; ~2,000 free minutes/mo on free plans</li>
+                        <li>No CodePipeline or CodeBuild costs</li>
+                        <li>S3 for Terraform plan artifacts: negligible</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-blue-50 border border-blue-200 rounded-xl p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Monthly Cost Summary</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-gray-800">
+                    <thead>
+                        <tr class="border-b border-blue-200">
+                            <th class="text-left py-2 pr-4 font-semibold">Module</th>
+                            <th class="text-right py-2 pr-4 font-semibold">Low</th>
+                            <th class="text-right py-2 font-semibold">High</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-blue-100">
+                        <tr><td class="py-2 pr-4">Networking (VPC + NAT + Flow Logs)</td><td class="text-right pr-4">$15</td><td class="text-right">$30</td></tr>
+                        <tr><td class="py-2 pr-4">Compute (ECS Fargate + ALB)</td><td class="text-right pr-4">$30</td><td class="text-right">$80</td></tr>
+                        <tr><td class="py-2 pr-4">Database (RDS PostgreSQL Multi-AZ)</td><td class="text-right pr-4">$50</td><td class="text-right">$120</td></tr>
+                        <tr><td class="py-2 pr-4">CDN & Edge (CloudFront + WAF)</td><td class="text-right pr-4">$5</td><td class="text-right">$20</td></tr>
+                        <tr><td class="py-2 pr-4">Key Management (KMS CMKs)</td><td class="text-right pr-4">$5</td><td class="text-right">$10</td></tr>
+                        <tr><td class="py-2 pr-4">Monitoring (CloudWatch + CloudTrail)</td><td class="text-right pr-4">$10</td><td class="text-right">$30</td></tr>
+                        <tr><td class="py-2 pr-4">CI/CD (GitHub Actions + S3)</td><td class="text-right pr-4">$0</td><td class="text-right">$15</td></tr>
+                        <tr class="font-semibold border-t-2 border-blue-300"><td class="py-2 pr-4">Total</td><td class="text-right pr-4">$115</td><td class="text-right">$305</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-sm text-gray-600 mt-4">Costs increase as workloads scale. RDS and Fargate are the dominant levers — plan sizing conversations early.</p>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-10">
+            <h2 class="text-2xl font-semibold mb-4">What This Stack Does Not Include</h2>
+            <p class="text-gray-700 mb-4">
+                Knowing the ceiling matters too. These are common additions that push costs above the base range:
+            </p>
+            <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                <li><strong>ElastiCache / Redis:</strong> Add $30–80/mo for session caching or queue offload.</li>
+                <li><strong>Additional Fargate tasks:</strong> Every production service adds $10–20/mo per task running 24/7.</li>
+                <li><strong>Data transfer:</strong> Significant cross-AZ or internet egress traffic adds up quickly. NAT Gateway egress is $0.059/GB — model your traffic patterns.</li>
+                <li><strong>Secrets Manager:</strong> $0.40/secret/mo + $0.05 per 10k API calls. For most apps, $5–15/mo additional.</li>
+                <li><strong>AWS Config:</strong> $0.003 per configuration item — typically $5–20/mo for a stack this size. Valuable for compliance evidence.</li>
+                <li><strong>Security Hub:</strong> $0.0010 per finding record/mo. Essential for APRA workloads but adds $10–40/mo depending on rule set.</li>
+            </ul>
+        </section>
+
+        <section class="bg-blue-900 text-white rounded-xl p-8">
+            <h2 class="text-2xl font-semibold mb-3">Want This Stack Built for Your Environment?</h2>
+            <p class="text-blue-100 mb-6">
+                WaterApps deploys this stack as a reference architecture for regulated enterprises — fully Terraformed, OIDC-authenticated CI/CD, security scanning built in, and documentation that satisfies procurement reviews.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a href="index.html#contact" class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-lg font-semibold text-center">Book a Discovery Call</a>
+                <a href="capability-statement.html" class="bg-transparent border border-blue-300 text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-blue-800">Capability Statement</a>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
