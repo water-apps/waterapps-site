@@ -2,7 +2,8 @@
   "name": "waterapps-site",
   "private": true,
   "scripts": {
-    "build:css": "tailwindcss -i ./assets/css/tailwind-input.css -o ./assets/css/tailwind.generated.css --minify"
+    "build:css": "tailwindcss -i ./assets/css/tailwind-input.css -o ./assets/css/tailwind.generated.css --minify",
+    "test:portal-auth": "node --test tests/portal-auth.test.js"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.17"
