@@ -92,9 +92,11 @@ GitHub Pages auto-deploys on every push to `main`. Changes go live within 1–2 
 
 ---
 
-## Contact Form API Integration (Serverless Backend)
+## Contact + Booking API Integration (Serverless Backend)
 
-The site now includes a browser-submitted contact form UI in `index.html` that can post to the WaterApps serverless contact-form API.
+The site includes:
+- a browser-submitted contact form (`POST /contact`)
+- a native discovery-call scheduler (`GET /availability`, `POST /booking`)
 
 Before promoting to production, configure the API endpoint in one of these ways:
 
@@ -102,12 +104,20 @@ Before promoting to production, configure the API endpoint in one of these ways:
 2. Or define `window.WATERAPPS_CONFIG = { contactApiEndpoint: "https://.../contact" }` before the inline script runs
 3. Or define `window.WATERAPPS_CONTACT_API_ENDPOINT = "https://.../contact"`
 
+For booking UI in `#booking-form`:
+- set `data-availability-endpoint="https://.../availability"`
+- set `data-booking-endpoint="https://.../booking"`
+- or set only `contactApiEndpoint` and the frontend derives booking endpoints from it
+
 The frontend expects JSON responses and handles:
 - `200` success
 - `400` validation failures with `fieldErrors`
 - `403` origin errors (misconfigured allowlist/origin)
 - `429` throttling
 - `500` fallback message
+
+Reference article:
+- `/Users/varunau/Projects/waterapps/waterapps-site/docs/BOOKING_PLATFORM_ARTICLE.md`
 
 ### Email Deliverability / Trust Notice (Completed: DNS Auth Active)
 
