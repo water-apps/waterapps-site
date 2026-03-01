@@ -4,6 +4,40 @@ function trackEvent(eventName, params) {
     }
 }
 
+function localDateKeyFromDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+function filterSlotsByLocalDate(slots, dateValue) {
+    if (!Array.isArray(slots)) return [];
+    if (!dateValue) return slots;
+    return slots.filter((slot) => {
+        const slotDate = new Date((slot && slot.slotStart) || '');
+        if (Number.isNaN(slotDate.getTime())) return false;
+        return localDateKeyFromDate(slotDate) === dateValue;
+    });
+}
+
+function createAvailabilityRequestUrl(baseEndpoint, selectedDate) {
+    const url = new URL(baseEndpoint);
+    url.searchParams.set('days', selectedDate ? '14' : '7');
+    if (selectedDate) {
+        url.searchParams.set('date', selectedDate);
+    }
+    return url.toString();
+}
+
+if (typeof window !== 'undefined') {
+    window.WaterAppsBookingHelpers = {
+        localDateKeyFromDate,
+        filterSlotsByLocalDate,
+        createAvailabilityRequestUrl
+    };
+}
+
 (function setupBookingForm() {
     const form = document.getElementById('booking-form');
     if (!form) return;
@@ -116,13 +150,6 @@ function trackEvent(eventName, params) {
         });
     }
 
-    function localDateKey(date) {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    }
-
     function renderSlotOptions(slots) {
         if (!slotSelect) return;
         slotSelect.innerHTML = '';
@@ -149,12 +176,7 @@ function trackEvent(eventName, params) {
     }
 
     function filterSlotsByDate(dateValue) {
-        if (!dateValue) return latestSlots;
-        return latestSlots.filter((slot) => {
-            const slotDate = new Date(slot.slotStart || '');
-            if (Number.isNaN(slotDate.getTime())) return false;
-            return localDateKey(slotDate) === dateValue;
-        });
+        return filterSlotsByLocalDate(latestSlots, dateValue);
     }
 
     async function loadSlots(options = {}) {
@@ -173,13 +195,7 @@ function trackEvent(eventName, params) {
         setLoadingSlots(true);
         try {
             const selectedDate = dateInput?.value || '';
-            const url = new URL(availabilityEndpoint);
-            url.searchParams.set('days', selectedDate ? '14' : '7');
-            if (selectedDate) {
-                url.searchParams.set('date', selectedDate);
-            }
-
-            const response = await fetch(url.toString());
+            const response = await fetch(createAvailabilityRequestUrl(availabilityEndpoint, selectedDate));
             const data = await response.json();
             if (!response.ok) {
                 if (!silent) {
