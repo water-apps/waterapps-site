@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WaterApps Management Dashboard (Preview)</title>
+    <meta name="description" content="Preview of WaterApps management dashboards for delivery, security, platform operations, and cost governance.">
+    <meta name="robots" content="noindex,nofollow">
+    <link rel="icon" type="image/png" href="logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .bg-grid {
+            background:
+                linear-gradient(rgba(148,163,184,0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(148,163,184,0.08) 1px, transparent 1px),
+                linear-gradient(180deg, #f8fafc 0%, #eef2ff 45%, #f8fafc 100%);
+            background-size: 32px 32px, 32px 32px, auto;
+        }
+        .panel {
+            background: rgba(255,255,255,0.92);
+            border: 1px solid rgba(148,163,184,0.2);
+            backdrop-filter: blur(8px);
+        }
+    </style>
+</head>
+<body class="bg-grid text-slate-900">
+    <header class="sticky top-0 z-30 border-b border-slate-200/80 bg-white/80 backdrop-blur">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <a href="portal-login.html" class="flex items-center gap-3">
+                <img src="logo.png" alt="WaterApps logo" class="w-9 h-9 rounded-md">
+                <div>
+                    <div class="font-bold">WaterApps</div>
+                    <div class="text-xs text-slate-500">Management Dashboard (Preview)</div>
+                </div>
+            </a>
+            <div class="flex items-center gap-2">
+                <span id="previewBadge" class="hidden sm:inline-flex items-center gap-2 text-xs bg-amber-100 text-amber-800 px-3 py-1 rounded-full">
+                    <i class="fas fa-flask"></i>Preview UI only
+                </span>
+                <span id="portalUserChip" class="hidden sm:inline-flex items-center gap-2 text-xs bg-blue-50 text-blue-800 px-3 py-1 rounded-full"></span>
+                <button id="signOutBtn" type="button" class="text-sm bg-slate-900 text-white px-4 py-2 rounded-lg hover:bg-slate-700 transition">Sign Out</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="mb-6">
+            <p class="text-sm text-slate-600">Client: WaterApps Internal Management</p>
+            <h1 class="text-3xl font-extrabold tracking-tight">Executive Control Dashboard</h1>
+            <p class="text-slate-600 mt-2">Single-pane preview for delivery, security, platform operations, and cost governance.</p>
+        </div>
+
+        <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+            <div class="panel rounded-2xl p-5">
+                <div class="text-sm text-slate-500">Release Readiness</div>
+                <div class="mt-2 flex items-end gap-2">
+                    <div class="text-3xl font-bold text-emerald-600">92%</div>
+                    <div class="text-xs text-emerald-700 mb-1">up 6% this sprint</div>
+                </div>
+                <p class="text-xs text-slate-500 mt-3">Quality gates passed for planned release train.</p>
+            </div>
+            <div class="panel rounded-2xl p-5">
+                <div class="text-sm text-slate-500">Security Findings (Open)</div>
+                <div class="mt-2 flex items-end gap-2">
+                    <div class="text-3xl font-bold text-amber-600">14</div>
+                    <div class="text-xs text-slate-600 mb-1">2 high / 12 medium</div>
+                </div>
+                <p class="text-xs text-slate-500 mt-3">No criticals. WAF and dependency alerts included.</p>
+            </div>
+            <div class="panel rounded-2xl p-5" id="cost">
+                <div class="text-sm text-slate-500">Cloud Spend (Month-to-Date)</div>
+                <div class="mt-2 flex items-end gap-2">
+                    <div class="text-3xl font-bold text-blue-700">$186</div>
+                    <div class="text-xs text-slate-600 mb-1">62% of budget</div>
+                </div>
+                <p class="text-xs text-slate-500 mt-3">Forecast on track with active budget alarms.</p>
+            </div>
+            <div class="panel rounded-2xl p-5">
+                <div class="text-sm text-slate-500">Platform Uptime</div>
+                <div class="mt-2 flex items-end gap-2">
+                    <div class="text-3xl font-bold text-cyan-700">99.97%</div>
+                    <div class="text-xs text-slate-600 mb-1">30-day rolling</div>
+                </div>
+                <p class="text-xs text-slate-500 mt-3">No Sev1 incidents in current reporting period.</p>
+            </div>
+        </section>
+
+        <section class="grid lg:grid-cols-3 gap-4 mt-6" id="delivery">
+            <div class="lg:col-span-2 panel rounded-2xl p-5">
+                <div class="flex items-center justify-between">
+                    <h2 class="font-bold text-lg">Delivery Pipeline Status</h2>
+                    <span class="text-xs text-slate-500">Last refresh: just now</span>
+                </div>
+                <div class="mt-4 space-y-3">
+                    <div class="rounded-xl border border-slate-200 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                        <div>
+                            <div class="font-semibold">Frontend Hardening Rollout</div>
+                            <div class="text-sm text-slate-500">CloudFront OAC + WAF + security headers + Route53 wiring</div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">In Progress</span>
+                            <span class="text-xs bg-slate-100 text-slate-700 px-2 py-1 rounded">Plan Reviewed</span>
+                        </div>
+                    </div>
+                    <div class="rounded-xl border border-slate-200 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                        <div>
+                            <div class="font-semibold">Monitoring Expansion</div>
+                            <div class="text-sm text-slate-500">CloudFront and WAF alarms, dashboard visibility, SNS alerts</div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs bg-emerald-100 text-emerald-800 px-2 py-1 rounded">Ready</span>
+                            <span class="text-xs bg-slate-100 text-slate-700 px-2 py-1 rounded">Awaiting Apply</span>
+                        </div>
+                    </div>
+                    <div class="rounded-xl border border-slate-200 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                        <div>
+                            <div class="font-semibold">Budget Guardrail Tuning</div>
+                            <div class="text-sm text-slate-500">Absolute and percentage alerts across recipients</div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded">Review Needed</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel rounded-2xl p-5" id="security">
+                <h2 class="font-bold text-lg">Security Posture Snapshot</h2>
+                <div class="mt-4 space-y-3 text-sm">
+                    <div class="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2">
+                        <span>WAF Web ACL</span>
+                        <span class="font-semibold text-emerald-700">Enabled</span>
+                    </div>
+                    <div class="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2">
+                        <span>Origin Access Control</span>
+                        <span class="font-semibold text-emerald-700">Enabled</span>
+                    </div>
+                    <div class="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2">
+                        <span>Security Headers</span>
+                        <span class="font-semibold text-emerald-700">Enabled</span>
+                    </div>
+                    <div class="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2">
+                        <span>DNSSEC</span>
+                        <span class="font-semibold text-amber-700">Optional / Pending</span>
+                    </div>
+                    <div class="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2">
+                        <span>MFA for Portal</span>
+                        <span class="font-semibold text-rose-700">UI only (not wired)</span>
+                    </div>
+                </div>
+                <a href="portal-login.html#access-request" class="mt-5 inline-flex items-center text-sm text-blue-700 hover:text-blue-900">
+                    <i class="fas fa-arrow-right mr-2"></i>Configure SSO and role access
+                </a>
+            </div>
+        </section>
+
+        <section class="grid lg:grid-cols-2 gap-4 mt-6">
+            <div class="panel rounded-2xl p-5">
+                <h2 class="font-bold text-lg">Approval Queue</h2>
+                <div class="mt-4 divide-y divide-slate-200 text-sm">
+                    <div class="py-3 flex items-center justify-between gap-4">
+                        <div>
+                            <div class="font-medium">Production frontend apply</div>
+                            <div class="text-slate-500">CloudFront + WAF + Route53 alias changes</div>
+                        </div>
+                        <span class="px-2 py-1 rounded bg-amber-100 text-amber-800 text-xs">Pending</span>
+                    </div>
+                    <div class="py-3 flex items-center justify-between gap-4">
+                        <div>
+                            <div class="font-medium">Monitoring dashboard update</div>
+                            <div class="text-slate-500">Add WAF widgets and CloudFront 4xx alarm</div>
+                        </div>
+                        <span class="px-2 py-1 rounded bg-blue-100 text-blue-800 text-xs">Review</span>
+                    </div>
+                    <div class="py-3 flex items-center justify-between gap-4">
+                        <div>
+                            <div class="font-medium">Budget threshold change</div>
+                            <div class="text-slate-500">Absolute alerts at $25 / $50 / $100</div>
+                        </div>
+                        <span class="px-2 py-1 rounded bg-emerald-100 text-emerald-800 text-xs">Ready</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel rounded-2xl p-5">
+                <h2 class="font-bold text-lg">Next Integration Steps</h2>
+                <ol class="mt-4 space-y-3 text-sm text-slate-700 list-decimal list-inside">
+                    <li>Integrate real authentication (Cognito/Entra/Okta/Auth0) with MFA.</li>
+                    <li>Protect dashboard routes server-side, not just in frontend navigation.</li>
+                    <li>Add role-based access (executive, delivery lead, platform ops, auditor).</li>
+                    <li>Fetch live metrics from CloudWatch, Cost Explorer, and CI/CD systems.</li>
+                    <li>Audit log sign-ins, approvals, and dashboard data access events.</li>
+                </ol>
+            </div>
+        </section>
+    </main>
+
+    <script src="scripts/portal-auth-config.js"></script>
+    <script src="scripts/portal-auth.js"></script>
+    <script>
+        const signOutBtn = document.getElementById('signOutBtn');
+        const userChip = document.getElementById('portalUserChip');
+        const previewBadge = document.getElementById('previewBadge');
+
+        if (signOutBtn) {
+            signOutBtn.addEventListener('click', function () {
+                if (window.WaterAppsPortalAuth) {
+                    window.WaterAppsPortalAuth.signOut();
+                } else {
+                    window.location.assign('portal-login.html');
+                }
+            });
+        }
+
+        if (window.WaterAppsPortalAuth) {
+            const authStatus = window.WaterAppsPortalAuth.requireAuth({
+                redirectTarget: window.location.pathname + window.location.hash
+            });
+
+            if (authStatus.reason === 'cognito_disabled') {
+                signOutBtn.textContent = 'Back to Login';
+            } else {
+                if (previewBadge) {
+                    previewBadge.classList.add('hidden');
+                }
+                const user = window.WaterAppsPortalAuth.getCurrentUser();
+                if (user && user.email && userChip) {
+                    userChip.innerHTML = '<i class="fas fa-user-shield"></i><span>' + user.email + '</span>';
+                    userChip.classList.remove('hidden');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
