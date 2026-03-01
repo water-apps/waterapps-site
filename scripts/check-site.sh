@@ -71,6 +71,7 @@ grep -q 'id="booking-form"' index.html || fail "Expected native booking form on 
 grep -q 'data-availability-endpoint=' index.html || fail "Expected availability endpoint wiring on booking form"
 grep -q 'data-booking-endpoint=' index.html || fail "Expected booking endpoint wiring on booking form"
 grep -q 'id="booking-slot"' index.html || fail "Expected booking slot selector on homepage"
+grep -q 'https://calendar.app.google/MaHkjyQHyDLd5qPw5' index.html || fail "Expected Google Calendar fallback booking link on homepage"
 if grep -q 'calendly-inline-widget' index.html; then
   fail "Calendly embed should not exist after native booking rollout"
 fi

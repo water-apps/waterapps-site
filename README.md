@@ -146,11 +146,20 @@ To improve the website security-header grade, route traffic through Cloudflare a
 
 Runbook:
 - `/Users/varunau/Projects/waterapps/waterapps-site/docs/cloudflare-security-headers-rollout.md`
+- `/Users/varunau/Projects/waterapps/waterapps-site/docs/RELEASE_TESTING_POLICY.md`
 
 Smoke test checklist after deployment:
 - Submit a valid message from `https://www.waterapps.com.au` and confirm success UI
 - Submit invalid fields and confirm inline validation messages
 - Confirm the backend `ALLOWED_ORIGINS` includes `https://www.waterapps.com.au` and `https://waterapps.com.au`
+
+Mandatory release rule:
+- Do not promote code without functional testing.
+- Minimum local gate before PR/merge:
+  - `bash scripts/check-site.sh`
+  - `npm run test:functional-smoke`
+  - `npm run test:booking-availability`
+  - `npm run test:portal-auth`
 
 ---
 
