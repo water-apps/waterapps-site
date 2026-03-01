@@ -66,4 +66,11 @@ grep -q 'Privacy Policy' index.html || fail "Expected Privacy Policy link on hom
 grep -q 'Website Terms' index.html || fail "Expected Website Terms link on homepage"
 pass "homepage legal/security markers present"
 
+# Public content policy: do not expose internal tool names.
+blocked_term="$(printf '\143\157\144\145\170')"
+if grep -R -n -i --include='*.html' "\\b${blocked_term}\\b" . >/tmp/internal_tooling_policy_hits.txt; then
+  fail "Public HTML contains blocked internal tooling reference (see /tmp/internal_tooling_policy_hits.txt)"
+fi
+pass "internal tooling names are not exposed in public pages"
+
 echo "Site quality checks passed."
