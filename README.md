@@ -128,14 +128,16 @@ Team note:
 - Coordinate changes with the backend SES configuration in `waterapps-contact-form`
 - Re-test delivery headers after provider cache refresh if mailbox warnings persist
 
-### Website Security Header Grade (Cloudflare Rollout Required)
+### Website Security Header Grade (Cloudflare Active)
 
-The website is served from GitHub Pages, which does not support custom response security headers needed for common security-header grading tools (for example, CSP/HSTS/X-Content-Type-Options).
+The website is served from GitHub Pages behind Cloudflare. Security headers are now injected at Cloudflare for production traffic.
 
-To improve the website security-header grade, route traffic through Cloudflare and inject headers there (Worker or Transform Rules).
-
-Runbook:
+Operational runbooks:
 - `/Users/varunau/Projects/waterapps/waterapps-site/docs/cloudflare-security-headers-rollout.md`
+- `/Users/varunau/Projects/waterapps/waterapps-site/docs/cloudflare-api-token-security-process.md`
+
+Security engineering note:
+- Treat Cloudflare API tokens as short-lived privileged credentials and follow the token lifecycle process (issue, use, revoke, verify).
 
 Smoke test checklist after deployment:
 - Submit a valid message from `https://www.waterapps.com.au` and confirm success UI
