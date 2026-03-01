@@ -15,6 +15,7 @@ pass() {
 
 required_files=(
   "index.html"
+  "management-dashboard.html"
   "privacy.html"
   "terms.html"
   "enterprise-readiness.html"
@@ -76,6 +77,12 @@ if grep -q 'calendly-inline-widget' index.html; then
   fail "Calendly embed should not exist after native booking rollout"
 fi
 pass "booking flow markers present"
+
+# Dashboard moderation regression guards
+[[ -f "scripts/management-dashboard.js" ]] || fail "Expected dashboard moderation script"
+grep -q 'id="reviews-moderation"' management-dashboard.html || fail "Expected reviews moderation section in management dashboard"
+grep -q 'scripts/management-dashboard.js' management-dashboard.html || fail "Expected management dashboard script include"
+pass "management dashboard moderation markers present"
 
 # Public content policy: do not expose internal tool names.
 blocked_term="$(printf '\143\157\144\145\170')"
