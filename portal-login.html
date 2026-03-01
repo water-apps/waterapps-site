@@ -145,9 +145,12 @@
                         <i class="fas fa-right-to-bracket mr-2"></i>Sign In
                     </button>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <button id="cognitoLoginBtn" type="button" class="rounded-xl border border-slate-700 bg-slate-900/60 px-4 py-3 text-sm hover:border-slate-500 transition">
                             <i class="fas fa-user-shield mr-2 text-cyan-300"></i>Sign in with Cognito
+                        </button>
+                        <button id="googleLoginBtn" type="button" class="rounded-xl border border-slate-700 bg-slate-900/60 px-4 py-3 text-sm hover:border-slate-500 transition">
+                            <i class="fab fa-google mr-2 text-emerald-300"></i>Sign in with Google
                         </button>
                         <button type="button" class="rounded-xl border border-slate-700 bg-slate-900/60 px-4 py-3 text-sm hover:border-slate-500 transition">
                             <i class="fas fa-link mr-2 text-blue-300"></i>Send Magic Link
@@ -208,6 +211,7 @@
         const form = document.getElementById('portalLoginForm');
         const message = document.getElementById('formMessage');
         const cognitoLoginBtn = document.getElementById('cognitoLoginBtn');
+        const googleLoginBtn = document.getElementById('googleLoginBtn');
 
         function showMessage(type, html) {
             const styles = {
@@ -226,6 +230,7 @@
                 showMessage('error', 'Portal auth script failed to load.');
                 return;
             }
+            const config = window.WaterAppsPortalAuth.getConfig();
 
             const callbackResult = await window.WaterAppsPortalAuth.handleCallbackIfPresent().catch(function (error) {
                 return { handled: true, success: false, error: error.message || String(error) };
@@ -238,10 +243,13 @@
                     return;
                 }
                 showMessage('error', 'Cognito sign-in failed: ' + callbackResult.error);
+            } else if (config.previewPasswordLoginEnabled) {
+                const domains = (config.previewAllowedEmailDomains || []).join(', ');
+                showMessage('info', 'Preview password login is enabled' + (domains ? ' for domains: <code>' + domains + '</code>.' : '.') + ' You can also use Cognito SSO.');
             } else if (window.WaterAppsPortalAuth.isConfigured()) {
                 showMessage('info', 'Cognito is configured. Use "Sign in with Cognito" for production authentication.');
             } else {
-                showMessage('warn', 'Cognito is not configured yet. Update <code>scripts/portal-auth-config.js</code> and set <code>enabled: true</code>.');
+                showMessage('warn', 'No active authentication method configured. Enable Cognito or preview password login in <code>scripts/portal-auth-config.js</code>.');
             }
         }
 
@@ -256,25 +264,69 @@
                 });
         }
 
+        function startGoogleLogin() {
+            if (!window.WaterAppsPortalAuth || !window.WaterAppsPortalAuth.isConfigured()) {
+                showMessage('warn', 'Cognito is not configured yet. Update <code>scripts/portal-auth-config.js</code> first.');
+                return;
+            }
+
+            const config = window.WaterAppsPortalAuth.getConfig();
+            if (!config.googleLoginEnabled) {
+                showMessage('warn', 'Google login is not enabled yet. Enable Google IdP in Cognito first.');
+                return;
+            }
+
+            window.WaterAppsPortalAuth.startLogin({
+                postLoginRedirect: '/management-dashboard.html',
+                identityProvider: 'Google'
+            }).catch(function (error) {
+                showMessage('error', 'Unable to start Google login: ' + (error.message || String(error)));
+            });
+        }
+
         cognitoLoginBtn.addEventListener('click', startCognitoLogin);
+        googleLoginBtn.addEventListener('click', startGoogleLogin);
 
         form.addEventListener('submit', function (event) {
             event.preventDefault();
-
-            if (window.WaterAppsPortalAuth && window.WaterAppsPortalAuth.isConfigured()) {
-                startCognitoLogin();
-                return;
-            }
 
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value.trim();
 
             if (!email || !password) {
-                showMessage('error', 'Enter your work email and password. This is a frontend portal template and does not authenticate yet.');
+                showMessage('error', 'Enter your work email and password.');
                 return;
             }
 
-            showMessage('success', 'Frontend portal UI is ready. Next step: configure Cognito and server-side authorization. <a class="underline" href="management-dashboard.html">Open dashboard preview</a>.');
+            if (!window.WaterAppsPortalAuth) {
+                showMessage('error', 'Portal auth script failed to load.');
+                return;
+            }
+
+            const result = window.WaterAppsPortalAuth.signInWithPassword(email, password);
+            if (result && result.success) {
+                showMessage('success', 'Sign-in successful. Redirecting to dashboard...');
+                window.location.assign(result.redirectPath || 'management-dashboard.html');
+                return;
+            }
+
+            if (result && result.reason === 'domain_not_allowed') {
+                const config = window.WaterAppsPortalAuth.getConfig();
+                const domains = (config.previewAllowedEmailDomains || []).join(', ');
+                showMessage('error', 'Email domain not allowed for preview login. Allowed domain(s): <code>' + domains + '</code>.');
+                return;
+            }
+
+            if (result && result.reason === 'disabled') {
+                if (window.WaterAppsPortalAuth.isConfigured()) {
+                    startCognitoLogin();
+                    return;
+                }
+                showMessage('warn', 'Password sign-in is disabled and Cognito is not fully configured.');
+                return;
+            }
+
+            showMessage('error', 'Invalid credentials for preview login. Use your WaterApps email and a password with at least 10 characters.');
         });
 
         initPortalLogin();
