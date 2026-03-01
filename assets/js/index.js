@@ -225,9 +225,18 @@ document.querySelectorAll('a').forEach(link => {
             });
         }
 
-        if (href.includes('capability-statement.html') || text.includes('Capability Statement')) {
+        const isCapabilityStatementPdfLink =
+            href.includes('capability-statement-download.html') || href.endsWith('.pdf');
+
+        if (isCapabilityStatementPdfLink) {
+            trackEvent('capability_statement_pdf_download', {
+                cta_type: 'capability_statement_pdf_download',
+                cta_section: section,
+                link_text: text
+            });
+        } else if (href.includes('capability-statement.html') || text.includes('Capability Statement')) {
             trackEvent('cta_click', {
-                cta_type: 'capability_statement',
+                cta_type: 'capability_statement_view',
                 cta_section: section,
                 link_text: text
             });
