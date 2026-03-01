@@ -16,14 +16,17 @@
         <section class="bg-white rounded-xl border border-gray-200 p-8">
             <h1 class="text-3xl font-bold mb-3">Capability Statement PDF</h1>
             <p class="text-gray-700 mb-4">
-                We are preparing your download. If the PDF is not currently available, you will be redirected to request it by email.
+                We are preparing your download. If the primary file is temporarily unavailable due CDN cache, we will use a backup download source.
             </p>
             <p class="text-sm text-gray-500 mb-6">
                 If redirection does not start, use one of the options below.
             </p>
             <div class="flex flex-col sm:flex-row gap-4">
-                <a href="capability-statement.pdf" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold text-center">
+                <a href="capability-statement.pdf" id="primaryPdfLink" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold text-center">
                     Try Direct PDF Download
+                </a>
+                <a href="https://raw.githubusercontent.com/water-apps/waterapps-site/main/capability-statement.pdf" id="backupPdfLink" class="bg-blue-100 hover:bg-blue-200 text-blue-900 px-6 py-3 rounded-lg font-semibold text-center border border-blue-200">
+                    Backup PDF Download
                 </a>
                 <a href="mailto:varun@waterapps.com.au?subject=WaterApps%20Capability%20Statement%20Request" class="bg-gray-100 hover:bg-gray-200 text-gray-900 px-6 py-3 rounded-lg font-semibold text-center">
                     Request PDF by Email
@@ -37,7 +40,13 @@
     <script>
         (async function handleCapabilityStatementDownload() {
             const pdfPath = 'capability-statement.pdf';
+            const backupPdfPath = 'https://raw.githubusercontent.com/water-apps/waterapps-site/main/capability-statement.pdf';
             const fallbackPath = 'mailto:varun@waterapps.com.au?subject=WaterApps%20Capability%20Statement%20Request';
+            const primaryLink = document.getElementById('primaryPdfLink');
+            const backupLink = document.getElementById('backupPdfLink');
+
+            if (primaryLink) primaryLink.href = pdfPath;
+            if (backupLink) backupLink.href = backupPdfPath;
 
             try {
                 const response = await fetch(pdfPath, {
@@ -50,7 +59,27 @@
                     return;
                 }
             } catch (error) {
-                console.warn('Capability statement PDF check failed, falling back to email request.', error);
+                console.warn('Primary capability statement PDF check failed. Trying backup source.', error);
+            }
+
+            try {
+                const backupResponse = await fetch(backupPdfPath, {
+                    method: 'HEAD',
+                    cache: 'no-store'
+                });
+
+                if (backupResponse.ok) {
+                    if (typeof window.gtag === 'function') {
+                        window.gtag('event', 'capability_statement_pdf_download', {
+                            cta_type: 'capability_statement_pdf_backup',
+                            cta_section: 'capability_statement_download_route'
+                        });
+                    }
+                    window.location.replace(backupPdfPath);
+                    return;
+                }
+            } catch (error) {
+                console.warn('Backup capability statement PDF check failed, falling back to email request.', error);
             }
 
             if (typeof window.gtag === 'function') {
