@@ -116,6 +116,13 @@ function trackEvent(eventName, params) {
         });
     }
 
+    function localDateKey(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
     function renderSlotOptions(slots) {
         if (!slotSelect) return;
         slotSelect.innerHTML = '';
@@ -143,7 +150,11 @@ function trackEvent(eventName, params) {
 
     function filterSlotsByDate(dateValue) {
         if (!dateValue) return latestSlots;
-        return latestSlots.filter((slot) => (slot.slotStart || '').startsWith(dateValue));
+        return latestSlots.filter((slot) => {
+            const slotDate = new Date(slot.slotStart || '');
+            if (Number.isNaN(slotDate.getTime())) return false;
+            return localDateKey(slotDate) === dateValue;
+        });
     }
 
     async function loadSlots(options = {}) {
@@ -221,8 +232,8 @@ function trackEvent(eventName, params) {
     }
 
     if (dateInput) {
-        dateInput.addEventListener('change', () => {
-            renderSlotOptions(filterSlotsByDate(dateInput.value));
+        dateInput.addEventListener('change', async () => {
+            await loadSlots();
         });
     }
 
