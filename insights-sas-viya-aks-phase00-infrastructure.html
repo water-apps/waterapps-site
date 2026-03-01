@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SAS Viya on AKS: Phase 00 Infrastructure Done Right | WaterApps</title>
-    <meta name="description" content="A practical Phase 00 blueprint for SAS Viya on AKS: node pool sizing, Azure CNI, Key Vault hardening, Workload Identity, and GitHub OIDC-based Terraform pipelines.">
+    <meta name="description" content="A practical Phase 00 blueprint for SAS Viya on AKS: node pool sizing, Azure CNI, Key Vault hardening, and OIDC-based Terraform delivery aligned to APRA, Essential Eight, and PCI DSS control expectations.">
     <link rel="canonical" href="https://www.waterapps.com.au/insights-sas-viya-aks-phase00-infrastructure.html">
     <meta property="og:type" content="article">
     <meta property="og:title" content="SAS Viya on AKS: Phase 00 Infrastructure Done Right | WaterApps">
-    <meta property="og:description" content="How to build an audit-ready Phase 00 foundation for SAS Viya on AKS with secure identity, network controls, and CI/CD guardrails.">
+    <meta property="og:description" content="How to build an audit-ready SAS Viya Phase 00 foundation on AKS aligned to APRA, Essential Eight, and PCI DSS expectations.">
     <meta property="og:url" content="https://www.waterapps.com.au/insights-sas-viya-aks-phase00-infrastructure.html">
     <meta property="og:image" content="https://www.waterapps.com.au/logo.png">
     <meta property="og:image:alt" content="WaterApps logo">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="SAS Viya on AKS: Phase 00 Infrastructure Done Right | WaterApps">
-    <meta name="twitter:description" content="Production patterns for SAS Viya infrastructure on AKS in regulated enterprise environments.">
+    <meta name="twitter:description" content="Production patterns for SAS Viya infrastructure on AKS with APRA, Essential Eight, and PCI DSS-aligned controls.">
     <meta name="twitter:image" content="https://www.waterapps.com.au/logo.png">
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="stylesheet" href="assets/css/tailwind.generated.css">
@@ -33,6 +33,9 @@
                 <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">SAS Viya</span>
                 <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">DevSecOps</span>
                 <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">Terraform</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">APRA</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">Essential Eight</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">PCI DSS</span>
             </div>
             <div class="mt-4 text-sm text-gray-500">Published: March 1, 2026</div>
         </div>
@@ -44,6 +47,9 @@
             </p>
             <p class="text-gray-700 mb-4">
                 Phase 00 is the foundation layer. If this layer is wrong, teams typically discover it late and pay with rework, delayed go-live, and avoidable risk exceptions.
+            </p>
+            <p class="text-gray-700 mb-4">
+                Control patterns in this guide are intended to support audit and assurance conversations against APRA-aligned prudential controls, the ACSC Essential Eight maturity model, and PCI DSS security requirements where cardholder-adjacent systems are in scope.
             </p>
             <p class="text-sm text-gray-500">
                 This article is for platform teams running SAS Viya 4.x on AKS in regulated or control-heavy environments.
