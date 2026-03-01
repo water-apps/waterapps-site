@@ -600,6 +600,14 @@ document.querySelectorAll('a').forEach(link => {
             });
         }
 
+        if (href.includes('calendar.app.google')) {
+            trackEvent('cta_click', {
+                cta_type: 'google_calendar_booking',
+                cta_section: section,
+                link_text: text
+            });
+        }
+
         if (text.includes('Discuss Your Requirements')) {
             trackEvent('cta_click', {
                 cta_type: 'discuss_requirements',
