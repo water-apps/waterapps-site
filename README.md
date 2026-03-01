@@ -135,7 +135,10 @@ The website is served from GitHub Pages, which does not support custom response 
 To improve the website security-header grade, route traffic through Cloudflare and inject headers there (Worker or Transform Rules).
 
 Runbook:
-- `/Users/varunau/Projects/waterapps/waterapps-site/docs/cloudflare-security-headers-rollout.md`
+- `docs/cloudflare-security-headers-rollout.md`
+
+Website UI quality standard:
+- `docs/WEBSITE_UI_QUALITY_STANDARD.md`
 
 Smoke test checklist after deployment:
 - Submit a valid message from `https://www.waterapps.com.au` and confirm success UI
@@ -163,6 +166,7 @@ Before going live, update these in `index.html`:
 - Scroll-reveal animations via Intersection Observer
 - Fully responsive (mobile, tablet, desktop)
 - Lighthouse-optimised for performance and SEO
+- Site Quality workflow (`.github/workflows/site-quality.yml`) for baseline release checks
 
 ---
 

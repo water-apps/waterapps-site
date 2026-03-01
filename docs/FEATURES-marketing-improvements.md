@@ -195,4 +195,4 @@ flowchart TD
 - Keep public case studies anonymized unless explicit client naming permission exists.
 - Use resume-backed facts for all metrics and technical claims.
 - Favor incremental static HTML changes first; migrate to a richer site stack later only if content velocity or maintainability demands it.
-
+- Apply UI acceptance criteria from `docs/WEBSITE_UI_QUALITY_STANDARD.md` for all significant page changes.

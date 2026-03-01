@@ -157,6 +157,260 @@ function trackEvent(eventName, params) {
     });
 })();
 
+(function setupReviewForm() {
+    const form = document.getElementById('review-form');
+    if (!form) return;
+
+    const statusEl = document.getElementById('review-form-status');
+    const submitButton = document.getElementById('review-submit');
+    const fieldNames = ['name', 'email', 'role', 'company', 'linkedin', 'review', 'rating', 'consent'];
+    const endpoint = (
+        form.dataset.apiEndpoint ||
+        (window.WATERAPPS_CONFIG && window.WATERAPPS_CONFIG.contactApiEndpoint) ||
+        window.WATERAPPS_CONTACT_API_ENDPOINT ||
+        ''
+    ).trim();
+
+    function setStatus(kind, message) {
+        if (!statusEl) return;
+        statusEl.className = 'rounded-lg px-4 py-3 text-sm';
+        if (kind === 'success') {
+            statusEl.classList.add('bg-green-50', 'text-green-800', 'border', 'border-green-200');
+        } else if (kind === 'warn') {
+            statusEl.classList.add('bg-amber-50', 'text-amber-900', 'border', 'border-amber-200');
+        } else {
+            statusEl.classList.add('bg-red-50', 'text-red-800', 'border', 'border-red-200');
+        }
+        statusEl.textContent = message;
+        statusEl.classList.remove('hidden');
+    }
+
+    function clearStatus() {
+        if (!statusEl) return;
+        statusEl.textContent = '';
+        statusEl.classList.add('hidden');
+    }
+
+    function clearFieldErrors() {
+        fieldNames.forEach((name) => {
+            const input = form.elements.namedItem(name);
+            const errorEl = document.getElementById(`review-error-${name}`);
+            if (input && typeof input.removeAttribute === 'function') {
+                input.removeAttribute('aria-invalid');
+            }
+            if (errorEl) {
+                errorEl.textContent = '';
+                errorEl.classList.add('hidden');
+            }
+        });
+    }
+
+    function applyFieldErrors(fieldErrors) {
+        if (!fieldErrors || typeof fieldErrors !== 'object') return;
+        Object.entries(fieldErrors).forEach(([name, message]) => {
+            const input = form.elements.namedItem(name);
+            const errorEl = document.getElementById(`review-error-${name}`);
+            if (input && typeof input.setAttribute === 'function') {
+                input.setAttribute('aria-invalid', 'true');
+            }
+            if (errorEl) {
+                errorEl.textContent = String(message || 'Please check this field.');
+                errorEl.classList.remove('hidden');
+            }
+        });
+    }
+
+    function setSubmitting(isSubmitting) {
+        if (!submitButton) return;
+        submitButton.disabled = isSubmitting;
+        submitButton.textContent = isSubmitting ? 'Submitting...' : 'Submit Review';
+    }
+
+    function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function isValidLinkedInUrl(rawValue) {
+        try {
+            const parsed = new URL(rawValue);
+            if (parsed.protocol !== 'https:') return false;
+            const host = parsed.hostname.toLowerCase().replace(/^www\./, '');
+            if (host !== 'linkedin.com' && !host.endsWith('.linkedin.com')) return false;
+            if (!parsed.pathname || parsed.pathname === '/') return false;
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
+    function cleanLine(value) {
+        return String(value || '').replace(/\s+/g, ' ').trim();
+    }
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        clearStatus();
+        clearFieldErrors();
+
+        if (!endpoint) {
+            setStatus('warn', 'Review form API is not configured yet. Please email varun@waterapps.com.au with your review.');
+            trackEvent('review_form_submit', {
+                result: 'blocked',
+                reason: 'endpoint_not_configured',
+                section: 'reviews'
+            });
+            return;
+        }
+
+        const formData = new FormData(form);
+        const reviewFields = {
+            name: cleanLine(formData.get('name')),
+            email: cleanLine(formData.get('email')),
+            role: cleanLine(formData.get('role')),
+            company: cleanLine(formData.get('company')),
+            linkedin: cleanLine(formData.get('linkedin')),
+            review: cleanLine(formData.get('review')),
+            rating: cleanLine(formData.get('rating')),
+            consent: formData.get('consent') === 'yes'
+        };
+
+        const fieldErrors = {};
+        if (!reviewFields.name) {
+            fieldErrors.name = 'Please enter your name.';
+        }
+        if (!reviewFields.email || !isValidEmail(reviewFields.email)) {
+            fieldErrors.email = 'Please enter a valid work email.';
+        }
+        if (!reviewFields.linkedin || !isValidLinkedInUrl(reviewFields.linkedin)) {
+            fieldErrors.linkedin = 'Please enter a valid HTTPS LinkedIn URL.';
+        }
+        if (!reviewFields.review || reviewFields.review.length < 30) {
+            fieldErrors.review = 'Please provide at least 30 characters.';
+        }
+        if (!reviewFields.consent) {
+            fieldErrors.consent = 'Please confirm consent before submitting.';
+        }
+
+        if (Object.keys(fieldErrors).length > 0) {
+            applyFieldErrors(fieldErrors);
+            setStatus('error', 'Please correct the highlighted fields and try again.');
+            trackEvent('review_form_submit', {
+                result: 'error',
+                error_code: 'validation_error',
+                section: 'reviews'
+            });
+            return;
+        }
+
+        const messageLines = [
+            '[REVIEW_SUBMISSION]',
+            `Reviewer Name: ${reviewFields.name}`,
+            `Reviewer Email: ${reviewFields.email}`,
+            `Role: ${reviewFields.role || 'Not provided'}`,
+            `Company: ${reviewFields.company || 'Not provided'}`,
+            `LinkedIn: ${reviewFields.linkedin}`,
+            `Rating: ${reviewFields.rating || 'Not provided'}`,
+            'Consent to verification: yes',
+            'Review:',
+            reviewFields.review
+        ];
+
+        const payload = {
+            name: `${reviewFields.name} (Review Submission)`,
+            email: reviewFields.email,
+            company: reviewFields.company || reviewFields.role || 'Independent Review',
+            phone: '',
+            message: messageLines.join('\n').slice(0, 5000)
+        };
+
+        setSubmitting(true);
+
+        try {
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            let data = null;
+            try {
+                data = await response.json();
+            } catch {
+                data = null;
+            }
+
+            if (response.ok) {
+                setStatus('success', data?.message || 'Thank you. Your review has been submitted for verification.');
+                form.reset();
+                trackEvent('review_form_submit', {
+                    result: 'success',
+                    section: 'reviews',
+                    rating: reviewFields.rating || 'unspecified'
+                });
+                return;
+            }
+
+            if (response.status === 400 && data?.fieldErrors) {
+                applyFieldErrors(data.fieldErrors);
+                setStatus('error', data?.message || 'Please correct the highlighted fields and try again.');
+            } else if (response.status === 403) {
+                setStatus('error', 'This form cannot be submitted from the current site origin. Please email varun@waterapps.com.au directly.');
+            } else if (response.status === 429) {
+                setStatus('error', 'Too many requests. Please wait a moment and try again.');
+            } else {
+                setStatus('error', data?.message || 'Something went wrong. Please email varun@waterapps.com.au directly.');
+            }
+
+            trackEvent('review_form_submit', {
+                result: 'error',
+                status_code: response.status,
+                error_code: data?.code || 'unknown',
+                section: 'reviews'
+            });
+        } catch (err) {
+            setStatus('error', 'Unable to submit the form right now. Please check your connection or email varun@waterapps.com.au directly.');
+            trackEvent('review_form_submit', {
+                result: 'error',
+                status_code: 0,
+                error_code: 'network_error',
+                section: 'reviews'
+            });
+            console.error('Review form submit failed', err);
+        } finally {
+            setSubmitting(false);
+        }
+    });
+})();
+
+(function setupMobileNav() {
+    const toggle = document.getElementById('mobile-nav-toggle');
+    const menu = document.getElementById('mobile-nav-menu');
+    if (!toggle || !menu) return;
+
+    function setOpen(isOpen) {
+        toggle.setAttribute('aria-expanded', String(isOpen));
+        menu.classList.toggle('hidden', !isOpen);
+    }
+
+    toggle.addEventListener('click', () => {
+        const currentlyOpen = toggle.getAttribute('aria-expanded') === 'true';
+        setOpen(!currentlyOpen);
+    });
+
+    menu.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', () => setOpen(false));
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape') return;
+        if (toggle.getAttribute('aria-expanded') !== 'true') return;
+        setOpen(false);
+        toggle.focus();
+    });
+})();
+
 // Smooth scrolling for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
