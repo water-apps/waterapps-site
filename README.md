@@ -158,6 +158,7 @@ Mandatory release rule:
 - Minimum local gate before PR/merge:
   - `bash scripts/check-site.sh`
   - `npm run test:functional-smoke`
+  - `npm run test:playwright`
   - `npm run test:booking-availability`
   - `npm run test:portal-auth`
 

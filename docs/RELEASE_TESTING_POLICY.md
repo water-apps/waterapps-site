@@ -22,6 +22,7 @@ The `checks` job must include:
 
 1. `scripts/check-site.sh`
 2. `tests/functional-smoke.test.js`
+3. Playwright e2e tests (`tests/e2e/*.spec.js`) against a local web server
 
 ## Required Functional Coverage (Minimum)
 
@@ -32,6 +33,7 @@ Each release must verify:
 3. Google Calendar fallback booking link exists and is safe (`noopener noreferrer`).
 4. Contact form endpoint wiring exists.
 5. Analytics event mapping exists for fallback booking CTA.
+6. End-to-end booking and contact submissions pass with mocked API responses.
 
 ## Local Pre-PR Commands
 
@@ -40,6 +42,7 @@ Run these before opening or updating a PR:
 ```bash
 bash scripts/check-site.sh
 npm run test:functional-smoke
+npm run test:playwright
 npm run test:booking-availability
 npm run test:portal-auth
 ```
@@ -60,4 +63,3 @@ PR description must include:
 1. Commands run and pass/fail results.
 2. Any manual smoke checks performed.
 3. Known residual risk (if any).
-
