@@ -5,7 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enterprise Readiness | WaterApps</title>
     <meta name="description" content="Enterprise readiness information for WaterApps including delivery model, governance practices, procurement support, and regulated environment experience.">
+    <link rel="canonical" href="https://www.waterapps.com.au/enterprise-readiness.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Enterprise Readiness | WaterApps">
+    <meta property="og:description" content="Procurement and risk-review information for organizations evaluating WaterApps delivery, governance, and controls.">
+    <meta property="og:url" content="https://www.waterapps.com.au/enterprise-readiness.html">
+    <meta property="og:image" content="https://www.waterapps.com.au/logo.png">
+    <meta property="og:image:alt" content="WaterApps logo">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Enterprise Readiness | WaterApps">
+    <meta name="twitter:description" content="Procurement and risk-review information for evaluating WaterApps delivery and governance approach.">
+    <meta name="twitter:image" content="https://www.waterapps.com.au/logo.png">
     <link rel="icon" type="image/png" href="logo.png">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EVEC7YRTYC"></script>
+    <script src="assets/js/analytics.js"></script>
     <link rel="stylesheet" href="assets/css/tailwind.generated.css">
 </head>
 <body class="bg-gray-50 text-gray-900">
@@ -103,10 +116,16 @@
                 Need supporting documentation, insurance details, or clarification on delivery approach and controls? Send a request and include your organization name and procurement stage.
             </p>
             <div class="flex flex-col sm:flex-row gap-4">
-                <a href="mailto:varun@waterapps.com.au?subject=WaterApps%20Enterprise%20Readiness%20Request" class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-lg font-semibold text-center">
+                <a href="capability-statement.html" data-track-event="capability_statement_view_click" class="bg-white text-gray-900 px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-100">
+                    View Capability Statement
+                </a>
+                <a href="capability-statement-download.html" data-track-event="capability_statement_pdf_download" class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-lg font-semibold text-center">
+                    Download Capability Statement (PDF)
+                </a>
+                <a href="mailto:varun@waterapps.com.au?subject=WaterApps%20Enterprise%20Readiness%20Request" data-track-event="request_documentation" class="bg-blue-800 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold text-center border border-blue-300">
                     Request Documentation
                 </a>
-                <a href="index.html#contact" class="bg-white text-gray-900 px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-100">
+                <a href="index.html#contact" data-track-event="book_discovery_call" class="bg-transparent border border-blue-300 text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-blue-800">
                     Book Discovery Call
                 </a>
             </div>
@@ -115,5 +134,19 @@
             </p>
         </section>
     </main>
+    <script>
+        (function setupEnterpriseReadinessTracking() {
+            document.querySelectorAll('[data-track-event]').forEach((link) => {
+                link.addEventListener('click', function () {
+                    if (typeof window.gtag !== 'function') return;
+                    window.gtag('event', 'cta_click', {
+                        cta_type: this.dataset.trackEvent,
+                        cta_section: 'enterprise_readiness',
+                        link_text: (this.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 80)
+                    });
+                });
+            });
+        })();
+    </script>
 </body>
 </html>

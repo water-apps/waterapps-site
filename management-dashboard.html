@@ -196,10 +196,27 @@
                 </ol>
             </div>
         </section>
+
+        <section id="reviews-moderation" class="panel rounded-2xl p-5 mt-6">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                    <h2 class="font-bold text-lg">Independent Review Moderation</h2>
+                    <p class="text-sm text-slate-600 mt-1">Review queue from website submissions. Verify LinkedIn identity before approval.</p>
+                </div>
+                <button id="reviewsModerationRefresh" type="button" class="inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
+                    <i class="fas fa-rotate-right mr-2"></i>Refresh Queue
+                </button>
+            </div>
+
+            <div id="reviewsModerationStatus" class="hidden mt-4 rounded-lg border px-3 py-2 text-sm" role="status" aria-live="polite"></div>
+            <div id="reviewsModerationList" class="mt-4 space-y-3"></div>
+        </section>
     </main>
 
+    <script src="scripts/site-config.js"></script>
     <script src="scripts/portal-auth-config.js"></script>
     <script src="scripts/portal-auth.js"></script>
+    <script src="scripts/management-dashboard.js"></script>
     <script>
         const signOutBtn = document.getElementById('signOutBtn');
         const userChip = document.getElementById('portalUserChip');
