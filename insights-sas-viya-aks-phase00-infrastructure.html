@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAS Viya on AKS: Phase 00 Infrastructure Done Right | WaterApps</title>
+    <meta name="description" content="A practical Phase 00 blueprint for SAS Viya on AKS: node pool sizing, Azure CNI, Key Vault hardening, Workload Identity, and GitHub OIDC-based Terraform pipelines.">
+    <link rel="canonical" href="https://www.waterapps.com.au/insights-sas-viya-aks-phase00-infrastructure.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="SAS Viya on AKS: Phase 00 Infrastructure Done Right | WaterApps">
+    <meta property="og:description" content="How to build an audit-ready Phase 00 foundation for SAS Viya on AKS with secure identity, network controls, and CI/CD guardrails.">
+    <meta property="og:url" content="https://www.waterapps.com.au/insights-sas-viya-aks-phase00-infrastructure.html">
+    <meta property="og:image" content="https://www.waterapps.com.au/logo.png">
+    <meta property="og:image:alt" content="WaterApps logo">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="SAS Viya on AKS: Phase 00 Infrastructure Done Right | WaterApps">
+    <meta name="twitter:description" content="Production patterns for SAS Viya infrastructure on AKS in regulated enterprise environments.">
+    <meta name="twitter:image" content="https://www.waterapps.com.au/logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="assets/css/tailwind.generated.css">
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="mb-8">
+            <a href="insights.html" class="text-blue-600 hover:text-blue-700 text-sm">&larr; Back to Insights</a>
+            <h1 class="text-4xl font-bold mt-4 mb-4">SAS Viya on AKS: Phase 00 Infrastructure Done Right</h1>
+            <p class="text-lg text-gray-600">
+                Running SAS Viya on Kubernetes is not like deploying a standard stateless web workload. It is stateful, memory-intensive, and sensitive to infrastructure design decisions made before day one.
+            </p>
+            <div class="mt-4 flex flex-wrap gap-2 text-sm">
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">Azure</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">AKS</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">SAS Viya</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">DevSecOps</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">Terraform</span>
+            </div>
+            <div class="mt-4 text-sm text-gray-500">Published: March 1, 2026</div>
+        </div>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Why Phase 00 Matters</h2>
+            <p class="text-gray-700 mb-4">
+                Most failed SAS Viya programs do not fail at the application layer. They fail in the substrate: wrong CIDR planning, under-sized nodes, public secret stores, or static credentials in CI pipelines.
+            </p>
+            <p class="text-gray-700 mb-4">
+                Phase 00 is the foundation layer. If this layer is wrong, teams typically discover it late and pay with rework, delayed go-live, and avoidable risk exceptions.
+            </p>
+            <p class="text-sm text-gray-500">
+                This article is for platform teams running SAS Viya 4.x on AKS in regulated or control-heavy environments.
+            </p>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Architecture Decisions That Matter Early</h2>
+            <h3 class="text-xl font-semibold mb-3">1) Node Pool Segregation</h3>
+            <p class="text-gray-700 mb-4">
+                Use separate pools for Kubernetes system components and SAS workloads. A single D-series pool is a common anti-pattern that leads to memory pressure and unstable workloads.
+            </p>
+            <div class="overflow-x-auto mb-5">
+                <table class="min-w-full text-sm border border-gray-200 rounded-lg">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="text-left p-3">Node Pool</th>
+                            <th class="text-left p-3">VM Size</th>
+                            <th class="text-left p-3">Purpose</th>
+                            <th class="text-left p-3">Scaling</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-t border-gray-200">
+                            <td class="p-3 font-medium">system</td>
+                            <td class="p-3">Standard_D4s_v3</td>
+                            <td class="p-3">Kubernetes platform services</td>
+                            <td class="p-3">Fixed at 2 nodes</td>
+                        </tr>
+                        <tr class="border-t border-gray-200">
+                            <td class="p-3 font-medium">sas</td>
+                            <td class="p-3">Standard_E8s_v3</td>
+                            <td class="p-3">SAS Viya workloads</td>
+                            <td class="p-3">Autoscale 3 to 10 nodes</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <pre class="bg-gray-900 text-gray-100 text-sm p-4 rounded-lg overflow-x-auto mb-6"><code>node_taints = ["workload=sas-viya:NoSchedule"]</code></pre>
+
+            <h3 class="text-xl font-semibold mb-3">2) Azure CNI over Kubenet</h3>
+            <ul class="list-disc pl-6 text-gray-700 space-y-2 mb-6">
+                <li>Pods get real VNet IPs, simplifying policy and traffic tracing.</li>
+                <li>NSG controls can be applied with fewer translation blind spots.</li>
+                <li>Key Vault access can be constrained to AKS subnet paths.</li>
+                <li>Calico policy enforcement is clearer for audit and operations teams.</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold mb-3">3) Keyless Identity by Default</h3>
+            <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                <li><strong>GitHub Actions to Azure:</strong> OIDC federation, no stored cloud password.</li>
+                <li><strong>Pods to Key Vault:</strong> Workload Identity with short-lived scoped tokens.</li>
+                <li><strong>User-assigned managed identity:</strong> survives cluster rebuilds and avoids reassigning roles each cycle.</li>
+            </ul>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Key Vault Hardening Baseline</h2>
+            <p class="text-gray-700 mb-4">
+                Treat secrets as a network-isolated dependency, not just a credentials service. For SAS Viya, this usually includes license data, database credentials, and certificate materials.
+            </p>
+            <pre class="bg-gray-900 text-gray-100 text-sm p-4 rounded-lg overflow-x-auto mb-5"><code>enable_rbac_authorization  = true
+purge_protection_enabled   = true
+soft_delete_retention_days = 90
+network_acls.default_action = "Deny"</code></pre>
+            <p class="text-gray-700 mb-3">
+                The practical target is simple: even valid credentials should not be enough from outside your trusted network path.
+            </p>
+            <p class="text-gray-700">
+                In-cluster secret consumption should use the Secrets Store CSI Driver so pods receive runtime-mounted secrets without embedding values into images or manifests.
+            </p>
+        </section>
+
+        <section class="bg-blue-50 border border-blue-200 rounded-xl p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Pipeline Controls: Plan on PR, Apply on Approved Merge</h2>
+            <ul class="list-disc pl-6 text-gray-800 space-y-2 mb-4">
+                <li><strong>terraform-plan.yml on pull requests:</strong> generates visible infrastructure diffs for review.</li>
+                <li><strong>terraform-apply.yml on main:</strong> production behind manual environment approval.</li>
+                <li><strong>OIDC authentication:</strong> identity by token exchange, not static service principal secrets.</li>
+            </ul>
+            <p class="text-gray-700">
+                This model improves change control quality while keeping delivery lead time practical for infrastructure programs.
+            </p>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Common Mistakes and Preventive Controls</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full text-sm border border-gray-200 rounded-lg">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="text-left p-3">Common Mistake</th>
+                            <th class="text-left p-3">Typical Result</th>
+                            <th class="text-left p-3">Prevention</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-t border-gray-200">
+                            <td class="p-3">Using D-series for SAS workloads</td>
+                            <td class="p-3">OOMKilled pods and restart churn</td>
+                            <td class="p-3">Use E-series memory-optimized nodes</td>
+                        </tr>
+                        <tr class="border-t border-gray-200">
+                            <td class="p-3">System-assigned identity for rebuild-heavy environments</td>
+                            <td class="p-3">Role assignment drift after cluster recreation</td>
+                            <td class="p-3">Use user-assigned managed identity</td>
+                        </tr>
+                        <tr class="border-t border-gray-200">
+                            <td class="p-3">Kubenet in enterprise security contexts</td>
+                            <td class="p-3">Network policy complexity and audit gaps</td>
+                            <td class="p-3">Use Azure CNI with subnet planning</td>
+                        </tr>
+                        <tr class="border-t border-gray-200">
+                            <td class="p-3">Static service principal credentials in CI</td>
+                            <td class="p-3">Secret leakage and rotation overhead</td>
+                            <td class="p-3">Use GitHub OIDC federation</td>
+                        </tr>
+                        <tr class="border-t border-gray-200">
+                            <td class="p-3">Public Key Vault exposure</td>
+                            <td class="p-3">Expanded attack surface</td>
+                            <td class="p-3">Deny-by-default network ACLs</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-10">
+            <h2 class="text-2xl font-semibold mb-4">What Comes After Phase 00</h2>
+            <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                <li><strong>Phase 01 Application Layer:</strong> operator setup, namespaces, image pull and baseline workload policies.</li>
+                <li><strong>Phase 02 Ingress Layer:</strong> Application Gateway, TLS, and WAF controls for SAS web interfaces.</li>
+                <li><strong>Phase 03 Observability:</strong> workload-aware alerts and operational dashboards.</li>
+                <li><strong>Phase 04 Backup and DR:</strong> Kubernetes state backup and database recovery runbooks.</li>
+            </ul>
+            <p class="text-sm text-gray-500 mt-5">
+                Delivery examples are generalized to respect confidentiality and contractual obligations.
+            </p>
+        </section>
+
+        <section class="bg-blue-900 text-white rounded-xl p-8">
+            <h2 class="text-2xl font-semibold mb-3">Need a Phase 00 Review Before You Build?</h2>
+            <p class="text-blue-100 mb-6">
+                WaterApps helps teams design AKS foundations that are secure, scalable, and ready for enterprise audit expectations before SAS deployment begins.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a href="index.html#contact" class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-lg font-semibold text-center">Book a Discovery Call</a>
+                <a href="https://github.com/water-apps/sasviya-phase00" target="_blank" rel="noopener noreferrer" class="bg-transparent border border-blue-300 text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-blue-800">View Phase 00 Repository</a>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
