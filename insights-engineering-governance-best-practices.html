@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engineering Governance That Speeds Delivery | WaterApps</title>
+    <meta name="description" content="A practical operating model for PR-first delivery, GitOps approvals, story points, and security guardrails that reduce regressions without slowing teams down.">
+    <link rel="canonical" href="https://www.waterapps.com.au/insights-engineering-governance-best-practices.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Engineering Governance That Speeds Delivery | WaterApps">
+    <meta property="og:description" content="How to use PR-first delivery, GitOps approvals, CODEOWNERS, and story points to improve delivery speed and control at the same time.">
+    <meta property="og:url" content="https://www.waterapps.com.au/insights-engineering-governance-best-practices.html">
+    <meta property="og:image" content="https://www.waterapps.com.au/logo.png">
+    <meta property="og:image:alt" content="WaterApps logo">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Engineering Governance That Speeds Delivery | WaterApps">
+    <meta name="twitter:description" content="A practical governance baseline for CI/CD, GitOps, story points, and security controls in enterprise environments.">
+    <meta name="twitter:image" content="https://www.waterapps.com.au/logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="mb-8">
+            <a href="insights.html" class="text-blue-600 hover:text-blue-700 text-sm">&larr; Back to Insights</a>
+            <h1 class="text-4xl font-bold mt-4 mb-4">Engineering Governance That Speeds Delivery (Not Slows It)</h1>
+            <p class="text-lg text-gray-600">
+                A practical baseline for teams that want faster delivery and fewer regressions: PR-first workflow, GitOps approvals, story points, CI/CD guardrails, and explicit security ownership.
+            </p>
+            <div class="mt-4 flex flex-wrap gap-2 text-sm">
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">Engineering Management</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">GitOps</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">CI/CD Governance</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">Platform Engineering</span>
+            </div>
+        </div>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">The Mistake Most Teams Make</h2>
+            <p class="text-gray-700 mb-4">
+                Teams often treat governance and delivery speed as opposites. When incidents happen, they add manual approvals and extra checks. When delivery slows down, they bypass process. Both reactions increase risk.
+            </p>
+            <p class="text-gray-700 mb-4">
+                The better pattern is to define <strong>lightweight but enforced rules</strong> for how changes move through the system, then automate everything around those rules. Good governance removes ambiguity and rework, which usually improves speed.
+            </p>
+            <p class="text-sm text-gray-500">
+                Examples are generalized from enterprise and regulated delivery environments to respect confidentiality obligations.
+            </p>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-5">A Practical Baseline That Works</h2>
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">1. PR-First Delivery</h3>
+                    <p class="text-gray-700">
+                        No direct push to <code>main</code> for normal changes. Every change is reviewed in a PR with CI checks, so risk is assessed before merge instead of after deployment.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">2. GitOps Apply Rules by Blast Radius</h3>
+                    <p class="text-gray-700">
+                        Independent app repos can use controlled auto-apply on <code>main</code>. Shared infrastructure repos (IAM, bootstrap, platform) should use manual approved apply only. Treat dependency depth as a deployment policy input.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">3. Branch Protection Is Part of Runtime Safety</h3>
+                    <p class="text-gray-700">
+                        For config repos, Git is effectively the apply button. That means branch protection is not “repo hygiene”; it is an operational safety control. Required checks, linear history, and no force-pushes preserve rollback confidence and auditability.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">4. CODEOWNERS for Security-Sensitive Paths</h3>
+                    <p class="text-gray-700">
+                        Enforce code-owner reviews on <code>.github/workflows/</code> and <code>terraform/</code> paths. This prevents workflow and infra changes from being treated like ordinary docs edits.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">5. Story Points Before Execution</h3>
+                    <p class="text-gray-700">
+                        Estimate work before implementation starts. Story points are not for precision; they expose oversized work early, improve sequencing, and make it easier to split risky changes before they become delivery blockers.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-blue-50 border border-blue-200 rounded-xl p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Story Points: A Useful Rule (When Kept Simple)</h2>
+            <p class="text-gray-700 mb-4">
+                Use a small default scale and optimize for conversations, not reporting theater:
+            </p>
+            <div class="grid sm:grid-cols-2 gap-4 text-sm">
+                <div class="bg-white rounded-lg border border-blue-100 p-4"><strong>1</strong>: tiny fix / low risk</div>
+                <div class="bg-white rounded-lg border border-blue-100 p-4"><strong>2</strong>: small scoped change</div>
+                <div class="bg-white rounded-lg border border-blue-100 p-4"><strong>3</strong>: medium change, single repo</div>
+                <div class="bg-white rounded-lg border border-blue-100 p-4"><strong>5</strong>: larger change, workflow/config impact</div>
+                <div class="bg-white rounded-lg border border-blue-100 p-4"><strong>8</strong>: cross-file / cross-system complexity</div>
+                <div class="bg-white rounded-lg border border-blue-100 p-4"><strong>13</strong>: too large, split before starting</div>
+            </div>
+            <p class="text-gray-700 mt-5">
+                The key governance behavior is simple: if a change estimates at <strong>13</strong>, split it before implementation. That reduces merge risk, rework, and review fatigue.
+            </p>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">CI/CD and Terraform Controls That Prevent Regressions</h2>
+            <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                <li>Separate validation/security from apply so safety checks always run</li>
+                <li>Require remote Terraform state + locking for CI plan/apply</li>
+                <li>Fail <code>terraform apply</code> on non-<code>main</code> branches explicitly (defense in depth)</li>
+                <li>Use production environment approval gates for shared/dependent repos</li>
+                <li>Keep required status checks small and meaningful (summary checks are useful when implemented correctly)</li>
+                <li>Prefer native platform security controls when third-party tooling adds licensing friction without enough value</li>
+            </ul>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Lessons from Real CI/CD and OIDC Drift Incidents</h2>
+            <p class="text-gray-700 mb-4">
+                One recurring failure pattern is treating repo renames or new repos as purely organizational changes. In OIDC-based CI/CD, repo names are part of the trust policy. Rename the repo and your plan/apply pipeline can fail immediately.
+            </p>
+            <p class="text-gray-700 mb-4">
+                Best practice: treat repo rename/addition as an IAM/OIDC change event. Update trust allowlists, run a preflight check that prints expected trusted subjects, and fail early with a clear message when trust does not match.
+            </p>
+            <p class="text-gray-700">
+                Capturing these incidents as RCA issues and closing them with explicit remediation notes is not bureaucracy. It is how teams stop rediscovering the same failure modes.
+            </p>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Weekly Governance Rhythm (15 Minutes)</h2>
+            <ol class="list-decimal pl-6 text-gray-700 space-y-2">
+                <li>Review failed and skipped CI runs</li>
+                <li>Review secret scanning and Dependabot alerts</li>
+                <li>Review branch protection drift on key repos</li>
+                <li>Review open infra/security issues and blockers</li>
+                <li>Close completed items with retrospective notes (if they fixed regressions or risk gaps)</li>
+            </ol>
+            <p class="text-gray-700 mt-4">
+                This cadence is small enough to sustain and strong enough to prevent silent drift.
+            </p>
+        </section>
+
+        <section class="bg-blue-900 text-white rounded-xl p-8">
+            <h2 class="text-2xl font-semibold mb-3">Need Help Building This Baseline?</h2>
+            <p class="text-blue-100 mb-6">
+                WaterApps helps teams implement delivery governance that improves speed and control together: GitOps approvals, CI/CD hardening, Terraform guardrails, and platform operating practices that hold up under audit and production pressure.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a href="index.html#contact" class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-lg font-semibold text-center">Book a Discovery Call</a>
+                <a href="enterprise-readiness.html" class="bg-white text-gray-900 px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-100">Enterprise Readiness</a>
+                <a href="capability-statement.html" class="bg-transparent border border-blue-300 text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-blue-800">Capability Statement</a>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
