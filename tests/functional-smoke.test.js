@@ -5,9 +5,13 @@ const path = require("node:path");
 
 const INDEX_PATH = path.join(__dirname, "..", "index.html");
 const INDEX_JS_PATH = path.join(__dirname, "..", "assets", "js", "index.js");
+const MANAGEMENT_DASHBOARD_PATH = path.join(__dirname, "..", "management-dashboard.html");
+const MANAGEMENT_DASHBOARD_JS_PATH = path.join(__dirname, "..", "scripts", "management-dashboard.js");
 
 const indexHtml = fs.readFileSync(INDEX_PATH, "utf8");
 const indexJs = fs.readFileSync(INDEX_JS_PATH, "utf8");
+const managementDashboardHtml = fs.readFileSync(MANAGEMENT_DASHBOARD_PATH, "utf8");
+const managementDashboardJs = fs.readFileSync(MANAGEMENT_DASHBOARD_JS_PATH, "utf8");
 
 test("booking flow critical UI exists on homepage", () => {
     assert.match(indexHtml, /id="booking-form"/);
@@ -48,3 +52,15 @@ test("analytics tracks google calendar fallback click", () => {
     assert.match(indexJs, /cta_type:\s*'google_calendar_booking'/);
 });
 
+test("management dashboard includes moderation section and script wiring", () => {
+    assert.match(managementDashboardHtml, /id="reviews-moderation"/);
+    assert.match(managementDashboardHtml, /id="reviewsModerationRefresh"/);
+    assert.match(managementDashboardHtml, /scripts\/management-dashboard\.js/);
+});
+
+test("management dashboard moderation script calls review moderation endpoints", () => {
+    assert.match(managementDashboardJs, /\/reviews\?status=pending&limit=25/);
+    assert.match(managementDashboardJs, /\/reviews\/'\s*\+\s*encodeURIComponent\(reviewId\)\s*\+\s*'\/moderate/);
+    assert.match(managementDashboardJs, /data-decision="approved"/);
+    assert.match(managementDashboardJs, /data-decision="rejected"/);
+});
