@@ -95,12 +95,15 @@ GitHub Pages auto-deploys on every push to `main`. Changes go live within 1–2 
 ## Contact Form API Integration (Serverless Backend)
 
 The site now includes a browser-submitted contact form UI in `index.html` that can post to the WaterApps serverless contact-form API.
+It also includes independent review submission and dashboard moderation API integrations.
 
 Before promoting to production, configure the API endpoint in one of these ways:
 
-1. Set the form attribute `data-api-endpoint` on `#contact-form` in `index.html`
-2. Or define `window.WATERAPPS_CONFIG = { contactApiEndpoint: "https://.../contact" }` before the inline script runs
-3. Or define `window.WATERAPPS_CONTACT_API_ENDPOINT = "https://.../contact"`
+1. Define `window.WATERAPPS_CONFIG` before page scripts run (preferred), for example:
+   - `contactApiEndpoint: "https://.../contact"`
+   - `reviewApiEndpoint: "https://.../reviews"`
+2. Define `window.WATERAPPS_DASHBOARD_CONFIG.reviewApiBase = "https://..."` for moderation pages
+3. Use legacy `window.WATERAPPS_CONTACT_API_ENDPOINT = "https://.../contact"` fallback if required
 
 The frontend expects JSON responses and handles:
 - `200` success

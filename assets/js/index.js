@@ -166,6 +166,7 @@ function trackEvent(eventName, params) {
     const fieldNames = ['name', 'email', 'role', 'company', 'linkedin', 'review', 'rating', 'consent'];
     const endpoint = (
         form.dataset.apiEndpoint ||
+        (window.WATERAPPS_CONFIG && window.WATERAPPS_CONFIG.reviewApiEndpoint) ||
         (window.WATERAPPS_CONFIG && window.WATERAPPS_CONFIG.contactApiEndpoint) ||
         window.WATERAPPS_CONTACT_API_ENDPOINT ||
         ''
@@ -302,25 +303,15 @@ function trackEvent(eventName, params) {
             return;
         }
 
-        const messageLines = [
-            '[REVIEW_SUBMISSION]',
-            `Reviewer Name: ${reviewFields.name}`,
-            `Reviewer Email: ${reviewFields.email}`,
-            `Role: ${reviewFields.role || 'Not provided'}`,
-            `Company: ${reviewFields.company || 'Not provided'}`,
-            `LinkedIn: ${reviewFields.linkedin}`,
-            `Rating: ${reviewFields.rating || 'Not provided'}`,
-            'Consent to verification: yes',
-            'Review:',
-            reviewFields.review
-        ];
-
         const payload = {
-            name: `${reviewFields.name} (Review Submission)`,
+            name: reviewFields.name,
             email: reviewFields.email,
-            company: reviewFields.company || reviewFields.role || 'Independent Review',
-            phone: '',
-            message: messageLines.join('\n').slice(0, 5000)
+            role: reviewFields.role,
+            company: reviewFields.company,
+            linkedin: reviewFields.linkedin,
+            review: reviewFields.review,
+            rating: reviewFields.rating,
+            consent: true
         };
 
         setSubmitting(true);
