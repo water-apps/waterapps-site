@@ -84,7 +84,8 @@ test.describe("management dashboard moderation", () => {
             note: ""
         });
 
-        const fetchCalls = calls.filter((entry) => entry.method === "GET" && entry.url.includes("/reviews?status=pending&limit=25"));
-        expect(fetchCalls.length).toBeGreaterThanOrEqual(2);
+        await expect.poll(() => {
+            return calls.filter((entry) => entry.method === "GET" && entry.url.includes("/reviews?status=pending&limit=25")).length;
+        }).toBeGreaterThanOrEqual(2);
     });
 });
