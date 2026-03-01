@@ -4,7 +4,8 @@
   "scripts": {
     "build:css": "tailwindcss -i ./assets/css/tailwind-input.css -o ./assets/css/tailwind.generated.css --minify",
     "test:portal-auth": "node --test tests/portal-auth.test.js",
-    "test:booking-availability": "node --test tests/booking-availability.test.js"
+    "test:booking-availability": "node --test tests/booking-availability.test.js",
+    "test:functional-smoke": "node --test tests/functional-smoke.test.js"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.17"
