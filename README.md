@@ -135,6 +135,7 @@ The website is served from GitHub Pages behind Cloudflare. Security headers are 
 Operational runbooks:
 - `/Users/varunau/Projects/waterapps/waterapps-site/docs/cloudflare-security-headers-rollout.md`
 - `/Users/varunau/Projects/waterapps/waterapps-site/docs/cloudflare-api-token-security-process.md`
+- `/Users/varunau/Projects/waterapps/waterapps-site/docs/token-key-management-standard.md` (all tokens/keys across providers)
 
 Security engineering note:
 - Treat Cloudflare API tokens as short-lived privileged credentials and follow the token lifecycle process (issue, use, revoke, verify).
