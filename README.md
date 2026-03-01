@@ -136,9 +136,16 @@ Operational runbooks:
 - `/Users/varunau/Projects/waterapps/waterapps-site/docs/cloudflare-security-headers-rollout.md`
 - `/Users/varunau/Projects/waterapps/waterapps-site/docs/cloudflare-api-token-security-process.md`
 - `/Users/varunau/Projects/waterapps/waterapps-site/docs/token-key-management-standard.md` (all tokens/keys across providers)
+- `/Users/varunau/Projects/waterapps/waterapps-site/docs/token-key-security-design-article.md` (design assessment + target model)
 
 Security engineering note:
 - Treat Cloudflare API tokens as short-lived privileged credentials and follow the token lifecycle process (issue, use, revoke, verify).
+
+Generate or refresh the token/key design article:
+
+```bash
+python3 scripts/generate_token_security_article.py
+```
 
 Smoke test checklist after deployment:
 - Submit a valid message from `https://www.waterapps.com.au` and confirm success UI
