@@ -6,6 +6,8 @@
     <title>Capability Statement | WaterApps</title>
     <meta name="description" content="WaterApps capability statement summary for enterprise and procurement teams evaluating cloud, platform engineering, and DevSecOps consulting services.">
     <link rel="icon" type="image/png" href="logo.png">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EVEC7YRTYC"></script>
+    <script src="assets/js/analytics.js"></script>
     <link rel="stylesheet" href="assets/css/tailwind.generated.css">
 </head>
 <body class="bg-gray-50 text-gray-900">
@@ -15,6 +17,21 @@
         <p class="text-lg text-gray-600 mb-8">
             A procurement-friendly summary of WaterApps capabilities, delivery model, and regulated-environment experience.
         </p>
+        <p class="text-sm text-gray-500 mb-6">Last updated: March 1, 2026 (AEDT)</p>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-6 mb-8">
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a href="capability-statement-download.html" data-track-event="capability_statement_pdf_download" data-track-source="capability_statement_page" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold text-center">
+                    Download Capability Statement (PDF)
+                </a>
+                <a href="mailto:varun@waterapps.com.au?subject=WaterApps%20Capability%20Statement%20Request" data-track-event="capability_statement_pdf_request" data-track-source="capability_statement_page" class="bg-gray-100 hover:bg-gray-200 text-gray-900 px-6 py-3 rounded-lg font-semibold text-center">
+                    Request PDF by Email
+                </a>
+            </div>
+            <p class="text-xs text-gray-500 mt-4">
+                If the PDF is temporarily unavailable, the download route will redirect to an email request path.
+            </p>
+        </section>
 
         <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
             <h2 class="text-2xl font-semibold mb-4">What WaterApps Delivers</h2>
@@ -60,8 +77,11 @@
                 Request procurement-ready material such as a capability statement PDF, insurance references, and supporting business information.
             </p>
             <div class="flex flex-col sm:flex-row gap-4">
-                <a href="mailto:varun@waterapps.com.au?subject=WaterApps%20Capability%20Statement%20Request" class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-lg font-semibold text-center">
-                    Request Capability Statement
+                <a href="capability-statement-download.html" data-track-event="capability_statement_pdf_download" data-track-source="capability_statement_cta" class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-lg font-semibold text-center">
+                    Download Capability Statement (PDF)
+                </a>
+                <a href="mailto:varun@waterapps.com.au?subject=WaterApps%20Capability%20Statement%20Request" data-track-event="capability_statement_pdf_request" data-track-source="capability_statement_cta" class="bg-blue-800 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold text-center border border-blue-300">
+                    Request Capability Pack
                 </a>
                 <a href="enterprise-readiness.html" class="bg-white text-gray-900 px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-100">
                     Review Enterprise Readiness
@@ -75,5 +95,25 @@
             </p>
         </section>
     </main>
+    <script>
+        (function setupCapabilityStatementTracking() {
+            if (typeof window.gtag === 'function') {
+                window.gtag('event', 'capability_statement_view', {
+                    format: 'html',
+                    page: 'capability_statement'
+                });
+            }
+
+            document.querySelectorAll('[data-track-event]').forEach((link) => {
+                link.addEventListener('click', function () {
+                    if (typeof window.gtag !== 'function') return;
+                    window.gtag('event', this.dataset.trackEvent, {
+                        source: this.dataset.trackSource || 'capability_statement_page',
+                        link_text: (this.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 80)
+                    });
+                });
+            });
+        })();
+    </script>
 </body>
 </html>
