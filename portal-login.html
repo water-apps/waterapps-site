@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WaterApps Management Portal Login</title>
+    <meta name="description" content="Secure access page for WaterApps management dashboards, delivery reporting, and operational controls.">
+    <meta name="robots" content="noindex,nofollow">
+    <link rel="canonical" href="https://www.waterapps.com.au/portal-login.html">
+    <link rel="icon" type="image/png" href="logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .portal-bg {
+            background:
+                radial-gradient(circle at 10% 10%, rgba(59, 130, 246, 0.18), transparent 40%),
+                radial-gradient(circle at 90% 15%, rgba(14, 165, 233, 0.16), transparent 40%),
+                linear-gradient(180deg, #020617 0%, #0f172a 45%, #111827 100%);
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.72);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+        }
+        .field-focus:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+        }
+        .tile-hover {
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .tile-hover:hover {
+            transform: translateY(-2px);
+            border-color: rgba(96, 165, 250, 0.55);
+            box-shadow: 0 14px 30px rgba(2, 6, 23, 0.25);
+        }
+    </style>
+</head>
+<body class="portal-bg min-h-screen text-slate-100">
+    <header class="border-b border-white/10 bg-slate-950/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3">
+                <img src="logo.png" alt="WaterApps logo" class="w-9 h-9 rounded-md">
+                <div>
+                    <div class="font-bold tracking-tight">WaterApps</div>
+                    <div class="text-xs text-slate-400">Management Portal</div>
+                </div>
+            </a>
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="text-sm text-slate-300 hover:text-white transition">Back to site</a>
+                <a href="#access-request" class="text-sm bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg transition">Request Access</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+        <div class="grid lg:grid-cols-2 gap-8 items-start">
+            <section class="glass-panel rounded-2xl p-7 lg:p-9">
+                <div class="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-sm text-emerald-200">
+                    <i class="fas fa-shield-check"></i>
+                    <span>Dashboard access point for WaterApps engagements</span>
+                </div>
+
+                <h1 class="mt-5 text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+                    Sign in to your
+                    <span class="text-blue-300">management dashboards</span>
+                </h1>
+
+                <p class="mt-4 text-slate-300 leading-relaxed">
+                    Use your allocated enterprise account to access delivery reporting, cloud posture, release controls,
+                    and executive summaries for your WaterApps-managed environments.
+                </p>
+
+                <div class="mt-8 grid sm:grid-cols-2 gap-4">
+                    <div class="rounded-xl border border-white/10 bg-white/5 p-4">
+                        <div class="text-blue-300 text-sm font-semibold"><i class="fas fa-chart-line mr-2"></i>Delivery & Release</div>
+                        <p class="mt-2 text-sm text-slate-300">Sprint health, release readiness, deployment risk, approvals.</p>
+                    </div>
+                    <div class="rounded-xl border border-white/10 bg-white/5 p-4">
+                        <div class="text-cyan-300 text-sm font-semibold"><i class="fas fa-cloud mr-2"></i>Cloud & Cost</div>
+                        <p class="mt-2 text-sm text-slate-300">Environment status, usage trends, alerts, spend guardrails.</p>
+                    </div>
+                    <div class="rounded-xl border border-white/10 bg-white/5 p-4">
+                        <div class="text-emerald-300 text-sm font-semibold"><i class="fas fa-shield-alt mr-2"></i>Security & Compliance</div>
+                        <p class="mt-2 text-sm text-slate-300">Policy posture, drift signals, WAF events, audit evidence links.</p>
+                    </div>
+                    <div class="rounded-xl border border-white/10 bg-white/5 p-4">
+                        <div class="text-amber-300 text-sm font-semibold"><i class="fas fa-bell mr-2"></i>Operational Alerts</div>
+                        <p class="mt-2 text-sm text-slate-300">Incident status, alarm summaries, escalation pathways, SLAs.</p>
+                    </div>
+                </div>
+
+                <div class="mt-8 rounded-xl border border-amber-400/20 bg-amber-300/10 p-4 text-sm text-amber-100">
+                    <div class="font-semibold mb-1"><i class="fas fa-triangle-exclamation mr-2"></i>Implementation note</div>
+                    <p>
+                        This page is a frontend portal UI. Before production use, connect it to an identity provider
+                        (AWS Cognito, Microsoft Entra ID, Auth0, or Okta) with MFA and session controls.
+                    </p>
+                </div>
+            </section>
+
+            <section class="glass-panel rounded-2xl p-7 lg:p-9">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold">Portal Sign In</h2>
+                        <p class="text-sm text-slate-400 mt-1">Use your approved WaterApps management account.</p>
+                    </div>
+                    <div class="hidden sm:flex items-center gap-2 text-xs text-slate-400">
+                        <i class="fas fa-lock"></i>
+                        <span>TLS required</span>
+                    </div>
+                </div>
+
+                <form id="portalLoginForm" class="space-y-4" novalidate>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-slate-200 mb-2">Work Email</label>
+                        <input id="email" name="email" type="email" autocomplete="email" placeholder="name@company.com.au"
+                               class="field-focus w-full rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-white placeholder:text-slate-500">
+                    </div>
+
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-slate-200 mb-2">Password</label>
+                        <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter password"
+                               class="field-focus w-full rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-white placeholder:text-slate-500">
+                    </div>
+
+                    <div>
+                        <label for="mfa" class="block text-sm font-medium text-slate-200 mb-2">MFA Code (Optional UI Placeholder)</label>
+                        <input id="mfa" name="mfa" inputmode="numeric" pattern="[0-9]*" maxlength="8" placeholder="123456"
+                               class="field-focus w-full rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-white placeholder:text-slate-500">
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-sm">
+                        <label class="inline-flex items-center gap-2 text-slate-300">
+                            <input type="checkbox" class="rounded border-slate-600 bg-slate-900 text-blue-600">
+                            Remember this device (12 hours)
+                        </label>
+                        <a href="#access-request" class="text-blue-300 hover:text-blue-200">Need access?</a>
+                    </div>
+
+                    <button type="submit" class="w-full rounded-xl bg-blue-600 hover:bg-blue-500 px-4 py-3 font-semibold transition">
+                        <i class="fas fa-right-to-bracket mr-2"></i>Sign In
+                    </button>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <button id="cognitoLoginBtn" type="button" class="rounded-xl border border-slate-700 bg-slate-900/60 px-4 py-3 text-sm hover:border-slate-500 transition">
+                            <i class="fas fa-user-shield mr-2 text-cyan-300"></i>Sign in with Cognito
+                        </button>
+                        <button type="button" class="rounded-xl border border-slate-700 bg-slate-900/60 px-4 py-3 text-sm hover:border-slate-500 transition">
+                            <i class="fas fa-link mr-2 text-blue-300"></i>Send Magic Link
+                        </button>
+                    </div>
+
+                    <p id="formMessage" class="hidden rounded-lg border px-3 py-2 text-sm"></p>
+                </form>
+
+                <div class="mt-8">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-semibold text-slate-100">Dashboard Destinations</h3>
+                        <span class="text-xs text-slate-400">Post-login landing options</span>
+                    </div>
+                    <div class="grid sm:grid-cols-2 gap-3">
+                        <a class="tile-hover rounded-xl border border-white/10 bg-white/5 p-4 block" href="management-dashboard.html">
+                            <div class="text-sm font-semibold text-blue-200">Executive Overview</div>
+                            <p class="text-xs text-slate-400 mt-1">KPIs, risk posture, release summary, open actions.</p>
+                        </a>
+                        <a class="tile-hover rounded-xl border border-white/10 bg-white/5 p-4 block" href="management-dashboard.html#delivery">
+                            <div class="text-sm font-semibold text-cyan-200">Delivery Control Tower</div>
+                            <p class="text-xs text-slate-400 mt-1">Sprint throughput, blockers, environment readiness.</p>
+                        </a>
+                        <a class="tile-hover rounded-xl border border-white/10 bg-white/5 p-4 block" href="management-dashboard.html#security">
+                            <div class="text-sm font-semibold text-emerald-200">Security & Compliance</div>
+                            <p class="text-xs text-slate-400 mt-1">Findings, WAF alerts, evidence packs, exceptions.</p>
+                        </a>
+                        <a class="tile-hover rounded-xl border border-white/10 bg-white/5 p-4 block" href="management-dashboard.html#cost">
+                            <div class="text-sm font-semibold text-amber-200">Cost & Platform Ops</div>
+                            <p class="text-xs text-slate-400 mt-1">Budgets, anomalies, cloud usage trends, uptime.</p>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <section id="access-request" class="mt-10 glass-panel rounded-2xl p-6">
+            <div class="grid md:grid-cols-3 gap-4 items-center">
+                <div class="md:col-span-2">
+                    <h2 class="text-xl font-bold">Need Management Portal Access?</h2>
+                    <p class="text-slate-300 mt-2 text-sm">
+                        Access is provisioned per client engagement. Contact WaterApps to enable a tenant, assign roles,
+                        and configure your SSO/MFA policy.
+                    </p>
+                </div>
+                <div class="md:text-right">
+                    <a href="index.html#contact" class="inline-flex items-center justify-center rounded-xl bg-white text-slate-900 px-5 py-3 font-semibold hover:bg-slate-100 transition">
+                        <i class="fas fa-envelope mr-2"></i>Contact WaterApps
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="scripts/portal-auth-config.js"></script>
+    <script src="scripts/portal-auth.js"></script>
+    <script>
+        const form = document.getElementById('portalLoginForm');
+        const message = document.getElementById('formMessage');
+        const cognitoLoginBtn = document.getElementById('cognitoLoginBtn');
+
+        function showMessage(type, html) {
+            const styles = {
+                error: 'border-red-400/30 bg-red-400/10 text-red-200',
+                success: 'border-emerald-400/30 bg-emerald-400/10 text-emerald-200',
+                info: 'border-blue-400/30 bg-blue-400/10 text-blue-200',
+                warn: 'border-amber-400/30 bg-amber-400/10 text-amber-100'
+            };
+            message.className = 'rounded-lg border px-3 py-2 text-sm ' + (styles[type] || styles.info);
+            message.innerHTML = html;
+            message.classList.remove('hidden');
+        }
+
+        async function initPortalLogin() {
+            if (!window.WaterAppsPortalAuth) {
+                showMessage('error', 'Portal auth script failed to load.');
+                return;
+            }
+
+            const callbackResult = await window.WaterAppsPortalAuth.handleCallbackIfPresent().catch(function (error) {
+                return { handled: true, success: false, error: error.message || String(error) };
+            });
+
+            if (callbackResult && callbackResult.handled) {
+                if (callbackResult.success) {
+                    showMessage('success', 'Cognito sign-in successful. Redirecting to dashboard...');
+                    window.location.assign(callbackResult.redirectPath || 'management-dashboard.html');
+                    return;
+                }
+                showMessage('error', 'Cognito sign-in failed: ' + callbackResult.error);
+            } else if (window.WaterAppsPortalAuth.isConfigured()) {
+                showMessage('info', 'Cognito is configured. Use "Sign in with Cognito" for production authentication.');
+            } else {
+                showMessage('warn', 'Cognito is not configured yet. Update <code>scripts/portal-auth-config.js</code> and set <code>enabled: true</code>.');
+            }
+        }
+
+        function startCognitoLogin() {
+            if (!window.WaterAppsPortalAuth || !window.WaterAppsPortalAuth.isConfigured()) {
+                showMessage('warn', 'Cognito is not configured yet. Update <code>scripts/portal-auth-config.js</code> first.');
+                return;
+            }
+            window.WaterAppsPortalAuth.startLogin({ postLoginRedirect: '/management-dashboard.html' })
+                .catch(function (error) {
+                    showMessage('error', 'Unable to start Cognito login: ' + (error.message || String(error)));
+                });
+        }
+
+        cognitoLoginBtn.addEventListener('click', startCognitoLogin);
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            if (window.WaterAppsPortalAuth && window.WaterAppsPortalAuth.isConfigured()) {
+                startCognitoLogin();
+                return;
+            }
+
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (!email || !password) {
+                showMessage('error', 'Enter your work email and password. This is a frontend portal template and does not authenticate yet.');
+                return;
+            }
+
+            showMessage('success', 'Frontend portal UI is ready. Next step: configure Cognito and server-side authorization. <a class="underline" href="management-dashboard.html">Open dashboard preview</a>.');
+        });
+
+        initPortalLogin();
+    </script>
+</body>
+</html>
