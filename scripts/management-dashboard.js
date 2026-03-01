@@ -53,6 +53,14 @@
         return tokens.id_token || tokens.access_token || null;
     }
 
+    function isPreviewPasswordSession() {
+        if (!window.WaterAppsPortalAuth || typeof window.WaterAppsPortalAuth.getCurrentUser !== 'function') {
+            return false;
+        }
+        const user = window.WaterAppsPortalAuth.getCurrentUser();
+        return Boolean(user && user.payload && user.payload.auth_mode === 'preview_password');
+    }
+
     function renderReviews(reviews) {
         if (!listEl) return;
         if (!Array.isArray(reviews) || reviews.length === 0) {
@@ -100,6 +108,12 @@
     }
 
     async function fetchPendingReviews() {
+        if (isPreviewPasswordSession()) {
+            setStatus('warn', 'Preview password login is active. Moderation API requires Cognito SSO.');
+            renderReviews([]);
+            return;
+        }
+
         if (!apiBase) {
             setStatus('warn', 'Review API base URL is not configured for this dashboard.');
             return;
@@ -143,6 +157,11 @@
     }
 
     async function moderateReview(reviewId, decision) {
+        if (isPreviewPasswordSession()) {
+            setStatus('warn', 'Preview password login cannot approve/reject reviews. Sign in with Cognito.');
+            return;
+        }
+
         if (!apiBase) {
             setStatus('warn', 'Review API base URL is not configured.');
             return;

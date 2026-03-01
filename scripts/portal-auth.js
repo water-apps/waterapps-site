@@ -10,12 +10,16 @@
         const config = window.WATERAPPS_PORTAL_AUTH_CONFIG || {};
         return {
             enabled: config.enabled === true,
+            googleLoginEnabled: config.googleLoginEnabled === true,
             cognitoDomain: (config.cognitoDomain || "").replace(/\/+$/, ""),
             appClientId: config.appClientId || "",
             redirectUri: config.redirectUri || window.location.origin + "/portal-login.html",
             logoutRedirectUri: config.logoutRedirectUri || window.location.origin + "/portal-login.html",
             scopes: Array.isArray(config.scopes) && config.scopes.length ? config.scopes : ["openid", "email", "profile"],
-            postLoginRedirectPath: config.postLoginRedirectPath || "/management-dashboard.html"
+            postLoginRedirectPath: config.postLoginRedirectPath || "/management-dashboard.html",
+            previewPasswordLoginEnabled: config.previewPasswordLoginEnabled === true,
+            previewAllowedEmailDomains: Array.isArray(config.previewAllowedEmailDomains) ? config.previewAllowedEmailDomains : [],
+            previewSessionHours: Number(config.previewSessionHours || 12)
         };
     }
 
@@ -107,6 +111,44 @@
         }
     }
 
+    function encodeJwtPart(value) {
+        return btoa(JSON.stringify(value)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+    }
+
+    function createPreviewIdToken(email, sessionHours) {
+        const now = Math.floor(Date.now() / 1000);
+        const header = encodeJwtPart({ alg: "none", typ: "JWT" });
+        const payload = encodeJwtPart({
+            email: email,
+            auth_mode: "preview_password",
+            iat: now,
+            exp: now + (Math.floor(sessionHours) * 60 * 60)
+        });
+        return header + "." + payload + ".preview";
+    }
+
+    function isPreviewPasswordLoginAllowed(config, email) {
+        if (!config.previewPasswordLoginEnabled) {
+            return { allowed: false, reason: "disabled" };
+        }
+        const normalizedEmail = String(email || "").trim().toLowerCase();
+        const parts = normalizedEmail.split("@");
+        if (parts.length !== 2) {
+            return { allowed: false, reason: "invalid_email" };
+        }
+        const domain = parts[1];
+        const allowedDomains = config.previewAllowedEmailDomains.map(function (item) {
+            return String(item || "").trim().toLowerCase();
+        }).filter(Boolean);
+        if (allowedDomains.length === 0) {
+            return { allowed: true, reason: "allowed" };
+        }
+        if (!allowedDomains.includes(domain)) {
+            return { allowed: false, reason: "domain_not_allowed" };
+        }
+        return { allowed: true, reason: "allowed" };
+    }
+
     function getCurrentUser() {
         const tokens = getTokens();
         if (!tokens) {
@@ -116,6 +158,39 @@
         return {
             email: payload && (payload.email || payload["cognito:username"]) ? (payload.email || payload["cognito:username"]) : "Authenticated User",
             payload: payload || {}
+        };
+    }
+
+    function signInWithPassword(email, password) {
+        const config = getConfig();
+        const normalizedEmail = String(email || "").trim().toLowerCase();
+        const passwordValue = String(password || "");
+        const allowed = isPreviewPasswordLoginAllowed(config, normalizedEmail);
+
+        if (!allowed.allowed) {
+            return { success: false, reason: allowed.reason };
+        }
+        if (!normalizedEmail || passwordValue.length < 10) {
+            return { success: false, reason: "invalid_credentials" };
+        }
+
+        const sessionHours = Number.isFinite(config.previewSessionHours) && config.previewSessionHours > 0
+            ? config.previewSessionHours
+            : 12;
+        const expiresIn = Math.floor(sessionHours * 60 * 60);
+
+        saveTokens({
+            access_token: "preview-" + randomString(24),
+            id_token: createPreviewIdToken(normalizedEmail, sessionHours),
+            refresh_token: null,
+            token_type: "Bearer",
+            expires_in: expiresIn
+        });
+
+        return {
+            success: true,
+            email: normalizedEmail,
+            redirectPath: config.postLoginRedirectPath
         };
     }
 
@@ -129,6 +204,7 @@
         const challenge = await createPkceChallenge(verifier);
         const state = randomString(24);
         const postLoginRedirect = options && options.postLoginRedirect ? options.postLoginRedirect : config.postLoginRedirectPath;
+        const identityProvider = options && options.identityProvider ? options.identityProvider : null;
 
         sessionStorage.setItem(STORAGE_KEYS.pkceVerifier, verifier);
         sessionStorage.setItem(STORAGE_KEYS.oauthState, state);
@@ -141,7 +217,8 @@
             redirect_uri: config.redirectUri,
             state: state,
             code_challenge_method: "S256",
-            code_challenge: challenge
+            code_challenge: challenge,
+            identity_provider: identityProvider
         });
 
         window.location.assign(authorizeUrl);
@@ -258,6 +335,7 @@
         handleCallbackIfPresent: handleCallbackIfPresent,
         getTokens: getTokens,
         getCurrentUser: getCurrentUser,
+        signInWithPassword: signInWithPassword,
         signOut: signOut,
         requireAuth: requireAuth,
         clearTokens: clearTokens

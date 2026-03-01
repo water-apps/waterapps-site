@@ -134,7 +134,10 @@ const CONFIGURED_PORTAL = {
     redirectUri: "https://www.waterapps.com.au/portal-login.html",
     logoutRedirectUri: "https://www.waterapps.com.au/portal-login.html",
     scopes: ["openid", "email", "profile"],
-    postLoginRedirectPath: "/management-dashboard.html"
+    postLoginRedirectPath: "/management-dashboard.html",
+    previewPasswordLoginEnabled: true,
+    previewAllowedEmailDomains: ["waterapps.com.au"],
+    previewSessionHours: 12
 };
 
 test("startLogin throws when Cognito is not configured", async () => {
@@ -263,4 +266,30 @@ test("getCurrentUser returns decoded email from stored id_token", () => {
 
     assert.equal(user.email, "principal.engineer@waterapps.com.au");
     assert.equal(user.payload.email, "principal.engineer@waterapps.com.au");
+});
+
+test("signInWithPassword stores preview token for allowed domain", () => {
+    const harness = createHarness({ config: CONFIGURED_PORTAL });
+    const result = harness.auth.signInWithPassword("Varun@waterapps.com.au", "StrongPassword123");
+
+    assert.equal(result.success, true);
+    assert.equal(result.email, "varun@waterapps.com.au");
+    assert.equal(result.redirectPath, "/management-dashboard.html");
+
+    const tokens = harness.auth.getTokens();
+    assert.ok(tokens);
+    assert.ok(tokens.id_token);
+
+    const user = harness.auth.getCurrentUser();
+    assert.equal(user.email, "varun@waterapps.com.au");
+    assert.equal(user.payload.auth_mode, "preview_password");
+});
+
+test("signInWithPassword rejects non-allowed domain", () => {
+    const harness = createHarness({ config: CONFIGURED_PORTAL });
+    const result = harness.auth.signInWithPassword("test@example.com", "StrongPassword123");
+
+    assert.equal(result.success, false);
+    assert.equal(result.reason, "domain_not_allowed");
+    assert.equal(harness.auth.getTokens(), null);
 });
