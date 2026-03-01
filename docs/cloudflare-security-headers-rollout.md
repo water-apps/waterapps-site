@@ -14,6 +14,19 @@ Use this runbook to fix weak website security-header grades for `waterapps.com.a
 
 The solution is to place Cloudflare in front of GitHub Pages and inject the headers there.
 
+## Current Status (2026-03-01)
+
+- Cloudflare front-door is active for `waterapps.com.au`
+- Security headers are live in production responses
+- CSP script hardening is live (`unsafe-inline` and `unsafe-eval` removed from `script-src`)
+- Follow-up hardening is optional (`style-src 'unsafe-inline'`)
+
+## Security Operations
+
+For Cloudflare token issuance, rotation, and revocation workflow:
+
+- `/Users/varunau/Projects/waterapps/waterapps-site/docs/cloudflare-api-token-security-process.md`
+
 ## Scope
 
 - Domain: `waterapps.com.au`
@@ -72,7 +85,7 @@ Recommended Cloudflare settings:
 
 ### 5. Add Security Headers (Worker or Transform Rules)
 
-Apply the approved header set for the site dependencies (Tailwind CDN, Google Analytics, Calendly, Font Awesome CDN, Google Fonts, contact-form API).
+Apply the approved header set for current site dependencies (Google Analytics, Calendly, Font Awesome CDN, Google Fonts, contact-form API).
 
 Minimum required headers:
 
@@ -85,7 +98,6 @@ Minimum required headers:
 
 Keep the CSP aligned with current site dependencies:
 
-- `https://cdn.tailwindcss.com`
 - `https://cdnjs.cloudflare.com`
 - `https://www.googletagmanager.com`
 - `https://assets.calendly.com`
@@ -133,4 +145,5 @@ If the Worker/headers break functionality:
 ## Notes
 
 - GitHub Pages origin will still appear in some traces if Cloudflare is not proxying the records
-- Tailwind CDN runtime usage may require `'unsafe-eval'` in CSP; self-hosted compiled CSS is a future hardening improvement
+- Tailwind runtime CDN has been removed in favor of a generated static stylesheet (`assets/css/tailwind.generated.css`)
+- Any future external dependency changes must be reflected in CSP allowlists before release
