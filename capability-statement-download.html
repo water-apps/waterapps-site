@@ -46,12 +46,6 @@
                 });
 
                 if (response.ok) {
-                    if (typeof window.gtag === 'function') {
-                        window.gtag('event', 'capability_statement_pdf_download', {
-                            cta_type: 'capability_statement_pdf_download',
-                            cta_section: 'capability_statement_download_route'
-                        });
-                    }
                     window.location.replace(pdfPath);
                     return;
                 }
