@@ -147,6 +147,7 @@ Operational runbooks:
 - `/Users/varunau/Projects/waterapps/waterapps-site/docs/RELEASE_TESTING_POLICY.md`
 - `/Users/varunau/Projects/waterapps/waterapps-site/docs/RUN_LEARNINGS.md` (execution rules and per-run learning log)
 - `/Users/varunau/Projects/waterapps/waterapps-site/docs/cloudflare-api-token-security-process.md`
+- `/Users/varunau/Projects/waterapps/waterapps-site/docs/token-key-management-standard.md` (all tokens/keys across providers)
 
 Website UI quality standard:
 - `/Users/varunau/Projects/waterapps/waterapps-site/docs/WEBSITE_UI_QUALITY_STANDARD.md`

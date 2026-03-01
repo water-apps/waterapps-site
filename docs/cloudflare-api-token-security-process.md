@@ -2,6 +2,9 @@
 
 Use this runbook when any engineer needs Cloudflare API access for `waterapps.com.au`.
 
+This document is a provider-specific extension of:
+- `/Users/varunau/Projects/waterapps/waterapps-site/docs/token-key-management-standard.md`
+
 ## Purpose
 
 - Prevent token leakage and over-privileged access
