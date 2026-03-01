@@ -3,60 +3,119 @@
 << /Type /Catalog /Pages 2 0 R >>
 endobj
 2 0 obj
-<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+<< /Type /Pages /Kids [3 0 R 5 0 R] /Count 2 >>
 endobj
 3 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 7 0 R /F2 8 0 R >> >> /Contents 4 0 R >>
 endobj
 4 0 obj
-<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
-endobj
-5 0 obj
-<< /Length 628 >>
+<< /Length 4785 >>
 stream
-BT
-/F1 14 Tf
-72 780 Td
-(WaterApps Capability Statement) Tj
-0 -20 Td
-() Tj
-0 -20 Td
-(Cloud, Platform Engineering, DevSecOps, and Delivery Acceleration) Tj
-0 -20 Td
-() Tj
-0 -20 Td
-(Website: https://www.waterapps.com.au) Tj
-0 -20 Td
-(Email: varun@waterapps.com.au) Tj
-0 -20 Td
-() Tj
-0 -20 Td
-(Service Highlights) Tj
-0 -20 Td
-(- Secure CI/CD and cloud infrastructure hardening) Tj
-0 -20 Td
-(- Kubernetes and enterprise platform engineering) Tj
-0 -20 Td
-(- Compliance-aligned delivery for regulated environments) Tj
-0 -20 Td
-(- Automation, reporting, and operational runbooks) Tj
-0 -20 Td
-() Tj
-0 -20 Td
-(Generated: 2026-03-01) Tj
-ET
+q 0.050 0.230 0.540 rg 0 774 595 68 re f Q
+1.000 1.000 1.000 rg BT /F2 22 Tf 1 0 0 1 52 812 Tm (WaterApps Capability Statement) Tj ET
+0.860 0.920 1.000 rg BT /F1 11 Tf 1 0 0 1 52 790 Tm (Cloud Platform Engineering | DevSecOps | Regulated Delivery) Tj ET
+0.860 0.920 1.000 rg BT /F1 10 Tf 1 0 0 1 491 790 Tm (Page 1) Tj ET
+q 0.740 0.820 0.950 RG 0.80 w 52 768 m 543 768 l S Q
+0.120 0.180 0.260 rg BT /F1 12 Tf 1 0 0 1 52 744 Tm (WaterApps helps regulated teams design, secure, and scale cloud delivery) Tj ET
+0.120 0.180 0.260 rg BT /F1 12 Tf 1 0 0 1 52 727 Tm (systems with practical engineering execution.) Tj ET
+0.060 0.250 0.560 rg BT /F2 14 Tf 1 0 0 1 52 702 Tm (Company Snapshot) Tj ET
+0.060 0.250 0.560 rg BT /F1 11 Tf 1 0 0 1 52 682 Tm (-) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 66 682 Tm (Legal entity: Water Apps Pty Ltd) Tj ET
+0.060 0.250 0.560 rg BT /F1 11 Tf 1 0 0 1 52 661 Tm (-) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 66 661 Tm (ABN: 63 632 823 084) Tj ET
+0.060 0.250 0.560 rg BT /F1 11 Tf 1 0 0 1 52 640 Tm (-) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 66 640 Tm (Primary region: Australia) Tj ET
+0.060 0.250 0.560 rg BT /F1 11 Tf 1 0 0 1 52 619 Tm (-) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 66 619 Tm (Model: Principal-led delivery with specialist augmentation as needed) Tj ET
+0.060 0.250 0.560 rg BT /F2 14 Tf 1 0 0 1 52 590 Tm (Core Services) Tj ET
+0.060 0.250 0.560 rg BT /F1 11 Tf 1 0 0 1 52 570 Tm (-) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 66 570 Tm (Platform engineering and cloud modernization) Tj ET
+0.060 0.250 0.560 rg BT /F1 11 Tf 1 0 0 1 52 549 Tm (-) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 66 549 Tm (DevSecOps and CI/CD hardening with auditable controls) Tj ET
+0.060 0.250 0.560 rg BT /F1 11 Tf 1 0 0 1 52 528 Tm (-) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 66 528 Tm (Kubernetes architecture, security baseline, and delivery enablement) Tj ET
+0.060 0.250 0.560 rg BT /F1 11 Tf 1 0 0 1 52 507 Tm (-) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 66 507 Tm (Operational runbooks, automation, and reliability improvements) Tj ET
+0.060 0.250 0.560 rg BT /F2 14 Tf 1 0 0 1 52 478 Tm (Engagement Types) Tj ET
+0.060 0.250 0.560 rg BT /F1 11 Tf 1 0 0 1 52 458 Tm (-) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 66 458 Tm (Discovery and architecture assessment) Tj ET
+0.060 0.250 0.560 rg BT /F1 11 Tf 1 0 0 1 52 437 Tm (-) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 66 437 Tm (Targeted remediation and technical uplift) Tj ET
+0.060 0.250 0.560 rg BT /F1 11 Tf 1 0 0 1 52 416 Tm (-) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 66 416 Tm (Delivery acceleration with repeatable templates and playbooks) Tj ET
+0.060 0.250 0.560 rg BT /F1 11 Tf 1 0 0 1 52 395 Tm (-) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 66 395 Tm (Advisory support for procurement and enterprise readiness) Tj ET
+0.060 0.250 0.560 rg BT /F2 14 Tf 1 0 0 1 52 366 Tm (Regulated Environment Alignment) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 52 346 Tm (Experience supporting delivery contexts in banking, government, and) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 52 329 Tm (telecommunications.) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 52 308 Tm (Emphasis on evidence-linked workflows, least-privilege controls, and repeatable) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 52 291 Tm (operational governance.) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 52 270 Tm (Public artifacts are sanitized by design while deeper detail can be shared during) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 52 253 Tm (procurement stages.) Tj ET
+0.060 0.250 0.560 rg BT /F2 14 Tf 1 0 0 1 52 224 Tm (Representative Outcomes) Tj ET
+0.060 0.250 0.560 rg BT /F1 11 Tf 1 0 0 1 52 204 Tm (-) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 66 204 Tm (Reduced delivery lead time through standardized CI/CD and environment controls.) Tj ET
+0.060 0.250 0.560 rg BT /F1 11 Tf 1 0 0 1 52 183 Tm (-) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 66 183 Tm (Improved deployment safety using approval gates, traceable change records, and) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 66 166 Tm (runbook-driven operations.) Tj ET
+0.060 0.250 0.560 rg BT /F1 11 Tf 1 0 0 1 52 145 Tm (-) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 66 145 Tm (Higher platform consistency via reusable infrastructure and documentation) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 66 128 Tm (baselines.) Tj ET
+0.060 0.250 0.560 rg BT /F2 14 Tf 1 0 0 1 52 99 Tm (Operating Principles) Tj ET
+q 0.820 0.860 0.900 RG 0.80 w 52 44 m 543 44 l S Q
+0.380 0.440 0.500 rg BT /F1 9 Tf 1 0 0 1 52 30 Tm (www.waterapps.com.au  |  varun@waterapps.com.au) Tj ET
+0.380 0.440 0.500 rg BT /F1 9 Tf 1 0 0 1 433 30 Tm (Updated 2026-03-01) Tj ET
 endstream
 endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 7 0 R /F2 8 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 1965 >>
+stream
+q 0.050 0.230 0.540 rg 0 774 595 68 re f Q
+1.000 1.000 1.000 rg BT /F2 22 Tf 1 0 0 1 52 812 Tm (WaterApps Capability Statement) Tj ET
+0.860 0.920 1.000 rg BT /F1 11 Tf 1 0 0 1 52 790 Tm (Cloud Platform Engineering | DevSecOps | Regulated Delivery) Tj ET
+0.860 0.920 1.000 rg BT /F1 10 Tf 1 0 0 1 491 790 Tm (Page 2) Tj ET
+q 0.740 0.820 0.950 RG 0.80 w 52 768 m 543 768 l S Q
+0.060 0.250 0.560 rg BT /F1 11 Tf 1 0 0 1 52 744 Tm (-) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 66 744 Tm (Build trust first: secure defaults, explicit ownership, and measurable controls.) Tj ET
+0.060 0.250 0.560 rg BT /F1 11 Tf 1 0 0 1 52 723 Tm (-) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 66 723 Tm (Ship with evidence: every delivery item links to proof of execution.) Tj ET
+0.060 0.250 0.560 rg BT /F1 11 Tf 1 0 0 1 52 702 Tm (-) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 66 702 Tm (Design for repeatability: productize useful patterns to reduce risk and cost over) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 66 685 Tm (time.) Tj ET
+0.060 0.250 0.560 rg BT /F2 14 Tf 1 0 0 1 52 656 Tm (Contact and Next Step) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 52 636 Tm (Website: https://www.waterapps.com.au) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 52 615 Tm (Capability statement web version:) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 52 598 Tm (https://www.waterapps.com.au/capability-statement.html) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 52 577 Tm (Contact: varun@waterapps.com.au) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 52 556 Tm (Recommended next step: 30-minute discovery call to align scope, risks, and delivery) Tj ET
+0.150 0.200 0.270 rg BT /F1 11 Tf 1 0 0 1 52 539 Tm (model.) Tj ET
+q 0.820 0.860 0.900 RG 0.80 w 52 44 m 543 44 l S Q
+0.380 0.440 0.500 rg BT /F1 9 Tf 1 0 0 1 52 30 Tm (www.waterapps.com.au  |  varun@waterapps.com.au) Tj ET
+0.380 0.440 0.500 rg BT /F1 9 Tf 1 0 0 1 433 30 Tm (Updated 2026-03-01) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+8 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
 xref
-0 6
+0 9
 0000000000 65535 f 
 0000000009 00000 n 
 0000000058 00000 n 
-0000000115 00000 n 
-0000000241 00000 n 
-0000000311 00000 n 
+0000000121 00000 n 
+0000000257 00000 n 
+0000005094 00000 n 
+0000005230 00000 n 
+0000007247 00000 n 
+0000007317 00000 n 
 trailer
-<< /Size 6 /Root 1 0 R >>
+<< /Size 9 /Root 1 0 R >>
 startxref
-990
+7392
 %%EOF
