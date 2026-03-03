@@ -7,11 +7,13 @@ const INDEX_PATH = path.join(__dirname, "..", "index.html");
 const INDEX_JS_PATH = path.join(__dirname, "..", "assets", "js", "index.js");
 const MANAGEMENT_DASHBOARD_PATH = path.join(__dirname, "..", "management-dashboard.html");
 const MANAGEMENT_DASHBOARD_JS_PATH = path.join(__dirname, "..", "scripts", "management-dashboard.js");
+const PORTAL_LOGIN_PATH = path.join(__dirname, "..", "portal-login.html");
 
 const indexHtml = fs.readFileSync(INDEX_PATH, "utf8");
 const indexJs = fs.readFileSync(INDEX_JS_PATH, "utf8");
 const managementDashboardHtml = fs.readFileSync(MANAGEMENT_DASHBOARD_PATH, "utf8");
 const managementDashboardJs = fs.readFileSync(MANAGEMENT_DASHBOARD_JS_PATH, "utf8");
+const portalLoginHtml = fs.readFileSync(PORTAL_LOGIN_PATH, "utf8");
 
 test("booking flow critical UI exists on homepage", () => {
     assert.match(indexHtml, /id="booking-form"/);
@@ -63,4 +65,9 @@ test("management dashboard moderation script calls review moderation endpoints",
     assert.match(managementDashboardJs, /\/reviews\/'\s*\+\s*encodeURIComponent\(reviewId\)\s*\+\s*'\/moderate/);
     assert.match(managementDashboardJs, /data-decision="approved"/);
     assert.match(managementDashboardJs, /data-decision="rejected"/);
+});
+
+test("portal login header logo has explicit safe sizing", () => {
+    assert.match(portalLoginHtml, /<img[^>]*src="logo\.png"[^>]*width="32"[^>]*height="32"/);
+    assert.match(portalLoginHtml, /class="[^"]*brand-logo[^"]*"/);
 });
