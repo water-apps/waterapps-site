@@ -115,7 +115,21 @@
                 </div>
 
                 <form id="portalLoginForm" class="space-y-4" novalidate>
+                    <div id="ssoPrimaryPanel" class="hidden rounded-xl border border-cyan-300/30 bg-cyan-300/10 p-4">
+                        <p class="text-sm font-semibold text-cyan-100"><i class="fas fa-shield-halved mr-2"></i>Enterprise SSO Required</p>
+                        <p class="mt-2 text-sm text-cyan-50/90">
+                            Password sign-in is disabled on this host. Continue with Cognito to access your dashboard.
+                        </p>
+                        <button id="cognitoPrimaryBtn" type="button" class="mt-4 w-full rounded-xl bg-cyan-500 hover:bg-cyan-400 px-4 py-3 font-semibold text-slate-900 transition">
+                            <i class="fas fa-user-shield mr-2"></i>Continue With Cognito
+                        </button>
+                    </div>
+
                     <div id="passwordLoginFields" class="space-y-4">
+                        <p id="previewLoginHint" class="rounded-lg border border-indigo-300/20 bg-indigo-300/10 px-3 py-2 text-xs text-indigo-100">
+                            Preview password sign-in is available on non-production environments only.
+                        </p>
+
                         <div>
                             <label for="email" class="block text-sm font-medium text-slate-200 mb-2">Work Email</label>
                             <input id="email" name="email" type="email" autocomplete="email" placeholder="name@company.com.au"
@@ -147,7 +161,7 @@
                         </button>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div id="secondaryAuthOptions" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <button id="cognitoLoginBtn" type="button" class="rounded-xl border border-slate-700 bg-slate-900/60 px-4 py-3 text-sm hover:border-slate-500 transition">
                             <i class="fas fa-user-shield mr-2 text-cyan-300"></i>Sign in with Cognito
                         </button>
@@ -212,6 +226,9 @@
     <script>
         const form = document.getElementById('portalLoginForm');
         const message = document.getElementById('formMessage');
+        const ssoPrimaryPanel = document.getElementById('ssoPrimaryPanel');
+        const cognitoPrimaryBtn = document.getElementById('cognitoPrimaryBtn');
+        const secondaryAuthOptions = document.getElementById('secondaryAuthOptions');
         const passwordLoginFields = document.getElementById('passwordLoginFields');
         const passwordLoginSubmitBtn = document.getElementById('passwordLoginSubmitBtn');
         const cognitoLoginBtn = document.getElementById('cognitoLoginBtn');
@@ -235,8 +252,15 @@
             controls.forEach(function (control) {
                 control.disabled = !enabled;
             });
+            passwordLoginFields.classList.toggle('hidden', !enabled);
             passwordLoginFields.classList.toggle('opacity-50', !enabled);
             passwordLoginFields.classList.toggle('pointer-events-none', !enabled);
+            if (ssoPrimaryPanel) {
+                ssoPrimaryPanel.classList.toggle('hidden', enabled);
+            }
+            if (secondaryAuthOptions) {
+                secondaryAuthOptions.classList.toggle('hidden', !enabled);
+            }
             if (passwordLoginSubmitBtn) {
                 passwordLoginSubmitBtn.innerHTML = enabled
                     ? '<i class="fas fa-right-to-bracket mr-2"></i>Sign In'
@@ -264,10 +288,10 @@
                 showMessage('error', 'Cognito sign-in failed: ' + callbackResult.error);
             } else if (config.previewPasswordLoginEnabled) {
                 const domains = (config.previewAllowedEmailDomains || []).join(', ');
-                showMessage('info', 'Preview password login is enabled' + (domains ? ' for domains: <code>' + domains + '</code>.' : '.') + ' You can also use Cognito SSO.');
+                showMessage('info', 'Preview password login is enabled on this non-production host' + (domains ? ' for domains: <code>' + domains + '</code>.' : '.') + ' Use Cognito for production sign-in.');
                 setPasswordLoginState(true);
             } else if (window.WaterAppsPortalAuth.isConfigured()) {
-                showMessage('info', 'Password sign-in is disabled on this host. Use "Sign in with Cognito" for production authentication.');
+                showMessage('info', 'Production sign-in uses Cognito SSO. Continue with Cognito to authenticate.');
                 setPasswordLoginState(false);
             } else {
                 showMessage('warn', 'No active authentication method configured. Enable Cognito or preview password login in <code>scripts/portal-auth-config.js</code>.');
@@ -307,6 +331,9 @@
         }
 
         cognitoLoginBtn.addEventListener('click', startCognitoLogin);
+        if (cognitoPrimaryBtn) {
+            cognitoPrimaryBtn.addEventListener('click', startCognitoLogin);
+        }
         googleLoginBtn.addEventListener('click', startGoogleLogin);
 
         form.addEventListener('submit', function (event) {
