@@ -8,6 +8,10 @@
 
     function getConfig() {
         const config = window.WATERAPPS_PORTAL_AUTH_CONFIG || {};
+        const hostname = window.location && window.location.hostname ? window.location.hostname.toLowerCase() : "";
+        const isProductionHost = hostname === "waterapps.com.au" || hostname === "www.waterapps.com.au";
+        const previewEnabled = config.previewPasswordLoginEnabled === true &&
+            (!isProductionHost || config.allowPreviewPasswordLoginOnProduction === true);
         return {
             enabled: config.enabled === true,
             googleLoginEnabled: config.googleLoginEnabled === true,
@@ -17,9 +21,10 @@
             logoutRedirectUri: config.logoutRedirectUri || window.location.origin + "/portal-login.html",
             scopes: Array.isArray(config.scopes) && config.scopes.length ? config.scopes : ["openid", "email", "profile"],
             postLoginRedirectPath: config.postLoginRedirectPath || "/management-dashboard.html",
-            previewPasswordLoginEnabled: config.previewPasswordLoginEnabled === true,
+            previewPasswordLoginEnabled: previewEnabled,
             previewAllowedEmailDomains: Array.isArray(config.previewAllowedEmailDomains) ? config.previewAllowedEmailDomains : [],
-            previewSessionHours: Number(config.previewSessionHours || 12)
+            previewSessionHours: Number(config.previewSessionHours || 12),
+            isProductionHost: isProductionHost
         };
     }
 
