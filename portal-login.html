@@ -8,6 +8,12 @@
     <meta name="robots" content="noindex,nofollow">
     <link rel="canonical" href="https://www.waterapps.com.au/portal-login.html">
     <link rel="icon" type="image/png" href="logo.png">
+    <script>
+        (function setAuthModeClass() {
+            var isProductionHost = /^(www\.)?waterapps\.com\.au$/i.test(window.location.hostname);
+            document.documentElement.classList.add(isProductionHost ? "auth-prod" : "auth-preview");
+        })();
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -37,6 +43,9 @@
             border-color: rgba(96, 165, 250, 0.55);
             box-shadow: 0 14px 30px rgba(2, 6, 23, 0.25);
         }
+        .auth-prod #ssoPrimaryPanel { display: block; }
+        .auth-prod #passwordLoginFields,
+        .auth-prod #secondaryAuthOptions { display: none; }
     </style>
 </head>
 <body class="portal-bg min-h-screen text-slate-100">
