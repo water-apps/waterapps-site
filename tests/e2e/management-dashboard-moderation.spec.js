@@ -11,7 +11,7 @@ function createJwt(payload) {
 }
 
 test.describe("management dashboard moderation", () => {
-    test("renders pending reviews and approves a submission", async ({ context, page }) => {
+    async function runModerationDecisionFlow(context, page, decision) {
         const expiresAt = Math.floor(Date.now() / 1000) + 3600;
         const idToken = createJwt({ email: "qa.tester@waterapps.com.au" });
         const calls = [];
@@ -72,20 +72,29 @@ test.describe("management dashboard moderation", () => {
         await expect(page.locator("#reviewsModerationList article[data-review-id='review-001']")).toBeVisible();
         await expect(page.locator("#portalUserChip")).toContainText("qa.tester@waterapps.com.au");
 
-        await page.getByRole("button", { name: "Approve" }).click();
+        const buttonName = decision === "approved" ? "Approve" : "Reject";
+        await page.getByRole("button", { name: buttonName }).click();
         await expect.poll(() => {
             return calls.filter((entry) => entry.method === "POST" && entry.url.includes("/reviews/review-001/moderate")).length;
         }).toBe(1);
 
-        const approveCall = calls.find((entry) => entry.method === "POST" && entry.url.includes("/reviews/review-001/moderate"));
-        expect(approveCall).toBeTruthy();
-        expect(approveCall.body).toMatchObject({
-            decision: "approved",
+        const moderationCall = calls.find((entry) => entry.method === "POST" && entry.url.includes("/reviews/review-001/moderate"));
+        expect(moderationCall).toBeTruthy();
+        expect(moderationCall.body).toMatchObject({
+            decision: decision,
             note: ""
         });
 
         await expect.poll(() => {
             return calls.filter((entry) => entry.method === "GET" && entry.url.includes("/reviews?status=pending&limit=25")).length;
         }).toBeGreaterThanOrEqual(2);
+    }
+
+    test("renders pending reviews and approves a submission", async ({ context, page }) => {
+        await runModerationDecisionFlow(context, page, "approved");
+    });
+
+    test("renders pending reviews and rejects a submission", async ({ context, page }) => {
+        await runModerationDecisionFlow(context, page, "rejected");
     });
 });
