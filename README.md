@@ -147,6 +147,10 @@ To improve the website security-header grade, route traffic through Cloudflare a
 Runbook:
 - `/Users/varunau/Projects/waterapps/waterapps-site/docs/cloudflare-security-headers-rollout.md`
 - `/Users/varunau/Projects/waterapps/waterapps-site/docs/RELEASE_TESTING_POLICY.md`
+- `/Users/varunau/Projects/waterapps/waterapps-site/docs/RUN_LEARNINGS.md` (execution rules and per-run learning log)
+
+Website UI quality standard:
+- `/Users/varunau/Projects/waterapps/waterapps-site/docs/WEBSITE_UI_QUALITY_STANDARD.md`
 
 Smoke test checklist after deployment:
 - Submit a valid message from `https://www.waterapps.com.au` and confirm success UI
