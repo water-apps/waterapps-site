@@ -60,7 +60,6 @@
         const user = window.WaterAppsPortalAuth.getCurrentUser();
         return Boolean(user && user.payload && user.payload.auth_mode === 'preview_password');
     }
-
     function renderReviews(reviews) {
         if (!listEl) return;
         if (!Array.isArray(reviews) || reviews.length === 0) {
@@ -113,7 +112,6 @@
             renderReviews([]);
             return;
         }
-
         if (!apiBase) {
             setStatus('warn', 'Review API base URL is not configured for this dashboard.');
             return;
@@ -161,7 +159,6 @@
             setStatus('warn', 'Preview password login cannot approve/reject reviews. Sign in with Cognito.');
             return;
         }
-
         if (!apiBase) {
             setStatus('warn', 'Review API base URL is not configured.');
             return;
@@ -233,4 +230,3 @@
 
     fetchPendingReviews();
 })();
-
