@@ -97,12 +97,15 @@ GitHub Pages auto-deploys on every push to `main`. Changes go live within 1–2 
 The site includes:
 - a browser-submitted contact form (`POST /contact`)
 - a native discovery-call scheduler (`GET /availability`, `POST /booking`)
+- moderation dashboard integrations for independent review workflows (`GET /reviews`, `POST /reviews/{id}/moderate`)
 
 Before promoting to production, configure the API endpoint in one of these ways:
 
-1. Set the form attribute `data-api-endpoint` on `#contact-form` in `index.html`
-2. Or define `window.WATERAPPS_CONFIG = { contactApiEndpoint: "https://.../contact" }` before the inline script runs
-3. Or define `window.WATERAPPS_CONTACT_API_ENDPOINT = "https://.../contact"`
+1. Define `window.WATERAPPS_CONFIG` before page scripts run (preferred), for example:
+   - `contactApiEndpoint: "https://.../contact"`
+   - `reviewApiEndpoint: "https://.../reviews"`
+2. Define `window.WATERAPPS_DASHBOARD_CONFIG.reviewApiBase = "https://..."` for moderation pages
+3. Use legacy `window.WATERAPPS_CONTACT_API_ENDPOINT = "https://.../contact"` fallback if required
 
 For booking UI in `#booking-form`:
 - set `data-availability-endpoint="https://.../availability"`
