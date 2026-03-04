@@ -1,3 +1,5 @@
+const isWaterAppsProductionHost = /^(www\.)?waterapps\.com\.au$/i.test(window.location.hostname);
+
 window.WATERAPPS_PORTAL_AUTH_CONFIG = {
     enabled: true,
     googleLoginEnabled: false,
@@ -7,7 +9,8 @@ window.WATERAPPS_PORTAL_AUTH_CONFIG = {
     logoutRedirectUri: window.location.origin + "/portal-login.html",
     scopes: ["openid", "email", "profile"],
     postLoginRedirectPath: "/management-dashboard.html",
-    previewPasswordLoginEnabled: true,
+    previewPasswordLoginEnabled: !isWaterAppsProductionHost,
     previewAllowedEmailDomains: ["waterapps.com.au"],
-    previewSessionHours: 12
+    previewSessionHours: 12,
+    allowPreviewPasswordLoginOnProduction: false
 };
