@@ -5,11 +5,13 @@ const path = require("node:path");
 
 const INDEX_PATH = path.join(__dirname, "..", "index.html");
 const INDEX_JS_PATH = path.join(__dirname, "..", "assets", "js", "index.js");
+const SCHEDULEASE_PATH = path.join(__dirname, "..", "schedulease.html");
 const MANAGEMENT_DASHBOARD_PATH = path.join(__dirname, "..", "management-dashboard.html");
 const MANAGEMENT_DASHBOARD_JS_PATH = path.join(__dirname, "..", "scripts", "management-dashboard.js");
 
 const indexHtml = fs.readFileSync(INDEX_PATH, "utf8");
 const indexJs = fs.readFileSync(INDEX_JS_PATH, "utf8");
+const scheduleaseHtml = fs.readFileSync(SCHEDULEASE_PATH, "utf8");
 const managementDashboardHtml = fs.readFileSync(MANAGEMENT_DASHBOARD_PATH, "utf8");
 const managementDashboardJs = fs.readFileSync(MANAGEMENT_DASHBOARD_JS_PATH, "utf8");
 
@@ -59,6 +61,19 @@ test("homepage includes client recommendation carousel", () => {
 test("analytics tracks google calendar fallback click", () => {
     assert.match(indexJs, /href\.includes\('calendar\.app\.google'\)/);
     assert.match(indexJs, /cta_type:\s*'google_calendar_booking'/);
+});
+
+test("homepage exposes productized offer path with SchedulEase link", () => {
+    assert.match(indexHtml, /id="products"/);
+    assert.match(indexHtml, /Book SchedulEase Demo/);
+    assert.match(indexHtml, /href="schedulease\.html"/);
+    assert.match(indexJs, /cta_type:\s*'schedulease_offer'/);
+});
+
+test("SchedulEase offer page exists with conversion CTA", () => {
+    assert.match(scheduleaseHtml, /<h1[^>]*>\s*SchedulEase\s*<\/h1>/);
+    assert.match(scheduleaseHtml, /Book SchedulEase Demo/);
+    assert.match(scheduleaseHtml, /href="index\.html#contact"/);
 });
 
 test("management dashboard includes moderation section and script wiring", () => {
