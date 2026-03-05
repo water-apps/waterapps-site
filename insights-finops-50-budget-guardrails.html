@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Keep AWS Spend Under $50/Month Without Breaking Delivery | WaterApps</title>
+    <meta name="description" content="A practical FinOps pattern for small AWS environments: budget guardrails, anomaly alerts, and AI-assisted monitoring that preserves delivery speed and auditability.">
+    <link rel="canonical" href="https://www.waterapps.com.au/insights-finops-50-budget-guardrails.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="How to Keep AWS Spend Under $50/Month Without Breaking Delivery | WaterApps">
+    <meta property="og:description" content="A practical guardrail model for keeping AWS spend under control with budget thresholds, anomaly detection, and incident-aware operations.">
+    <meta property="og:url" content="https://www.waterapps.com.au/insights-finops-50-budget-guardrails.html">
+    <meta property="og:image" content="https://www.waterapps.com.au/logo.png">
+    <meta property="og:image:alt" content="WaterApps logo">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="How to Keep AWS Spend Under $50/Month Without Breaking Delivery | WaterApps">
+    <meta name="twitter:description" content="FinOps in practice for lean teams: budget limits, forecast alerts, anomaly response, and AI-assisted monitoring.">
+    <meta name="twitter:image" content="https://www.waterapps.com.au/logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="assets/css/tailwind.generated.css">
+<link rel="stylesheet" href="assets/css/insights-enhancements.css">
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="mb-8">
+            <a href="insights.html" class="text-blue-600 hover:text-blue-700 text-sm">&larr; Back to Insights</a>
+            <h1 class="text-4xl font-bold mt-4 mb-4">How to Keep AWS Spend Under $50/Month Without Breaking Delivery</h1>
+            <p class="text-lg text-gray-600">
+                Low cloud spend is not luck. It is a guardrail system: budget thresholds, anomaly detection, actionable alerts, and operational decisions that trigger before costs drift.
+            </p>
+            <div class="mt-4 flex flex-wrap gap-2 text-sm">
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">FinOps</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">AWS</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">Monitoring</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">AIOps</span>
+            </div>
+        </div>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">The Real Problem With Small Cloud Budgets</h2>
+            <p class="text-gray-700 mb-4">
+                Most teams can state a monthly budget target. Fewer teams can explain exactly what happens when spend reaches 80%, when forecast crosses 100%, or when a service anomaly appears mid-month.
+            </p>
+            <p class="text-gray-700 mb-4">
+                Without a response path, budget alerts become passive email noise. The result is predictable: spend drift, late interventions, and preventable rework.
+            </p>
+            <p class="text-sm text-gray-500">
+                Examples in this article are generalized to protect internal operational context.
+            </p>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-5">A Practical Guardrail Model</h2>
+            <p class="text-gray-700 mb-5">
+                This is the baseline model WaterApps applies for lean AWS environments where every dollar matters:
+            </p>
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">1. Monthly Budget Cap With Multi-Threshold Notifications</h3>
+                    <p class="text-gray-700">
+                        Configure an AWS Budget at the account level with three notifications: actual spend warning (for example 80%), actual breach (100%), and forecast breach (100%). The warning threshold creates intervention time before the hard breach.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">2. Cost Anomaly Detection With Lower Trigger Thresholds</h3>
+                    <p class="text-gray-700">
+                        Anomaly alerts should trigger on small absolute deltas in low-spend environments. A $10 anomaly is operationally meaningful when the total budget is $50.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">3. Monitoring Alerts Routed Into an Incident Workflow</h3>
+                    <p class="text-gray-700">
+                        Budget and anomaly signals must connect to operations signals. Route alarms to a dedicated intake path so engineering can correlate cost events with release events, runtime errors, and scaling changes.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">4. AI-Assisted Triage as an Operations Multiplier</h3>
+                    <p class="text-gray-700">
+                        AI should summarize likely impact and recommended checks, not replace engineering judgment. Start with deterministic triage output and add model enrichment after controls and audit trail requirements are in place.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-blue-50 border border-blue-200 rounded-xl p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">What “Good” Looks Like in Week 1</h2>
+            <ul class="list-disc pl-6 text-gray-800 space-y-2">
+                <li>Budget cap and notification thresholds are configured and verified.</li>
+                <li>Anomaly detection threshold is tuned for low spend patterns.</li>
+                <li>Alerts route to a single owner path (email/Slack/ticket queue).</li>
+                <li>Each alert has a documented runbook action, not only a message.</li>
+                <li>Weekly cost review includes both spend and forecast trajectories.</li>
+            </ul>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Common Failure Modes</h2>
+            <div class="space-y-4 text-gray-700">
+                <p><strong>Budget-only, no operations context:</strong> Teams receive spend alerts but do not know what changed technically.</p>
+                <p><strong>Operations-only, no FinOps targets:</strong> Teams triage incidents without an explicit budget policy.</p>
+                <p><strong>AI-first automation:</strong> Teams add model calls before defining deterministic triage fields and fallback behavior.</p>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-10">
+            <h2 class="text-2xl font-semibold mb-4">Implementation Notes for Regulated Environments</h2>
+            <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                <li>Keep budget and monitoring infrastructure as code for reviewability.</li>
+                <li>Encrypt alert intake channels and scope publish permissions tightly.</li>
+                <li>Record alert state changes, triage outputs, and responder actions for audit evidence.</li>
+                <li>Avoid exposing account identifiers or sensitive logs in public artifacts.</li>
+            </ul>
+        </section>
+
+        <section class="bg-blue-900 text-white rounded-xl p-8">
+            <h2 class="text-2xl font-semibold mb-3">Need a FinOps + AIOps Guardrail Baseline?</h2>
+            <p class="text-blue-100 mb-6">
+                WaterApps can design and implement a production-ready guardrail baseline for AWS: budget policy, cost anomaly controls, monitoring pipeline integration, and AI-assisted triage with audit-friendly outputs.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a href="index.html#contact" class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-lg font-semibold text-center">Book a Discovery Call</a>
+                <a href="capability-statement.html" class="bg-transparent border border-blue-300 text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-blue-800">Capability Statement</a>
+            </div>
+        </section>
+    </main>
+    <script src="assets/js/vendor/mermaid.min.js" defer></script>
+    <script src="assets/js/insights-enhancements.js" defer></script>
+</body>
+</html>

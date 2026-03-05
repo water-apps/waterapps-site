@@ -1,0 +1,162 @@
+body.insights-enhanced {
+    background:
+        radial-gradient(circle at 15% 0%, rgba(59, 130, 246, 0.12), transparent 42%),
+        radial-gradient(circle at 85% 10%, rgba(14, 165, 233, 0.1), transparent 38%),
+        #f5f7fb;
+}
+
+body.insights-enhanced main {
+    position: relative;
+}
+
+body.insights-enhanced main > div:first-child {
+    background: linear-gradient(135deg, #ffffff 0%, #eef5ff 100%);
+    border: 1px solid #dbe6ff;
+    border-radius: 1rem;
+    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
+    margin-bottom: 2rem;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+body.insights-enhanced main > div:first-child::after {
+    content: "";
+    position: absolute;
+    top: -3.5rem;
+    right: -2.5rem;
+    width: 11rem;
+    height: 11rem;
+    border-radius: 9999px;
+    background: radial-gradient(circle at center, rgba(59, 130, 246, 0.22), rgba(59, 130, 246, 0));
+    pointer-events: none;
+}
+
+body.insights-enhanced main > section {
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    transition: transform 0.24s ease, box-shadow 0.24s ease;
+}
+
+body.insights-enhanced main > section:hover {
+    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.12);
+    transform: translateY(-2px);
+}
+
+body.insights-enhanced main > section h2 {
+    line-height: 1.25;
+}
+
+body.insights-enhanced .insight-diagram-section {
+    background:
+        linear-gradient(130deg, rgba(37, 99, 235, 0.08) 0%, rgba(14, 165, 233, 0.08) 100%),
+        #ffffff;
+    border: 1px solid #bfdbfe;
+}
+
+body.insights-enhanced .insight-badge {
+    background: #dbeafe;
+    color: #1e3a8a;
+    border: 1px solid #93c5fd;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 0.35rem 0.75rem;
+    text-transform: uppercase;
+}
+
+body.insights-enhanced .insight-mermaid-wrap {
+    background: #f8fbff;
+    border: 1px solid #dbeafe;
+    border-radius: 0.9rem;
+    overflow: hidden;
+    padding: 1rem;
+}
+
+body.insights-enhanced .insight-mermaid-wrap .mermaid {
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+body.insights-enhanced .insight-diagram-image {
+    background: #ffffff;
+    border: 1px solid #bfdbfe;
+    border-radius: 0.85rem;
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+}
+
+body.insights-enhanced .mermaid-fallback {
+    display: grid;
+    gap: 0.9rem;
+}
+
+body.insights-enhanced .mermaid-flow-row {
+    align-items: center;
+    display: grid;
+    gap: 0.7rem;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+}
+
+body.insights-enhanced .mermaid-node {
+    background: #ffffff;
+    border: 1px solid #bfdbfe;
+    border-radius: 0.75rem;
+    color: #1f2937;
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.4;
+    padding: 0.65rem 0.75rem;
+    text-align: center;
+}
+
+body.insights-enhanced .mermaid-arrow {
+    color: #2563eb;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+body.insights-enhanced .mermaid-edge-label {
+    color: #1d4ed8;
+    font-size: 0.72rem;
+    font-weight: 700;
+    justify-self: center;
+    margin-bottom: -0.15rem;
+    text-transform: uppercase;
+}
+
+body.insights-enhanced .mermaid-line-fallback {
+    background: #ffffff;
+    border: 1px dashed #93c5fd;
+    border-radius: 0.7rem;
+    color: #1e3a8a;
+    font-size: 0.85rem;
+    padding: 0.6rem 0.75rem;
+}
+
+@media (max-width: 640px) {
+    body.insights-enhanced main > div:first-child {
+        padding: 1.4rem;
+    }
+
+    body.insights-enhanced .mermaid-flow-row {
+        grid-template-columns: 1fr;
+        justify-items: stretch;
+    }
+
+    body.insights-enhanced .mermaid-arrow {
+        justify-self: center;
+        transform: rotate(90deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.insights-enhanced main > section {
+        transition: none;
+    }
+
+    body.insights-enhanced main > section:hover {
+        transform: none;
+    }
+}
