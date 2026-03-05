@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Scanning in CI/CD: What to Scan, When to Block, and How to Reduce Noise | WaterApps</title>
+    <meta name="description" content="A practical cyber scan model for CI/CD in regulated environments: IaC scanning, dependency checks, severity gates, and weekly deep scans without blocking delivery.">
+    <link rel="canonical" href="https://www.waterapps.com.au/insights-cyber-scan-devsecops-pipeline.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Cyber Scanning in CI/CD: What to Scan, When to Block, and How to Reduce Noise | WaterApps">
+    <meta property="og:description" content="How to design cyber scanning controls that strengthen delivery quality instead of creating CI noise and false confidence.">
+    <meta property="og:url" content="https://www.waterapps.com.au/insights-cyber-scan-devsecops-pipeline.html">
+    <meta property="og:image" content="https://www.waterapps.com.au/logo.png">
+    <meta property="og:image:alt" content="WaterApps logo">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Cyber Scanning in CI/CD: What to Scan, When to Block, and How to Reduce Noise | WaterApps">
+    <meta name="twitter:description" content="A practical cyber scan strategy for DevSecOps teams in regulated delivery environments.">
+    <meta name="twitter:image" content="https://www.waterapps.com.au/logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="assets/css/tailwind.generated.css">
+<link rel="stylesheet" href="assets/css/insights-enhancements.css">
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="mb-8">
+            <a href="insights.html" class="text-blue-600 hover:text-blue-700 text-sm">&larr; Back to Insights</a>
+            <h1 class="text-4xl font-bold mt-4 mb-4">Cyber Scanning in CI/CD: What to Scan, When to Block, and How to Reduce Noise</h1>
+            <p class="text-lg text-gray-600">
+                Scanning is easy to add and hard to operationalize. Most delivery teams struggle with one of two failure modes: too little scanning, or too many noisy findings that nobody owns.
+            </p>
+            <div class="mt-4 flex flex-wrap gap-2 text-sm">
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">Cyber Security</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">DevSecOps</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">CI/CD</span>
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">Regulated Delivery</span>
+            </div>
+        </div>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">The Objective: Faster Delivery With Fewer Security Surprises</h2>
+            <p class="text-gray-700 mb-4">
+                Cyber scanning should improve release confidence, not become a compliance theatre step. In regulated environments, that means scan controls need to be reliable, reviewable, and tied to clear release decisions.
+            </p>
+            <p class="text-gray-700">
+                The right model is layered scanning with explicit gate policy by severity and exploitability.
+            </p>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-5">What to Scan</h2>
+            <div class="space-y-5 text-gray-700">
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">1. Infrastructure as Code</h3>
+                    <p>Scan Terraform/Bicep for misconfigurations (public exposure, weak encryption defaults, permissive IAM, logging gaps). This catches architectural defects before deployment.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">2. Application Dependencies</h3>
+                    <p>Scan language dependencies and container layers for known CVEs. Track remediation windows and apply policy by severity and package criticality.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">3. Secrets and Credential Exposure</h3>
+                    <p>Block leaked keys/tokens in PR and mainline workflows. Pair with OIDC federation to minimize long-lived secret footprint.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">4. Runtime and Drift Signals</h3>
+                    <p>Supplement CI scans with scheduled scans and cloud-native findings review. CI-only scanning misses post-deploy drift and configuration entropy.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-blue-50 border border-blue-200 rounded-xl p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">When to Block the Build</h2>
+            <ul class="list-disc pl-6 text-gray-800 space-y-2">
+                <li><strong>PR path:</strong> fail on syntax/validation errors and high-confidence critical issues.</li>
+                <li><strong>Main path:</strong> enforce strict fail rules for critical and high-severity policy violations.</li>
+                <li><strong>Scheduled deep scans:</strong> allow soft-fail for broad visibility scans, but require ticketing and owner assignment for unresolved findings.</li>
+            </ul>
+            <p class="text-gray-700 mt-4">
+                This split keeps delivery flowing while preventing known high-risk defects from shipping.
+            </p>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">How to Reduce Scan Noise</h2>
+            <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                <li>Use a baseline suppression policy with expiry dates and documented rationale.</li>
+                <li>Separate policy violations from informational best-practice findings.</li>
+                <li>Require ownership and due dates for accepted risk items.</li>
+                <li>Publish weekly scan summary trends to engineering and platform leads.</li>
+            </ul>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-10">
+            <h2 class="text-2xl font-semibold mb-4">Minimum Controls for Regulated Teams</h2>
+            <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                <li>OIDC-based CI auth (avoid static cloud credentials in CI).</li>
+                <li>Mandatory IaC validation + formatting + policy scanning in PR.</li>
+                <li>Protected environment approvals for production apply.</li>
+                <li>Weekly security scans with SARIF upload and triage workflow.</li>
+                <li>Evidence retention for findings, exceptions, and remediation actions.</li>
+            </ul>
+            <p class="text-sm text-gray-500 mt-4">
+                Examples in this article are generalized to respect confidentiality obligations.
+            </p>
+        </section>
+
+        <section class="bg-blue-900 text-white rounded-xl p-8">
+            <h2 class="text-2xl font-semibold mb-3">Need a Cyber Scan Baseline That Teams Will Actually Use?</h2>
+            <p class="text-blue-100 mb-6">
+                WaterApps helps regulated engineering teams implement scan controls that are technically enforceable, operationally realistic, and aligned to release risk.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a href="index.html#contact" class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-lg font-semibold text-center">Book a Discovery Call</a>
+                <a href="enterprise-readiness.html" class="bg-transparent border border-blue-300 text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-blue-800">Enterprise Readiness</a>
+            </div>
+        </section>
+    </main>
+    <script src="assets/js/vendor/mermaid.min.js" defer></script>
+    <script src="assets/js/insights-enhancements.js" defer></script>
+</body>
+</html>
