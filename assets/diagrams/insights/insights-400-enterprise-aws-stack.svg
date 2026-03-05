@@ -4,32 +4,35 @@
     <stop offset="0%" stop-color="#f8fbff"/>
     <stop offset="100%" stop-color="#eaf2ff"/>
   </linearGradient>
-  <filter id="shadow" x="-10%" y="-10%" width="120%" height="140%">
-    <feDropShadow dx="0" dy="3" stdDeviation="5" flood-opacity="0.12"/>
-  </filter>
-  <marker id="arrow" markerWidth="12" markerHeight="8" refX="10" refY="4" orient="auto">
-    <path d="M0,0 L12,4 L0,8 z" fill="#2563eb"/>
-  </marker>
 </defs>
 <rect width="1440" height="360" rx="20" fill="url(#bg)"/>
-<rect x="42" y="110" width="236" height="124" rx="16" fill="#ffffff" stroke="#7aa7ef" stroke-width="2" filter="url(#shadow)"/>
+<rect x="44" y="113" width="236" height="124" rx="16" fill="#dbeafe" opacity="0.6"/>
+<rect x="42" y="110" width="236" height="124" rx="16" fill="#ffffff" stroke="#7aa7ef" stroke-width="2"/>
 <text x="160.0" y="146" text-anchor="middle" fill="#1f2937" font-size="16" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial" font-weight="600">Requirements and Risk</text>
 <text x="160.0" y="168" text-anchor="middle" fill="#1f2937" font-size="16" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial" font-weight="600">Profile</text>
-<rect x="322" y="110" width="236" height="124" rx="16" fill="#ffffff" stroke="#7aa7ef" stroke-width="2" filter="url(#shadow)"/>
+<rect x="324" y="113" width="236" height="124" rx="16" fill="#dbeafe" opacity="0.6"/>
+<rect x="322" y="110" width="236" height="124" rx="16" fill="#ffffff" stroke="#7aa7ef" stroke-width="2"/>
 <text x="440.0" y="136" text-anchor="middle" fill="#1f2937" font-size="16" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial" font-weight="600">Core Modules: VPC ECS RDS</text>
 <text x="440.0" y="158" text-anchor="middle" fill="#1f2937" font-size="16" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial" font-weight="600">CloudFront KMS Monitoring</text>
 <text x="440.0" y="180" text-anchor="middle" fill="#1f2937" font-size="16" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial" font-weight="600">CI/CD</text>
-<rect x="602" y="110" width="236" height="124" rx="16" fill="#ffffff" stroke="#7aa7ef" stroke-width="2" filter="url(#shadow)"/>
+<rect x="604" y="113" width="236" height="124" rx="16" fill="#dbeafe" opacity="0.6"/>
+<rect x="602" y="110" width="236" height="124" rx="16" fill="#ffffff" stroke="#7aa7ef" stroke-width="2"/>
 <text x="720.0" y="146" text-anchor="middle" fill="#1f2937" font-size="16" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial" font-weight="600">Cost Model and Right</text>
 <text x="720.0" y="168" text-anchor="middle" fill="#1f2937" font-size="16" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial" font-weight="600">Sizing</text>
-<rect x="882" y="110" width="236" height="124" rx="16" fill="#ffffff" stroke="#7aa7ef" stroke-width="2" filter="url(#shadow)"/>
+<rect x="884" y="113" width="236" height="124" rx="16" fill="#dbeafe" opacity="0.6"/>
+<rect x="882" y="110" width="236" height="124" rx="16" fill="#ffffff" stroke="#7aa7ef" stroke-width="2"/>
 <text x="1000.0" y="146" text-anchor="middle" fill="#1f2937" font-size="16" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial" font-weight="600">Security and Compliance</text>
 <text x="1000.0" y="168" text-anchor="middle" fill="#1f2937" font-size="16" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial" font-weight="600">Guardrails</text>
-<rect x="1162" y="110" width="236" height="124" rx="16" fill="#ffffff" stroke="#7aa7ef" stroke-width="2" filter="url(#shadow)"/>
+<rect x="1164" y="113" width="236" height="124" rx="16" fill="#dbeafe" opacity="0.6"/>
+<rect x="1162" y="110" width="236" height="124" rx="16" fill="#ffffff" stroke="#7aa7ef" stroke-width="2"/>
 <text x="1280.0" y="146" text-anchor="middle" fill="#1f2937" font-size="16" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial" font-weight="600">Production Release with</text>
 <text x="1280.0" y="168" text-anchor="middle" fill="#1f2937" font-size="16" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial" font-weight="600">Evidence</text>
-<line x1="278.0" y1="172.0" x2="314.0" y2="172.0" stroke="#2563eb" stroke-width="4" marker-end="url(#arrow)"/>
-<line x1="558.0" y1="172.0" x2="594.0" y2="172.0" stroke="#2563eb" stroke-width="4" marker-end="url(#arrow)"/>
-<line x1="838.0" y1="172.0" x2="874.0" y2="172.0" stroke="#2563eb" stroke-width="4" marker-end="url(#arrow)"/>
-<line x1="1118.0" y1="172.0" x2="1154.0" y2="172.0" stroke="#2563eb" stroke-width="4" marker-end="url(#arrow)"/>
+<line x1="278.0" y1="172.0" x2="310.0" y2="172.0" stroke="#2563eb" stroke-width="4" stroke-linecap="round"/>
+<polygon points="310.0,166.0 322.0,172.0 310.0,178.0" fill="#2563eb"/>
+<line x1="558.0" y1="172.0" x2="590.0" y2="172.0" stroke="#2563eb" stroke-width="4" stroke-linecap="round"/>
+<polygon points="590.0,166.0 602.0,172.0 590.0,178.0" fill="#2563eb"/>
+<line x1="838.0" y1="172.0" x2="870.0" y2="172.0" stroke="#2563eb" stroke-width="4" stroke-linecap="round"/>
+<polygon points="870.0,166.0 882.0,172.0 870.0,178.0" fill="#2563eb"/>
+<line x1="1118.0" y1="172.0" x2="1150.0" y2="172.0" stroke="#2563eb" stroke-width="4" stroke-linecap="round"/>
+<polygon points="1150.0,166.0 1162.0,172.0 1150.0,178.0" fill="#2563eb"/>
 </svg>
