@@ -656,6 +656,14 @@ document.querySelectorAll('a').forEach(link => {
             });
         }
 
+        if (text.includes('Book SchedulEase Demo')) {
+            trackEvent('cta_click', {
+                cta_type: 'book_schedulease_demo',
+                cta_section: section,
+                link_text: text
+            });
+        }
+
         if (href.startsWith('mailto:')) {
             trackEvent('contact_click', {
                 contact_type: 'email',
@@ -716,6 +724,14 @@ document.querySelectorAll('a').forEach(link => {
         if (href.includes('insights.html')) {
             trackEvent('cta_click', {
                 cta_type: 'insights',
+                cta_section: section,
+                link_text: text
+            });
+        }
+
+        if (href.includes('schedulease.html') || text.includes('SchedulEase')) {
+            trackEvent('cta_click', {
+                cta_type: 'schedulease_offer',
                 cta_section: section,
                 link_text: text
             });
