@@ -19,6 +19,7 @@ required_files=(
   "privacy.html"
   "terms.html"
   "enterprise-readiness.html"
+  "schedulease.html"
   "robots.txt"
   "sitemap.xml"
   "CNAME"
@@ -30,7 +31,7 @@ done
 pass "required files present"
 
 # Basic HTML closing tag sanity (cheap guard against accidental truncation)
-for f in index.html privacy.html terms.html enterprise-readiness.html; do
+for f in index.html privacy.html terms.html enterprise-readiness.html schedulease.html; do
   tail -20 "$f" | grep -q '</html>' || fail "$f missing closing </html>"
   tail -20 "$f" | grep -q '</body>' || fail "$f missing closing </body>"
 done

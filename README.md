@@ -97,12 +97,15 @@ GitHub Pages auto-deploys on every push to `main`. Changes go live within 1–2 
 The site includes:
 - a browser-submitted contact form (`POST /contact`)
 - a native discovery-call scheduler (`GET /availability`, `POST /booking`)
+- moderation dashboard integrations for independent review workflows (`GET /reviews`, `POST /reviews/{id}/moderate`)
 
 Before promoting to production, configure the API endpoint in one of these ways:
 
-1. Set the form attribute `data-api-endpoint` on `#contact-form` in `index.html`
-2. Or define `window.WATERAPPS_CONFIG = { contactApiEndpoint: "https://.../contact" }` before the inline script runs
-3. Or define `window.WATERAPPS_CONTACT_API_ENDPOINT = "https://.../contact"`
+1. Define `window.WATERAPPS_CONFIG` before page scripts run (preferred), for example:
+   - `contactApiEndpoint: "https://.../contact"`
+   - `reviewApiEndpoint: "https://.../reviews"`
+2. Define `window.WATERAPPS_DASHBOARD_CONFIG.reviewApiBase = "https://..."` for moderation pages
+3. Use legacy `window.WATERAPPS_CONTACT_API_ENDPOINT = "https://.../contact"` fallback if required
 
 For booking UI in `#booking-form`:
 - set `data-availability-endpoint="https://.../availability"`
@@ -138,19 +141,29 @@ Team note:
 - Coordinate changes with the backend SES configuration in `waterapps-contact-form`
 - Re-test delivery headers after provider cache refresh if mailbox warnings persist
 
-### Website Security Header Grade (Cloudflare Rollout Required)
+### Website Security Header Grade (Cloudflare Active)
 
-The website is served from GitHub Pages, which does not support custom response security headers needed for common security-header grading tools (for example, CSP/HSTS/X-Content-Type-Options).
+The website is served from GitHub Pages behind Cloudflare. Security headers are now injected at Cloudflare for production traffic.
 
-To improve the website security-header grade, route traffic through Cloudflare and inject headers there (Worker or Transform Rules).
-
-Runbook:
+Operational runbooks:
 - `/Users/varunau/Projects/waterapps/waterapps-site/docs/cloudflare-security-headers-rollout.md`
 - `/Users/varunau/Projects/waterapps/waterapps-site/docs/RELEASE_TESTING_POLICY.md`
 - `/Users/varunau/Projects/waterapps/waterapps-site/docs/RUN_LEARNINGS.md` (execution rules and per-run learning log)
+- `/Users/varunau/Projects/waterapps/waterapps-site/docs/cloudflare-api-token-security-process.md`
+- `/Users/varunau/Projects/waterapps/waterapps-site/docs/token-key-management-standard.md` (all tokens/keys across providers)
+- `/Users/varunau/Projects/waterapps/waterapps-site/docs/token-key-security-design-article.md` (design assessment + target model)
 
 Website UI quality standard:
 - `/Users/varunau/Projects/waterapps/waterapps-site/docs/WEBSITE_UI_QUALITY_STANDARD.md`
+
+Security engineering note:
+- Treat Cloudflare API tokens as short-lived privileged credentials and follow the token lifecycle process (issue, use, revoke, verify).
+
+Generate or refresh the token/key design article:
+
+```bash
+python3 scripts/generate_token_security_article.py
+```
 
 Smoke test checklist after deployment:
 - Submit a valid message from `https://www.waterapps.com.au` and confirm success UI

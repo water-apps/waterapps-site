@@ -8,6 +8,12 @@
     <meta name="robots" content="noindex,nofollow">
     <link rel="canonical" href="https://www.waterapps.com.au/portal-login.html">
     <link rel="icon" type="image/png" href="logo.png">
+    <script>
+        (function setAuthModeClass() {
+            var isProductionHost = /^(www\.)?waterapps\.com\.au$/i.test(window.location.hostname);
+            document.documentElement.classList.add(isProductionHost ? "auth-prod" : "auth-preview");
+        })();
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -37,13 +43,24 @@
             border-color: rgba(96, 165, 250, 0.55);
             box-shadow: 0 14px 30px rgba(2, 6, 23, 0.25);
         }
+        .brand-logo {
+            width: 32px;
+            height: 32px;
+            max-width: 32px;
+            max-height: 32px;
+            object-fit: contain;
+            flex: none;
+        }
+        .auth-prod #ssoPrimaryPanel { display: block; }
+        .auth-prod #passwordLoginFields,
+        .auth-prod #secondaryAuthOptions { display: none; }
     </style>
 </head>
 <body class="portal-bg min-h-screen text-slate-100">
     <header class="border-b border-white/10 bg-slate-950/50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <a href="index.html" class="flex items-center gap-3">
-                <img src="logo.png" alt="WaterApps logo" class="w-9 h-9 rounded-md">
+                <img src="logo.png" alt="WaterApps logo" width="32" height="32" class="brand-logo rounded-md ring-1 ring-white/20 bg-slate-950/40 p-0.5">
                 <div>
                     <div class="font-bold tracking-tight">WaterApps</div>
                     <div class="text-xs text-slate-400">Management Portal</div>
@@ -115,37 +132,53 @@
                 </div>
 
                 <form id="portalLoginForm" class="space-y-4" novalidate>
-                    <div>
-                        <label for="email" class="block text-sm font-medium text-slate-200 mb-2">Work Email</label>
-                        <input id="email" name="email" type="email" autocomplete="email" placeholder="name@company.com.au"
-                               class="field-focus w-full rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-white placeholder:text-slate-500">
+                    <div id="ssoPrimaryPanel" class="hidden rounded-xl border border-cyan-300/30 bg-cyan-300/10 p-4">
+                        <p class="text-sm font-semibold text-cyan-100"><i class="fas fa-shield-halved mr-2"></i>Enterprise SSO Required</p>
+                        <p class="mt-2 text-sm text-cyan-50/90">
+                            Password sign-in is disabled on this host. Continue with Cognito to access your dashboard.
+                        </p>
+                        <button id="cognitoPrimaryBtn" type="button" class="mt-4 w-full rounded-xl bg-cyan-500 hover:bg-cyan-400 px-4 py-3 font-semibold text-slate-900 transition">
+                            <i class="fas fa-user-shield mr-2"></i>Continue With Cognito
+                        </button>
                     </div>
 
-                    <div>
-                        <label for="password" class="block text-sm font-medium text-slate-200 mb-2">Password</label>
-                        <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter password"
-                               class="field-focus w-full rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-white placeholder:text-slate-500">
+                    <div id="passwordLoginFields" class="space-y-4">
+                        <p id="previewLoginHint" class="rounded-lg border border-indigo-300/20 bg-indigo-300/10 px-3 py-2 text-xs text-indigo-100">
+                            Preview password sign-in is available on non-production environments only.
+                        </p>
+
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-slate-200 mb-2">Work Email</label>
+                            <input id="email" name="email" type="email" autocomplete="email" placeholder="name@company.com.au"
+                                   class="field-focus w-full rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-white placeholder:text-slate-500">
+                        </div>
+
+                        <div>
+                            <label for="password" class="block text-sm font-medium text-slate-200 mb-2">Password</label>
+                            <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter password"
+                                   class="field-focus w-full rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-white placeholder:text-slate-500">
+                        </div>
+
+                        <div>
+                            <label for="mfa" class="block text-sm font-medium text-slate-200 mb-2">MFA Code (Optional UI Placeholder)</label>
+                            <input id="mfa" name="mfa" inputmode="numeric" pattern="[0-9]*" maxlength="8" placeholder="123456"
+                                   class="field-focus w-full rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-white placeholder:text-slate-500">
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-sm">
+                            <label class="inline-flex items-center gap-2 text-slate-300">
+                                <input type="checkbox" class="rounded border-slate-600 bg-slate-900 text-blue-600">
+                                Remember this device (12 hours)
+                            </label>
+                            <a href="#access-request" class="text-blue-300 hover:text-blue-200">Need access?</a>
+                        </div>
+
+                        <button id="passwordLoginSubmitBtn" type="submit" class="w-full rounded-xl bg-blue-600 hover:bg-blue-500 px-4 py-3 font-semibold transition">
+                            <i class="fas fa-right-to-bracket mr-2"></i>Sign In
+                        </button>
                     </div>
 
-                    <div>
-                        <label for="mfa" class="block text-sm font-medium text-slate-200 mb-2">MFA Code (Optional UI Placeholder)</label>
-                        <input id="mfa" name="mfa" inputmode="numeric" pattern="[0-9]*" maxlength="8" placeholder="123456"
-                               class="field-focus w-full rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-white placeholder:text-slate-500">
-                    </div>
-
-                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-sm">
-                        <label class="inline-flex items-center gap-2 text-slate-300">
-                            <input type="checkbox" class="rounded border-slate-600 bg-slate-900 text-blue-600">
-                            Remember this device (12 hours)
-                        </label>
-                        <a href="#access-request" class="text-blue-300 hover:text-blue-200">Need access?</a>
-                    </div>
-
-                    <button type="submit" class="w-full rounded-xl bg-blue-600 hover:bg-blue-500 px-4 py-3 font-semibold transition">
-                        <i class="fas fa-right-to-bracket mr-2"></i>Sign In
-                    </button>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div id="secondaryAuthOptions" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <button id="cognitoLoginBtn" type="button" class="rounded-xl border border-slate-700 bg-slate-900/60 px-4 py-3 text-sm hover:border-slate-500 transition">
                             <i class="fas fa-user-shield mr-2 text-cyan-300"></i>Sign in with Cognito
                         </button>
@@ -210,6 +243,11 @@
     <script>
         const form = document.getElementById('portalLoginForm');
         const message = document.getElementById('formMessage');
+        const ssoPrimaryPanel = document.getElementById('ssoPrimaryPanel');
+        const cognitoPrimaryBtn = document.getElementById('cognitoPrimaryBtn');
+        const secondaryAuthOptions = document.getElementById('secondaryAuthOptions');
+        const passwordLoginFields = document.getElementById('passwordLoginFields');
+        const passwordLoginSubmitBtn = document.getElementById('passwordLoginSubmitBtn');
         const cognitoLoginBtn = document.getElementById('cognitoLoginBtn');
         const googleLoginBtn = document.getElementById('googleLoginBtn');
 
@@ -223,6 +261,28 @@
             message.className = 'rounded-lg border px-3 py-2 text-sm ' + (styles[type] || styles.info);
             message.innerHTML = html;
             message.classList.remove('hidden');
+        }
+
+        function setPasswordLoginState(enabled) {
+            if (!passwordLoginFields) return;
+            const controls = passwordLoginFields.querySelectorAll('input, button');
+            controls.forEach(function (control) {
+                control.disabled = !enabled;
+            });
+            passwordLoginFields.classList.toggle('hidden', !enabled);
+            passwordLoginFields.classList.toggle('opacity-50', !enabled);
+            passwordLoginFields.classList.toggle('pointer-events-none', !enabled);
+            if (ssoPrimaryPanel) {
+                ssoPrimaryPanel.classList.toggle('hidden', enabled);
+            }
+            if (secondaryAuthOptions) {
+                secondaryAuthOptions.classList.toggle('hidden', !enabled);
+            }
+            if (passwordLoginSubmitBtn) {
+                passwordLoginSubmitBtn.innerHTML = enabled
+                    ? '<i class="fas fa-right-to-bracket mr-2"></i>Sign In'
+                    : '<i class="fas fa-ban mr-2"></i>Password Sign-In Disabled';
+            }
         }
 
         async function initPortalLogin() {
@@ -245,11 +305,14 @@
                 showMessage('error', 'Cognito sign-in failed: ' + callbackResult.error);
             } else if (config.previewPasswordLoginEnabled) {
                 const domains = (config.previewAllowedEmailDomains || []).join(', ');
-                showMessage('info', 'Preview password login is enabled' + (domains ? ' for domains: <code>' + domains + '</code>.' : '.') + ' You can also use Cognito SSO.');
+                showMessage('info', 'Preview password login is enabled on this non-production host' + (domains ? ' for domains: <code>' + domains + '</code>.' : '.') + ' Use Cognito for production sign-in.');
+                setPasswordLoginState(true);
             } else if (window.WaterAppsPortalAuth.isConfigured()) {
-                showMessage('info', 'Cognito is configured. Use "Sign in with Cognito" for production authentication.');
+                showMessage('info', 'Production sign-in uses Cognito SSO. Continue with Cognito to authenticate.');
+                setPasswordLoginState(false);
             } else {
                 showMessage('warn', 'No active authentication method configured. Enable Cognito or preview password login in <code>scripts/portal-auth-config.js</code>.');
+                setPasswordLoginState(false);
             }
         }
 
@@ -285,21 +348,33 @@
         }
 
         cognitoLoginBtn.addEventListener('click', startCognitoLogin);
+        if (cognitoPrimaryBtn) {
+            cognitoPrimaryBtn.addEventListener('click', startCognitoLogin);
+        }
         googleLoginBtn.addEventListener('click', startGoogleLogin);
 
         form.addEventListener('submit', function (event) {
             event.preventDefault();
 
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value.trim();
-
-            if (!email || !password) {
-                showMessage('error', 'Enter your work email and password.');
+            if (!window.WaterAppsPortalAuth) {
+                showMessage('error', 'Portal auth script failed to load.');
                 return;
             }
 
-            if (!window.WaterAppsPortalAuth) {
-                showMessage('error', 'Portal auth script failed to load.');
+            const config = window.WaterAppsPortalAuth.getConfig();
+            if (!config.previewPasswordLoginEnabled) {
+                if (window.WaterAppsPortalAuth.isConfigured()) {
+                    startCognitoLogin();
+                } else {
+                    showMessage('warn', 'Password sign-in is disabled and Cognito is not fully configured.');
+                }
+                return;
+            }
+
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            if (!email || !password) {
+                showMessage('error', 'Enter your work email and password.');
                 return;
             }
 

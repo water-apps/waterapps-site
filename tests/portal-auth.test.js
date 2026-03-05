@@ -68,6 +68,9 @@ function createHarness(options) {
         get hash() {
             return currentUrl.hash;
         },
+        get hostname() {
+            return currentUrl.hostname;
+        },
         assign(value) {
             assignedUrls.push(value);
             this.href = value;
@@ -269,7 +272,10 @@ test("getCurrentUser returns decoded email from stored id_token", () => {
 });
 
 test("signInWithPassword stores preview token for allowed domain", () => {
-    const harness = createHarness({ config: CONFIGURED_PORTAL });
+    const harness = createHarness({
+        config: CONFIGURED_PORTAL,
+        href: "http://127.0.0.1:4173/portal-login.html"
+    });
     const result = harness.auth.signInWithPassword("Varun@waterapps.com.au", "StrongPassword123");
 
     assert.equal(result.success, true);
@@ -286,10 +292,43 @@ test("signInWithPassword stores preview token for allowed domain", () => {
 });
 
 test("signInWithPassword rejects non-allowed domain", () => {
-    const harness = createHarness({ config: CONFIGURED_PORTAL });
+    const harness = createHarness({
+        config: CONFIGURED_PORTAL,
+        href: "http://127.0.0.1:4173/portal-login.html"
+    });
     const result = harness.auth.signInWithPassword("test@example.com", "StrongPassword123");
 
     assert.equal(result.success, false);
     assert.equal(result.reason, "domain_not_allowed");
     assert.equal(harness.auth.getTokens(), null);
+});
+
+test("getConfig disables preview password login on production host by default", () => {
+    const harness = createHarness({
+        config: {
+            ...CONFIGURED_PORTAL,
+            previewPasswordLoginEnabled: true,
+            allowPreviewPasswordLoginOnProduction: false
+        },
+        href: "https://www.waterapps.com.au/portal-login.html"
+    });
+
+    const config = harness.auth.getConfig();
+    assert.equal(config.previewPasswordLoginEnabled, false);
+    assert.equal(config.isProductionHost, true);
+});
+
+test("getConfig allows explicit preview override on production host", () => {
+    const harness = createHarness({
+        config: {
+            ...CONFIGURED_PORTAL,
+            previewPasswordLoginEnabled: true,
+            allowPreviewPasswordLoginOnProduction: true
+        },
+        href: "https://www.waterapps.com.au/portal-login.html"
+    });
+
+    const config = harness.auth.getConfig();
+    assert.equal(config.previewPasswordLoginEnabled, true);
+    assert.equal(config.isProductionHost, true);
 });

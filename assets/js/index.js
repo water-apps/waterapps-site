@@ -499,6 +499,127 @@ if (typeof window !== 'undefined') {
     });
 })();
 
+(function setupRecommendationCarousel() {
+    const carousel = document.getElementById('recommendation-carousel');
+    if (!carousel) return;
+
+    const slides = Array.from(carousel.querySelectorAll('[data-recommendation-slide]'));
+    const dotsContainer = document.getElementById('recommendation-dots');
+    const prevButton = document.getElementById('recommendation-prev');
+    const nextButton = document.getElementById('recommendation-next');
+
+    if (slides.length === 0) return;
+    if (!dotsContainer) return;
+
+    dotsContainer.innerHTML = slides
+        .map((_, index) => (
+            `<button type="button" class="h-2.5 w-2.5 rounded-full ${index === 0 ? 'bg-blue-600' : 'bg-blue-200'}" data-recommendation-dot data-slide-index="${index}" aria-label="Show slide ${index + 1}"></button>`
+        ))
+        .join('');
+
+    const dots = Array.from(dotsContainer.querySelectorAll('[data-recommendation-dot]'));
+
+    let currentIndex = 0;
+    let autoRotateTimer = null;
+    const autoRotateMs = 9000;
+    const reduceMotion =
+        typeof window.matchMedia === 'function' &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function render() {
+        slides.forEach((slide, index) => {
+            const isActive = index === currentIndex;
+            slide.classList.toggle('hidden', !isActive);
+            slide.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+        });
+
+        dots.forEach((dot, index) => {
+            const isActive = index === currentIndex;
+            dot.classList.toggle('bg-blue-600', isActive);
+            dot.classList.toggle('bg-blue-200', !isActive);
+            dot.setAttribute('aria-current', isActive ? 'true' : 'false');
+        });
+    }
+
+    function trackNavigate(source) {
+        trackEvent('recommendation_carousel_navigate', {
+            carousel: 'client_recommendations',
+            slide_index: currentIndex + 1,
+            slide_count: slides.length,
+            source
+        });
+    }
+
+    function goTo(index, source) {
+        const nextIndex = ((index % slides.length) + slides.length) % slides.length;
+        if (nextIndex === currentIndex) return;
+        currentIndex = nextIndex;
+        render();
+        if (source) {
+            trackNavigate(source);
+        }
+    }
+
+    function goBy(delta, source) {
+        goTo(currentIndex + delta, source);
+    }
+
+    function stopAutoRotate() {
+        if (autoRotateTimer) {
+            clearInterval(autoRotateTimer);
+            autoRotateTimer = null;
+        }
+    }
+
+    function startAutoRotate() {
+        if (reduceMotion || slides.length < 2) return;
+        stopAutoRotate();
+        autoRotateTimer = setInterval(() => {
+            goBy(1, 'autoplay');
+        }, autoRotateMs);
+    }
+
+    prevButton?.addEventListener('click', () => {
+        goBy(-1, 'previous_button');
+    });
+
+    nextButton?.addEventListener('click', () => {
+        goBy(1, 'next_button');
+    });
+
+    dots.forEach((dot) => {
+        dot.addEventListener('click', () => {
+            const targetIndex = Number(dot.getAttribute('data-slide-index'));
+            if (Number.isInteger(targetIndex)) {
+                goTo(targetIndex, 'dot');
+            }
+        });
+    });
+
+    carousel.addEventListener('mouseenter', stopAutoRotate);
+    carousel.addEventListener('mouseleave', startAutoRotate);
+    carousel.addEventListener('focusin', stopAutoRotate);
+    carousel.addEventListener('focusout', () => {
+        if (!carousel.contains(document.activeElement)) {
+            startAutoRotate();
+        }
+    });
+
+    carousel.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowLeft') {
+            event.preventDefault();
+            goBy(-1, 'keyboard');
+        }
+        if (event.key === 'ArrowRight') {
+            event.preventDefault();
+            goBy(1, 'keyboard');
+        }
+    });
+
+    render();
+    startAutoRotate();
+})();
+
 // Smooth scrolling for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
@@ -530,6 +651,14 @@ document.querySelectorAll('a').forEach(link => {
         if (text.includes('Book Discovery Call')) {
             trackEvent('cta_click', {
                 cta_type: 'book_discovery_call',
+                cta_section: section,
+                link_text: text
+            });
+        }
+
+        if (text.includes('Book SchedulEase Demo')) {
+            trackEvent('cta_click', {
+                cta_type: 'book_schedulease_demo',
                 cta_section: section,
                 link_text: text
             });
@@ -595,6 +724,14 @@ document.querySelectorAll('a').forEach(link => {
         if (href.includes('insights.html')) {
             trackEvent('cta_click', {
                 cta_type: 'insights',
+                cta_section: section,
+                link_text: text
+            });
+        }
+
+        if (href.includes('schedulease.html') || text.includes('SchedulEase')) {
+            trackEvent('cta_click', {
+                cta_type: 'schedulease_offer',
                 cta_section: section,
                 link_text: text
             });
