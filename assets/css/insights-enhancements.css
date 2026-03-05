@@ -135,6 +135,23 @@ body.insights-enhanced .mermaid-line-fallback {
     padding: 0.6rem 0.75rem;
 }
 
+/* Normalize legacy dark code blocks to a light, readable style. */
+body.insights-enhanced .bg-gray-900.text-green-400,
+body.insights-enhanced pre.bg-gray-900.text-gray-100 {
+    background: #f8fafc;
+    border: 1px solid #dbeafe;
+    color: #1f2937;
+}
+
+body.insights-enhanced .bg-gray-900.text-green-400 pre,
+body.insights-enhanced pre.bg-gray-900.text-gray-100 code {
+    color: #1f2937;
+}
+
+body.insights-enhanced .bg-gray-900.text-green-400 pre {
+    margin: 0;
+}
+
 @media (max-width: 640px) {
     body.insights-enhanced main > div:first-child {
         padding: 1.4rem;
