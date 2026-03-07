@@ -150,6 +150,7 @@
 
     var TRUST_CONTENT = {
         "insights-400-enterprise-aws-stack.html": {
+            published: "February 27, 2026",
             lastReviewed: "March 7, 2026",
             sources: [
                 { label: "AWS Pricing Calculator", url: "https://calculator.aws/" },
@@ -163,6 +164,7 @@
             ]
         },
         "insights-australian-compliance-baseline.html": {
+            published: "March 1, 2026",
             lastReviewed: "March 7, 2026",
             sources: [
                 { label: "OAIC: Australian Privacy Principles", url: "https://www.oaic.gov.au/privacy/australian-privacy-principles" },
@@ -176,6 +178,7 @@
             ]
         },
         "insights-cyber-scan-devsecops-pipeline.html": {
+            published: "March 6, 2026",
             lastReviewed: "March 7, 2026",
             sources: [
                 { label: "NIST SSDF (SP 800-218)", url: "https://csrc.nist.gov/pubs/sp/800/218/final" },
@@ -189,6 +192,7 @@
             ]
         },
         "insights-engineering-governance-best-practices.html": {
+            published: "March 1, 2026",
             lastReviewed: "March 7, 2026",
             sources: [
                 { label: "DORA Research Program", url: "https://dora.dev/research/" },
@@ -202,6 +206,7 @@
             ]
         },
         "insights-finops-50-budget-guardrails.html": {
+            published: "March 6, 2026",
             lastReviewed: "March 7, 2026",
             sources: [
                 { label: "FinOps Framework", url: "https://www.finops.org/framework/" },
@@ -215,6 +220,7 @@
             ]
         },
         "insights-iam-access-keys-cicd.html": {
+            published: "February 27, 2026",
             lastReviewed: "March 7, 2026",
             sources: [
                 { label: "AWS IAM Security Best Practices", url: "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html" },
@@ -228,6 +234,7 @@
             ]
         },
         "insights-n8n-aiops-platform.html": {
+            published: "February 27, 2026",
             lastReviewed: "March 7, 2026",
             sources: [
                 { label: "n8n Documentation", url: "https://docs.n8n.io/" },
@@ -241,6 +248,7 @@
             ]
         },
         "insights-performance-testing-major-releases.html": {
+            published: "February 24, 2026",
             lastReviewed: "March 7, 2026",
             sources: [
                 { label: "Google SRE Workbook: Implementing SLOs", url: "https://sre.google/workbook/implementing-slos/" },
@@ -254,6 +262,7 @@
             ]
         },
         "insights-sas-viya-aks-phase00-infrastructure.html": {
+            published: "March 5, 2026",
             lastReviewed: "March 7, 2026",
             sources: [
                 { label: "AKS Node Pools", url: "https://learn.microsoft.com/azure/aks/use-node-pools" },
@@ -267,6 +276,7 @@
             ]
         },
         "insights-terraform-apra-regulated.html": {
+            published: "February 27, 2026",
             lastReviewed: "March 7, 2026",
             sources: [
                 { label: "Terraform Language Documentation", url: "https://developer.hashicorp.com/terraform/language" },
@@ -280,6 +290,7 @@
             ]
         },
         "insights-test-automation-regulated-cicd.html": {
+            published: "February 24, 2026",
             lastReviewed: "March 7, 2026",
             sources: [
                 { label: "NIST SSDF (SP 800-218)", url: "https://csrc.nist.gov/pubs/sp/800/218/final" },
@@ -293,6 +304,7 @@
             ]
         },
         "insights-zero-trust-networking-aws.html": {
+            published: "February 27, 2026",
             lastReviewed: "March 7, 2026",
             sources: [
                 { label: "NIST SP 800-207: Zero Trust Architecture", url: "https://csrc.nist.gov/pubs/sp/800/207/final" },
@@ -316,6 +328,17 @@
 
     function getMainElement() {
         return document.querySelector("main");
+    }
+
+    function buildMetaText(trust) {
+        var parts = [];
+        if (trust && trust.published) {
+            parts.push("Published: " + trust.published);
+        }
+        if (trust && trust.lastReviewed) {
+            parts.push("Last reviewed: " + trust.lastReviewed);
+        }
+        return parts.join(" | ");
     }
 
     function hasSectionHeading(main, heading) {
@@ -440,33 +463,33 @@
         });
     }
 
-    function injectLastReviewed(main, fileName) {
+    function syncHeroMeta(main, fileName) {
         var trust = TRUST_CONTENT[fileName];
-        if (!trust || !trust.lastReviewed) return;
+        var metaText = buildMetaText(trust);
+        if (!metaText) return;
 
         var hero = Array.prototype.slice.call(main.children).find(function (child) {
             return child.tagName === "DIV";
         });
         if (!hero) return;
 
-        if (hero.textContent.indexOf("Last reviewed:") !== -1) return;
-
         var meta = Array.prototype.slice.call(hero.querySelectorAll("div, p, span")).find(function (el) {
             return (
                 el.className.includes("text-sm") &&
                 el.className.includes("text-gray-500") &&
-                el.textContent.indexOf("Published:") !== -1
+                (el.textContent.indexOf("Published:") !== -1 || el.textContent.indexOf("Last reviewed:") !== -1)
             );
         });
 
         if (meta) {
-            meta.textContent = meta.textContent.trim() + " | Last reviewed: " + trust.lastReviewed;
+            meta.classList.add("insight-meta");
+            meta.textContent = metaText;
             return;
         }
 
         var fallbackMeta = document.createElement("div");
-        fallbackMeta.className = "mt-4 text-sm text-gray-500";
-        fallbackMeta.textContent = "Last reviewed: " + trust.lastReviewed;
+        fallbackMeta.className = "mt-4 text-sm text-gray-500 insight-meta";
+        fallbackMeta.textContent = metaText;
         hero.appendChild(fallbackMeta);
     }
 
@@ -651,7 +674,7 @@
             injectDiagram(main, diagramConfig);
         }
 
-        injectLastReviewed(main, fileName);
+        syncHeroMeta(main, fileName);
         injectTrustSections(main, fileName);
         renderMermaidBlocks();
     }
