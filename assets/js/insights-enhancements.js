@@ -148,6 +148,165 @@
         }
     };
 
+    var TRUST_CONTENT = {
+        "insights-400-enterprise-aws-stack.html": {
+            lastReviewed: "March 7, 2026",
+            sources: [
+                { label: "AWS Pricing Calculator", url: "https://calculator.aws/" },
+                { label: "AWS Well-Architected Framework", url: "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html" },
+                { label: "AWS Security Pillar", url: "https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html" }
+            ],
+            related: [
+                { label: "Enterprise Readiness", url: "enterprise-readiness.html" },
+                { label: "Capability Statement", url: "capability-statement.html" },
+                { label: "Book a Discovery Call", url: "index.html#contact" }
+            ]
+        },
+        "insights-australian-compliance-baseline.html": {
+            lastReviewed: "March 7, 2026",
+            sources: [
+                { label: "OAIC: Australian Privacy Principles", url: "https://www.oaic.gov.au/privacy/australian-privacy-principles" },
+                { label: "ACSC Essential Eight", url: "https://www.cyber.gov.au/resources-business-and-government/essential-cyber-security/essential-eight" },
+                { label: "Privacy Act 1988 (Cth)", url: "https://www.legislation.gov.au/C2004A03712/latest/text" }
+            ],
+            related: [
+                { label: "Enterprise Readiness", url: "enterprise-readiness.html" },
+                { label: "Capability Statement", url: "capability-statement.html" },
+                { label: "Book a Discovery Call", url: "index.html#contact" }
+            ]
+        },
+        "insights-cyber-scan-devsecops-pipeline.html": {
+            lastReviewed: "March 7, 2026",
+            sources: [
+                { label: "NIST SSDF (SP 800-218)", url: "https://csrc.nist.gov/pubs/sp/800/218/final" },
+                { label: "OWASP ASVS", url: "https://owasp.org/www-project-application-security-verification-standard/" },
+                { label: "CISA Known Exploited Vulnerabilities Catalog", url: "https://www.cisa.gov/known-exploited-vulnerabilities-catalog" }
+            ],
+            related: [
+                { label: "Enterprise Readiness", url: "enterprise-readiness.html" },
+                { label: "Quality Engineering", url: "quality-engineering.html" },
+                { label: "Book a Discovery Call", url: "index.html#contact" }
+            ]
+        },
+        "insights-engineering-governance-best-practices.html": {
+            lastReviewed: "March 7, 2026",
+            sources: [
+                { label: "DORA Research Program", url: "https://dora.dev/research/" },
+                { label: "Google SRE Workbook", url: "https://sre.google/workbook/table-of-contents/" },
+                { label: "NIST Cybersecurity Framework 2.0", url: "https://www.nist.gov/cyberframework" }
+            ],
+            related: [
+                { label: "Enterprise Readiness", url: "enterprise-readiness.html" },
+                { label: "Capability Statement", url: "capability-statement.html" },
+                { label: "Book a Discovery Call", url: "index.html#contact" }
+            ]
+        },
+        "insights-finops-50-budget-guardrails.html": {
+            lastReviewed: "March 7, 2026",
+            sources: [
+                { label: "FinOps Framework", url: "https://www.finops.org/framework/" },
+                { label: "AWS Budgets Documentation", url: "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html" },
+                { label: "AWS Cost Anomaly Detection", url: "https://docs.aws.amazon.com/cost-management/latest/userguide/manage-ad.html" }
+            ],
+            related: [
+                { label: "Enterprise Readiness", url: "enterprise-readiness.html" },
+                { label: "Capability Statement", url: "capability-statement.html" },
+                { label: "Book a Discovery Call", url: "index.html#contact" }
+            ]
+        },
+        "insights-iam-access-keys-cicd.html": {
+            lastReviewed: "March 7, 2026",
+            sources: [
+                { label: "AWS IAM Security Best Practices", url: "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html" },
+                { label: "GitHub Actions OIDC in AWS", url: "https://docs.github.com/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services" },
+                { label: "APRA CPS 234", url: "https://www.apra.gov.au/prudential-standard-cps-234-information-security" }
+            ],
+            related: [
+                { label: "Enterprise Readiness", url: "enterprise-readiness.html" },
+                { label: "Quality Engineering", url: "quality-engineering.html" },
+                { label: "Book a Discovery Call", url: "index.html#contact" }
+            ]
+        },
+        "insights-n8n-aiops-platform.html": {
+            lastReviewed: "March 7, 2026",
+            sources: [
+                { label: "n8n Documentation", url: "https://docs.n8n.io/" },
+                { label: "n8n Self-Hosting Guide", url: "https://docs.n8n.io/hosting/" },
+                { label: "ACSC Essential Eight", url: "https://www.cyber.gov.au/resources-business-and-government/essential-cyber-security/essential-eight" }
+            ],
+            related: [
+                { label: "Enterprise Readiness", url: "enterprise-readiness.html" },
+                { label: "Capability Statement", url: "capability-statement.html" },
+                { label: "Book a Discovery Call", url: "index.html#contact" }
+            ]
+        },
+        "insights-performance-testing-major-releases.html": {
+            lastReviewed: "March 7, 2026",
+            sources: [
+                { label: "Google SRE Workbook: Implementing SLOs", url: "https://sre.google/workbook/implementing-slos/" },
+                { label: "AWS Builders Library: Load Shedding", url: "https://aws.amazon.com/builders-library/using-load-shedding-to-avoid-overload/" },
+                { label: "Azure Well-Architected: Performance Efficiency", url: "https://learn.microsoft.com/azure/well-architected/performance-efficiency/" }
+            ],
+            related: [
+                { label: "Quality Engineering", url: "quality-engineering.html" },
+                { label: "Test Automation in Regulated CI/CD", url: "insights-test-automation-regulated-cicd.html" },
+                { label: "Book a Discovery Call", url: "index.html#contact" }
+            ]
+        },
+        "insights-sas-viya-aks-phase00-infrastructure.html": {
+            lastReviewed: "March 7, 2026",
+            sources: [
+                { label: "AKS Node Pools", url: "https://learn.microsoft.com/azure/aks/use-node-pools" },
+                { label: "AKS Workload Identity", url: "https://learn.microsoft.com/azure/aks/workload-identity-overview" },
+                { label: "Azure Key Vault Security Baseline", url: "https://learn.microsoft.com/security/benchmark/azure/baselines/key-vault-security-baseline" }
+            ],
+            related: [
+                { label: "Enterprise Readiness", url: "enterprise-readiness.html" },
+                { label: "Capability Statement", url: "capability-statement.html" },
+                { label: "Book a Discovery Call", url: "index.html#contact" }
+            ]
+        },
+        "insights-terraform-apra-regulated.html": {
+            lastReviewed: "March 7, 2026",
+            sources: [
+                { label: "Terraform Language Documentation", url: "https://developer.hashicorp.com/terraform/language" },
+                { label: "Terraform Module Development", url: "https://developer.hashicorp.com/terraform/language/modules/develop" },
+                { label: "APRA Prudential Standards", url: "https://www.apra.gov.au/prudential-framework" }
+            ],
+            related: [
+                { label: "Enterprise Readiness", url: "enterprise-readiness.html" },
+                { label: "Capability Statement", url: "capability-statement.html" },
+                { label: "Book a Discovery Call", url: "index.html#contact" }
+            ]
+        },
+        "insights-test-automation-regulated-cicd.html": {
+            lastReviewed: "March 7, 2026",
+            sources: [
+                { label: "NIST SSDF (SP 800-218)", url: "https://csrc.nist.gov/pubs/sp/800/218/final" },
+                { label: "DORA Research Program", url: "https://dora.dev/research/" },
+                { label: "OWASP ASVS", url: "https://owasp.org/www-project-application-security-verification-standard/" }
+            ],
+            related: [
+                { label: "Quality Engineering", url: "quality-engineering.html" },
+                { label: "Performance Testing Before Major Releases", url: "insights-performance-testing-major-releases.html" },
+                { label: "Book a Discovery Call", url: "index.html#contact" }
+            ]
+        },
+        "insights-zero-trust-networking-aws.html": {
+            lastReviewed: "March 7, 2026",
+            sources: [
+                { label: "NIST SP 800-207: Zero Trust Architecture", url: "https://csrc.nist.gov/pubs/sp/800/207/final" },
+                { label: "CISA Zero Trust Maturity Model", url: "https://www.cisa.gov/zero-trust-maturity-model" },
+                { label: "AWS Zero Trust on AWS", url: "https://aws.amazon.com/identity/zero-trust/" }
+            ],
+            related: [
+                { label: "Enterprise Readiness", url: "enterprise-readiness.html" },
+                { label: "Capability Statement", url: "capability-statement.html" },
+                { label: "Book a Discovery Call", url: "index.html#contact" }
+            ]
+        }
+    };
+
     function getCurrentFileName() {
         var rawPath = window.location.pathname || "";
         var parts = rawPath.split("/");
@@ -157,6 +316,12 @@
 
     function getMainElement() {
         return document.querySelector("main");
+    }
+
+    function hasSectionHeading(main, heading) {
+        return Array.prototype.slice.call(main.querySelectorAll("h2")).some(function (el) {
+            return el.textContent.trim().toLowerCase() === heading.toLowerCase();
+        });
     }
 
     function upgradePageShell(main) {
@@ -233,6 +398,104 @@
         var target = sections[1] || sections[0];
         var visualSection = buildDiagramSection(config);
         target.insertAdjacentElement("afterend", visualSection);
+    }
+
+    function buildLinksSection(title, links) {
+        var section = document.createElement("section");
+        section.className = "bg-white rounded-xl border border-gray-200 p-8 mb-8";
+
+        var h2 = document.createElement("h2");
+        h2.className = "text-2xl font-semibold mb-4";
+        h2.textContent = title;
+
+        var list = document.createElement("ul");
+        list.className = "list-disc pl-6 text-gray-700 space-y-2";
+
+        links.forEach(function (item) {
+            var li = document.createElement("li");
+            var a = document.createElement("a");
+            a.href = item.url;
+            a.textContent = item.label;
+            a.className = "text-blue-600 hover:text-blue-700 underline";
+            if (/^https?:\/\//i.test(item.url)) {
+                a.target = "_blank";
+                a.rel = "noopener noreferrer";
+            }
+            li.appendChild(a);
+            list.appendChild(li);
+        });
+
+        section.appendChild(h2);
+        section.appendChild(list);
+        return section;
+    }
+
+    function getPrimaryCtaSection(main) {
+        return Array.prototype.slice.call(main.children).find(function (child) {
+            return (
+                child.tagName === "SECTION" &&
+                child.className.includes("bg-blue-900") &&
+                child.className.includes("text-white")
+            );
+        });
+    }
+
+    function injectLastReviewed(main, fileName) {
+        var trust = TRUST_CONTENT[fileName];
+        if (!trust || !trust.lastReviewed) return;
+
+        var hero = Array.prototype.slice.call(main.children).find(function (child) {
+            return child.tagName === "DIV";
+        });
+        if (!hero) return;
+
+        if (hero.textContent.indexOf("Last reviewed:") !== -1) return;
+
+        var meta = Array.prototype.slice.call(hero.querySelectorAll("div, p, span")).find(function (el) {
+            return (
+                el.className.includes("text-sm") &&
+                el.className.includes("text-gray-500") &&
+                el.textContent.indexOf("Published:") !== -1
+            );
+        });
+
+        if (meta) {
+            meta.textContent = meta.textContent.trim() + " | Last reviewed: " + trust.lastReviewed;
+            return;
+        }
+
+        var fallbackMeta = document.createElement("div");
+        fallbackMeta.className = "mt-4 text-sm text-gray-500";
+        fallbackMeta.textContent = "Last reviewed: " + trust.lastReviewed;
+        hero.appendChild(fallbackMeta);
+    }
+
+    function injectTrustSections(main, fileName) {
+        var trust = TRUST_CONTENT[fileName];
+        if (!trust) return;
+
+        var cta = getPrimaryCtaSection(main);
+        var insertedSources = null;
+
+        if (trust.sources && trust.sources.length && !hasSectionHeading(main, "Sources")) {
+            insertedSources = buildLinksSection("Sources", trust.sources);
+            if (cta) {
+                cta.insertAdjacentElement("beforebegin", insertedSources);
+            } else {
+                main.appendChild(insertedSources);
+            }
+        }
+
+        if (trust.related && trust.related.length && !hasSectionHeading(main, "Related WaterApps Links")) {
+            var relatedSection = buildLinksSection("Related WaterApps Links", trust.related);
+            if (insertedSources) {
+                insertedSources.insertAdjacentElement("afterend", relatedSection);
+            } else if (cta) {
+                cta.insertAdjacentElement("beforebegin", relatedSection);
+            } else {
+                main.appendChild(relatedSection);
+            }
+        }
     }
 
     function parseEdge(line) {
@@ -388,6 +651,8 @@
             injectDiagram(main, diagramConfig);
         }
 
+        injectLastReviewed(main, fileName);
+        injectTrustSections(main, fileName);
         renderMermaidBlocks();
     }
 
