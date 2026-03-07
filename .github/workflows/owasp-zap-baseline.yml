@@ -24,9 +24,10 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p zap-report
+          chmod -R 777 zap-report
 
           set +e
-          docker run --rm -v "${PWD}/zap-report:/zap/wrk:rw" -t ghcr.io/zaproxy/zaproxy:stable \
+          docker run --rm --user root -v "${PWD}/zap-report:/zap/wrk:rw" ghcr.io/zaproxy/zaproxy:stable \
             zap-baseline.py \
             -t "${TARGET_URL}" \
             -m 5 \
