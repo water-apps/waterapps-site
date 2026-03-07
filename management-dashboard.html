@@ -8,6 +8,14 @@
     <meta name="robots" content="noindex,nofollow">
     <meta id="dashboardMetaRedirect" http-equiv="refresh" content="2;url=portal-login.html">
     <link rel="icon" type="image/png" href="logo.png">
+    <script>
+        (function enforceCanonicalHost() {
+            var host = window.location.hostname.toLowerCase();
+            if (host === "waterapps.com.au") {
+                window.location.replace("https://www.waterapps.com.au" + window.location.pathname + window.location.search + window.location.hash);
+            }
+        })();
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="scripts/portal-auth-config.js"></script>
@@ -47,19 +55,21 @@
         @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
 
         :root {
-            --surface: rgba(255, 255, 255, 0.9);
-            --border: rgba(148, 163, 184, 0.25);
+            --surface: rgba(255, 255, 255, 0.95);
+            --surface-muted: rgba(248, 250, 252, 0.92);
+            --border: rgba(148, 163, 184, 0.24);
             --ink: #0f172a;
             --ink-soft: #475569;
+            --accent: #0f766e;
         }
 
         body {
             font-family: 'Manrope', sans-serif;
             color: var(--ink);
             background:
-                radial-gradient(circle at 10% -10%, rgba(56, 189, 248, 0.2), transparent 35%),
-                radial-gradient(circle at 95% 5%, rgba(37, 99, 235, 0.15), transparent 35%),
-                linear-gradient(180deg, #f8fafc 0%, #eef2ff 45%, #f8fafc 100%);
+                radial-gradient(circle at 8% -8%, rgba(13, 148, 136, 0.12), transparent 36%),
+                radial-gradient(circle at 92% 4%, rgba(59, 130, 246, 0.1), transparent 40%),
+                linear-gradient(180deg, #f8fafc 0%, #f1f5f9 40%, #f8fafc 100%);
         }
 
         #portalAuthLoading {
@@ -87,7 +97,7 @@
             border: 1px solid var(--border);
             border-radius: 1rem;
             backdrop-filter: blur(10px);
-            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.05);
         }
 
         .metric-card {
@@ -96,7 +106,7 @@
 
         .metric-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 16px 28px rgba(15, 23, 42, 0.1);
+            box-shadow: 0 14px 24px rgba(15, 23, 42, 0.09);
         }
 
         .status-chip {
@@ -116,11 +126,13 @@
             font-size: 0.78rem;
             font-weight: 700;
             color: #334155;
-            transition: background-color 0.2s ease, color 0.2s ease;
+            background: var(--surface-muted);
+            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
         }
 
         .link-chip:hover {
-            background: #0f172a;
+            background: var(--accent);
+            border-color: var(--accent);
             color: #fff;
         }
     </style>
@@ -160,7 +172,7 @@
                     <div>
                         <p class="text-sm text-slate-600">Client tenant: WaterApps Internal</p>
                         <h1 class="text-3xl lg:text-4xl font-extrabold tracking-tight mt-1">Executive Control Dashboard</h1>
-                        <p class="text-slate-600 mt-2 max-w-2xl">A clean operating view across release health, security posture, cloud spend, and customer delivery outcomes.</p>
+                        <p class="text-slate-600 mt-2 max-w-2xl">Single operating view for delivery, security, cloud spend, and approvals.</p>
                     </div>
                     <div class="flex flex-col items-start lg:items-end gap-2">
                         <span class="status-chip bg-emerald-100 text-emerald-800"><i class="fas fa-circle-check"></i>System Healthy</span>
@@ -232,7 +244,7 @@
                     <div class="flex items-center justify-between gap-3">
                         <div>
                             <h2 class="font-extrabold text-lg">Delivery Pipeline</h2>
-                            <p class="text-xs text-slate-500 mt-1">Cross-team initiatives and deployment readiness</p>
+                            <p class="text-xs text-slate-500 mt-1">Live progress across platform initiatives</p>
                         </div>
                         <span class="status-chip bg-blue-100 text-blue-800"><i class="fas fa-arrow-trend-up"></i>On Track</span>
                     </div>
@@ -274,7 +286,7 @@
 
                 <article class="panel p-5">
                     <h2 class="font-extrabold text-lg">Security Snapshot</h2>
-                    <p class="text-xs text-slate-500 mt-1">Current control posture at the perimeter and identity layers</p>
+                    <p class="text-xs text-slate-500 mt-1">Perimeter and identity controls</p>
 
                     <div class="mt-4 space-y-2 text-sm">
                         <div class="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2"><span>WAF Web ACL</span><span class="font-semibold text-emerald-700">Enabled</span></div>
@@ -289,7 +301,7 @@
             <section class="grid lg:grid-cols-2 gap-4">
                 <article class="panel p-5">
                     <h2 class="font-extrabold text-lg">Approval Queue</h2>
-                    <p class="text-xs text-slate-500 mt-1">Decisions waiting for release or governance approval</p>
+                    <p class="text-xs text-slate-500 mt-1">Pending release and governance decisions</p>
 
                     <div class="mt-4 divide-y divide-slate-200 text-sm">
                         <div class="py-3 flex items-center justify-between gap-4">
@@ -318,7 +330,7 @@
 
                 <article class="panel p-5">
                     <h2 class="font-extrabold text-lg">Next Integration Steps</h2>
-                    <p class="text-xs text-slate-500 mt-1">Top priorities to move from preview to production-grade operations</p>
+                    <p class="text-xs text-slate-500 mt-1">Priority actions to reach production maturity</p>
 
                     <ol class="mt-4 space-y-3 text-sm text-slate-700 list-decimal list-inside">
                         <li>Wire enterprise authentication with MFA and session policy controls.</li>
