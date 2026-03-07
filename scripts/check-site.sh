@@ -18,6 +18,8 @@ required_files=(
   "privacy.html"
   "terms.html"
   "enterprise-readiness.html"
+  "portal-login.html"
+  "management-dashboard.html"
   "robots.txt"
   "sitemap.xml"
   "CNAME"
@@ -29,7 +31,7 @@ done
 pass "required files present"
 
 # Basic HTML closing tag sanity (cheap guard against accidental truncation)
-for f in index.html privacy.html terms.html enterprise-readiness.html; do
+for f in index.html privacy.html terms.html enterprise-readiness.html portal-login.html management-dashboard.html; do
   tail -20 "$f" | grep -q '</html>' || fail "$f missing closing </html>"
   tail -20 "$f" | grep -q '</body>' || fail "$f missing closing </body>"
 done
@@ -65,5 +67,11 @@ grep -q 'rel="noopener noreferrer"' index.html || fail "Expected noopener/norefe
 grep -q 'Privacy Policy' index.html || fail "Expected Privacy Policy link on homepage"
 grep -q 'Website Terms' index.html || fail "Expected Website Terms link on homepage"
 pass "homepage legal/security markers present"
+
+# Portal route must remain fail-closed for unauthenticated users
+grep -q "window.__WATERAPPS_PORTAL_AUTH_STATUS" management-dashboard.html || fail "Dashboard auth bootstrap marker missing"
+grep -q "data-portal-auth" management-dashboard.html || fail "Dashboard auth render gate missing"
+grep -q "noscript" management-dashboard.html || fail "Dashboard noscript redirect missing"
+pass "management dashboard auth gates present"
 
 echo "Site quality checks passed."
