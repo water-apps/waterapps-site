@@ -1,7 +1,7 @@
 # Release Testing Policy
 
 Status: Active  
-Last updated: 2026-03-01  
+Last updated: 2026-03-07  
 Owner: Website Engineering
 
 ## Mandatory Rule
@@ -17,12 +17,19 @@ All pull requests to `main` must pass:
 1. `checks` workflow job
 2. `portal-auth-tests`
 3. `booking-availability-tests`
+4. `zap-baseline`
 
 The `checks` job must include:
 
 1. `scripts/check-site.sh`
 2. `tests/functional-smoke.test.js`
 3. Playwright e2e tests (`tests/e2e/*.spec.js`) against a local web server
+
+The `zap-baseline` job must:
+
+1. Scan the pull request build against a local web server before merge.
+2. Scan `https://www.waterapps.com.au` weekly for drift and production regressions.
+3. Upload report artifacts on every run.
 
 ## Required Functional Coverage (Minimum)
 
