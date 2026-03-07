@@ -6,6 +6,7 @@
     <title>WaterApps Management Dashboard (Preview)</title>
     <meta name="description" content="Preview of WaterApps management dashboards for delivery, security, platform operations, and cost governance.">
     <meta name="robots" content="noindex,nofollow">
+    <meta id="dashboardMetaRedirect" http-equiv="refresh" content="2;url=portal-login.html">
     <link rel="icon" type="image/png" href="logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -13,22 +14,31 @@
     <script src="scripts/portal-auth.js"></script>
     <script>
         (function () {
-            const auth = window.WaterAppsPortalAuth;
-            if (!auth) {
+            try {
+                const auth = window.WaterAppsPortalAuth;
+                if (!auth) {
+                    return;
+                }
+
+                const authStatus = auth.requireAuth({
+                    redirectTarget: window.location.pathname + window.location.hash
+                });
+
+                if (!authStatus.allowed) {
+                    return;
+                }
+
+                const fallbackRedirect = document.getElementById('dashboardMetaRedirect');
+                if (fallbackRedirect) {
+                    fallbackRedirect.remove();
+                }
+
+                window.__WATERAPPS_PORTAL_AUTH_STATUS = authStatus;
+                document.documentElement.setAttribute('data-portal-auth', 'ok');
+            } catch (_error) {
                 window.location.replace('portal-login.html');
                 return;
             }
-
-            const authStatus = auth.requireAuth({
-                redirectTarget: window.location.pathname + window.location.hash
-            });
-
-            if (!authStatus.allowed) {
-                return;
-            }
-
-            window.__WATERAPPS_PORTAL_AUTH_STATUS = authStatus;
-            document.documentElement.setAttribute('data-portal-auth', 'ok');
         })();
     </script>
     <noscript>
@@ -36,8 +46,19 @@
     </noscript>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-        body { font-family: 'Inter', sans-serif; visibility: hidden; }
-        html[data-portal-auth='ok'] body { visibility: visible; }
+        body { font-family: 'Inter', sans-serif; }
+        #portalAuthLoading {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+            color: #0f172a;
+        }
+        main { display: none; }
+        html[data-portal-auth='ok'] #portalAuthLoading { display: none; }
+        html[data-portal-auth='ok'] main { display: block; }
         .bg-grid {
             background:
                 linear-gradient(rgba(148,163,184,0.08) 1px, transparent 1px),
@@ -53,6 +74,12 @@
     </style>
 </head>
 <body class="bg-grid text-slate-900">
+    <section id="portalAuthLoading" aria-live="polite">
+        <div class="panel rounded-2xl p-6 max-w-md w-full">
+            <h1 class="text-lg font-semibold">Checking secure access...</h1>
+            <p class="text-sm text-slate-600 mt-2">If you are not redirected, open <a href="portal-login.html" class="text-blue-700 underline">portal login</a>.</p>
+        </div>
+    </section>
     <header class="sticky top-0 z-30 border-b border-slate-200/80 bg-white/80 backdrop-blur">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <a href="portal-login.html" class="flex items-center gap-3">
