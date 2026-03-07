@@ -237,13 +237,19 @@
 
     function requireAuth(options) {
         const config = getConfig();
+        const redirectTarget = (options && options.redirectTarget) || (window.location.pathname + window.location.hash);
+        const allowWhenDisabled = Boolean(options && options.allowWhenDisabled === true);
         if (!isConfigured(config)) {
-            return { allowed: true, reason: "cognito_disabled" };
+            if (allowWhenDisabled) {
+                return { allowed: true, reason: "cognito_disabled" };
+            }
+            sessionStorage.setItem(STORAGE_KEYS.postLoginRedirect, redirectTarget);
+            window.location.assign("portal-login.html");
+            return { allowed: false, reason: "cognito_not_configured" };
         }
         if (getTokens()) {
             return { allowed: true, reason: "authenticated" };
         }
-        const redirectTarget = (options && options.redirectTarget) || (window.location.pathname + window.location.hash);
         sessionStorage.setItem(STORAGE_KEYS.postLoginRedirect, redirectTarget);
         window.location.assign("portal-login.html");
         return { allowed: false, reason: "redirected_to_login" };
