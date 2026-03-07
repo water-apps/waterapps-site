@@ -9,26 +9,29 @@
     <link rel="canonical" href="https://www.waterapps.com.au/portal-login.html">
     <link rel="icon" type="image/png" href="logo.png">
     <script>
-        (function setAuthModeClass() {
-            var isProductionHost = /^(www\.)?waterapps\.com\.au$/i.test(window.location.hostname);
-            document.documentElement.classList.add(isProductionHost ? "auth-prod" : "auth-preview");
+        (function enforceCanonicalHost() {
+            var host = window.location.hostname.toLowerCase();
+            if (host === "waterapps.com.au") {
+                window.location.replace("https://www.waterapps.com.au" + window.location.pathname + window.location.search + window.location.hash);
+            }
         })();
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Manrope', sans-serif; }
         .portal-bg {
             background:
-                radial-gradient(circle at 10% 10%, rgba(59, 130, 246, 0.18), transparent 40%),
-                radial-gradient(circle at 90% 15%, rgba(14, 165, 233, 0.16), transparent 40%),
-                linear-gradient(180deg, #020617 0%, #0f172a 45%, #111827 100%);
+                radial-gradient(circle at 10% 10%, rgba(14, 116, 144, 0.2), transparent 40%),
+                radial-gradient(circle at 90% 15%, rgba(30, 64, 175, 0.14), transparent 40%),
+                linear-gradient(180deg, #020617 0%, #0b1325 45%, #0f172a 100%);
         }
         .glass-panel {
-            background: rgba(15, 23, 42, 0.72);
+            background: rgba(15, 23, 42, 0.76);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(148, 163, 184, 0.18);
+            box-shadow: 0 14px 36px rgba(2, 6, 23, 0.35);
         }
         .field-focus:focus {
             outline: none;
@@ -51,9 +54,16 @@
             object-fit: contain;
             flex: none;
         }
-        .auth-prod #ssoPrimaryPanel { display: block; }
-        .auth-prod #passwordLoginFields,
-        .auth-prod #secondaryAuthOptions { display: none; }
+        .diag-list dt {
+            color: #cbd5e1;
+            font-size: 0.75rem;
+        }
+        .diag-list dd {
+            color: #f8fafc;
+            font-size: 0.82rem;
+            font-weight: 600;
+            word-break: break-word;
+        }
     </style>
 </head>
 <body class="portal-bg min-h-screen text-slate-100">
@@ -133,9 +143,9 @@
 
                 <form id="portalLoginForm" class="space-y-4" novalidate>
                     <div id="ssoPrimaryPanel" class="hidden rounded-xl border border-cyan-300/30 bg-cyan-300/10 p-4">
-                        <p class="text-sm font-semibold text-cyan-100"><i class="fas fa-shield-halved mr-2"></i>Enterprise SSO Required</p>
+                        <p class="text-sm font-semibold text-cyan-100"><i class="fas fa-shield-halved mr-2"></i>Enterprise SSO</p>
                         <p class="mt-2 text-sm text-cyan-50/90">
-                            Password sign-in is disabled on this host. Continue with Cognito to access your dashboard.
+                            Continue with Cognito to access your dashboard. If SSO fails, use temporary WaterApps fallback credentials below.
                         </p>
                         <button id="cognitoPrimaryBtn" type="button" class="mt-4 w-full rounded-xl bg-cyan-500 hover:bg-cyan-400 px-4 py-3 font-semibold text-slate-900 transition">
                             <i class="fas fa-user-shield mr-2"></i>Continue With Cognito
@@ -144,7 +154,7 @@
 
                     <div id="passwordLoginFields" class="space-y-4">
                         <p id="previewLoginHint" class="rounded-lg border border-indigo-300/20 bg-indigo-300/10 px-3 py-2 text-xs text-indigo-100">
-                            Preview password sign-in is available on non-production environments only.
+                            Temporary fallback login is enabled for <code>@waterapps.com.au</code> while SSO is being stabilized.
                         </p>
 
                         <div>
@@ -191,6 +201,17 @@
                     </div>
 
                     <p id="formMessage" class="hidden rounded-lg border px-3 py-2 text-sm"></p>
+
+                    <details id="loginDiagnostics" class="rounded-lg border border-slate-700/80 bg-slate-950/40 px-3 py-2">
+                        <summary class="cursor-pointer text-xs text-slate-300">Login diagnostics</summary>
+                        <dl class="diag-list mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                            <div><dt>Host</dt><dd id="diagHost">-</dd></div>
+                            <div><dt>Cognito Enabled</dt><dd id="diagCognito">-</dd></div>
+                            <div><dt>Redirect URI</dt><dd id="diagRedirect">-</dd></div>
+                            <div><dt>Password Fallback</dt><dd id="diagFallback">-</dd></div>
+                            <div class="sm:col-span-2"><dt>Last Error</dt><dd id="diagError">none</dd></div>
+                        </dl>
+                    </details>
                 </form>
 
                 <div class="mt-8">
@@ -250,6 +271,11 @@
         const passwordLoginSubmitBtn = document.getElementById('passwordLoginSubmitBtn');
         const cognitoLoginBtn = document.getElementById('cognitoLoginBtn');
         const googleLoginBtn = document.getElementById('googleLoginBtn');
+        const diagHost = document.getElementById('diagHost');
+        const diagCognito = document.getElementById('diagCognito');
+        const diagRedirect = document.getElementById('diagRedirect');
+        const diagFallback = document.getElementById('diagFallback');
+        const diagError = document.getElementById('diagError');
 
         function showMessage(type, html) {
             const styles = {
@@ -285,12 +311,31 @@
             }
         }
 
+        function renderDiagnostics(config, lastError) {
+            if (diagHost) {
+                diagHost.textContent = window.location.hostname;
+            }
+            if (diagCognito) {
+                diagCognito.textContent = window.WaterAppsPortalAuth && window.WaterAppsPortalAuth.isConfigured() ? 'configured' : 'not configured';
+            }
+            if (diagRedirect) {
+                diagRedirect.textContent = config && config.redirectUri ? config.redirectUri : 'not set';
+            }
+            if (diagFallback) {
+                diagFallback.textContent = config && config.previewPasswordLoginEnabled ? 'enabled' : 'disabled';
+            }
+            if (diagError) {
+                diagError.textContent = lastError || 'none';
+            }
+        }
+
         async function initPortalLogin() {
             if (!window.WaterAppsPortalAuth) {
                 showMessage('error', 'Portal auth script failed to load.');
                 return;
             }
             const config = window.WaterAppsPortalAuth.getConfig();
+            renderDiagnostics(config, null);
 
             const callbackResult = await window.WaterAppsPortalAuth.handleCallbackIfPresent().catch(function (error) {
                 return { handled: true, success: false, error: error.message || String(error) };
@@ -302,10 +347,15 @@
                     window.location.assign(callbackResult.redirectPath || 'management-dashboard.html');
                     return;
                 }
-                showMessage('error', 'Cognito sign-in failed: ' + callbackResult.error);
+                renderDiagnostics(config, callbackResult.error || 'unknown callback failure');
+                showMessage(
+                    'error',
+                    'Cognito sign-in failed: ' + callbackResult.error +
+                    '<br><br>Checks: callback URL in Cognito must include <code>https://www.waterapps.com.au/portal-login.html</code>, user must be confirmed, and app client must allow Authorization Code + PKCE.'
+                );
             } else if (config.previewPasswordLoginEnabled) {
                 const domains = (config.previewAllowedEmailDomains || []).join(', ');
-                showMessage('info', 'Preview password login is enabled on this non-production host' + (domains ? ' for domains: <code>' + domains + '</code>.' : '.') + ' Use Cognito for production sign-in.');
+                showMessage('info', 'Cognito SSO is available. Temporary fallback password login is also enabled' + (domains ? ' for domains: <code>' + domains + '</code>.' : '.') + '.');
                 setPasswordLoginState(true);
             } else if (window.WaterAppsPortalAuth.isConfigured()) {
                 showMessage('info', 'Production sign-in uses Cognito SSO. Continue with Cognito to authenticate.');
@@ -323,6 +373,8 @@
             }
             window.WaterAppsPortalAuth.startLogin({ postLoginRedirect: '/management-dashboard.html' })
                 .catch(function (error) {
+                    const config = window.WaterAppsPortalAuth.getConfig();
+                    renderDiagnostics(config, error.message || String(error));
                     showMessage('error', 'Unable to start Cognito login: ' + (error.message || String(error)));
                 });
         }
