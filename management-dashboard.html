@@ -9,9 +9,35 @@
     <link rel="icon" type="image/png" href="logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="scripts/portal-auth-config.js"></script>
+    <script src="scripts/portal-auth.js"></script>
+    <script>
+        (function () {
+            const auth = window.WaterAppsPortalAuth;
+            if (!auth) {
+                window.location.replace('portal-login.html');
+                return;
+            }
+
+            const authStatus = auth.requireAuth({
+                redirectTarget: window.location.pathname + window.location.hash
+            });
+
+            if (!authStatus.allowed) {
+                return;
+            }
+
+            window.__WATERAPPS_PORTAL_AUTH_STATUS = authStatus;
+            document.documentElement.setAttribute('data-portal-auth', 'ok');
+        })();
+    </script>
+    <noscript>
+        <meta http-equiv="refresh" content="0;url=portal-login.html">
+    </noscript>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', sans-serif; visibility: hidden; }
+        html[data-portal-auth='ok'] body { visibility: visible; }
         .bg-grid {
             background:
                 linear-gradient(rgba(148,163,184,0.08) 1px, transparent 1px),
@@ -214,40 +240,32 @@
     </main>
 
     <script src="scripts/site-config.js"></script>
-    <script src="scripts/portal-auth-config.js"></script>
-    <script src="scripts/portal-auth.js"></script>
     <script src="scripts/management-dashboard.js"></script>
     <script>
+        const auth = window.WaterAppsPortalAuth;
+        const authStatus = window.__WATERAPPS_PORTAL_AUTH_STATUS;
         const signOutBtn = document.getElementById('signOutBtn');
         const userChip = document.getElementById('portalUserChip');
         const previewBadge = document.getElementById('previewBadge');
 
         if (signOutBtn) {
             signOutBtn.addEventListener('click', function () {
-                if (window.WaterAppsPortalAuth) {
-                    window.WaterAppsPortalAuth.signOut();
+                if (auth) {
+                    auth.signOut();
                 } else {
                     window.location.assign('portal-login.html');
                 }
             });
         }
 
-        if (window.WaterAppsPortalAuth) {
-            const authStatus = window.WaterAppsPortalAuth.requireAuth({
-                redirectTarget: window.location.pathname + window.location.hash
-            });
-
-            if (authStatus.reason === 'cognito_disabled') {
-                signOutBtn.textContent = 'Back to Login';
-            } else {
-                if (previewBadge) {
-                    previewBadge.classList.add('hidden');
-                }
-                const user = window.WaterAppsPortalAuth.getCurrentUser();
-                if (user && user.email && userChip) {
-                    userChip.innerHTML = '<i class="fas fa-user-shield"></i><span>' + user.email + '</span>';
-                    userChip.classList.remove('hidden');
-                }
+        if (auth && authStatus && authStatus.allowed) {
+            if (previewBadge) {
+                previewBadge.classList.add('hidden');
+            }
+            const user = auth.getCurrentUser();
+            if (user && user.email && userChip) {
+                userChip.innerHTML = '<i class="fas fa-user-shield"></i><span>' + user.email + '</span>';
+                userChip.classList.remove('hidden');
             }
         }
     </script>

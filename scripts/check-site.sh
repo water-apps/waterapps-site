@@ -20,6 +20,7 @@ required_files=(
   "terms.html"
   "enterprise-readiness.html"
   "schedulease.html"
+  "portal-login.html"
   "robots.txt"
   "sitemap.xml"
   "CNAME"
@@ -31,7 +32,7 @@ done
 pass "required files present"
 
 # Basic HTML closing tag sanity (cheap guard against accidental truncation)
-for f in index.html privacy.html terms.html enterprise-readiness.html schedulease.html; do
+for f in index.html privacy.html terms.html enterprise-readiness.html schedulease.html portal-login.html management-dashboard.html; do
   tail -20 "$f" | grep -q '</html>' || fail "$f missing closing </html>"
   tail -20 "$f" | grep -q '</body>' || fail "$f missing closing </body>"
 done
@@ -84,6 +85,12 @@ pass "booking flow markers present"
 grep -q 'id="reviews-moderation"' management-dashboard.html || fail "Expected reviews moderation section in management dashboard"
 grep -q 'scripts/management-dashboard.js' management-dashboard.html || fail "Expected management dashboard script include"
 pass "management dashboard moderation markers present"
+
+# Portal route must remain fail-closed for unauthenticated users
+grep -q "window.__WATERAPPS_PORTAL_AUTH_STATUS" management-dashboard.html || fail "Dashboard auth bootstrap marker missing"
+grep -q "data-portal-auth" management-dashboard.html || fail "Dashboard auth render gate missing"
+grep -q "noscript" management-dashboard.html || fail "Dashboard noscript redirect missing"
+pass "management dashboard auth gates present"
 
 # Public content policy: do not expose internal tool names.
 blocked_term="$(printf '\143\157\144\145\170')"
