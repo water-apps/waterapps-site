@@ -83,6 +83,39 @@ body.insights-enhanced .insight-badge {
     text-transform: uppercase;
 }
 
+body.insights-enhanced .insight-section-intro {
+    color: #475569;
+    font-size: 0.98rem;
+    line-height: 1.65;
+    margin-bottom: 1rem;
+}
+
+body.insights-enhanced .insight-links-list a {
+    font-weight: 500;
+}
+
+body.insights-enhanced .insight-trust-note {
+    align-items: center;
+    background: linear-gradient(135deg, #f8fbff 0%, #eef6ff 100%);
+    border: 1px solid #dbeafe;
+    border-radius: 0.85rem;
+    color: #334155;
+    display: inline-flex;
+    font-size: 0.84rem;
+    font-weight: 600;
+    gap: 0.45rem;
+    margin-top: 1rem;
+    padding: 0.55rem 0.8rem;
+}
+
+body.insights-enhanced .insight-trust-note::before {
+    color: #2563eb;
+    content: "Primary";
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
 body.insights-enhanced .insight-mermaid-wrap {
     background: #f8fbff;
     border: 1px solid #dbeafe;
