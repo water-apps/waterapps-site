@@ -251,6 +251,38 @@ test("requireAuth redirects to login when no valid token exists", () => {
     );
 });
 
+test("requireAuth fails closed when Cognito config is disabled", () => {
+    const harness = createHarness({
+        config: {
+            enabled: false
+        }
+    });
+
+    const result = harness.auth.requireAuth({ redirectTarget: "/management-dashboard.html" });
+
+    assert.equal(result.allowed, false);
+    assert.equal(result.reason, "cognito_not_configured");
+    assert.equal(harness.assignedUrls[0], "portal-login.html");
+    assert.equal(
+        harness.sessionStorage.getItem("waterapps.portal.post_login_redirect"),
+        "/management-dashboard.html"
+    );
+});
+
+test("requireAuth can opt into allow-when-disabled mode", () => {
+    const harness = createHarness({
+        config: {
+            enabled: false
+        }
+    });
+
+    const result = harness.auth.requireAuth({ allowWhenDisabled: true });
+
+    assert.equal(result.allowed, true);
+    assert.equal(result.reason, "cognito_disabled");
+    assert.equal(harness.assignedUrls.length, 0);
+});
+
 test("getCurrentUser returns decoded email from stored id_token", () => {
     const jwt = makeJwt({ email: "principal.engineer@waterapps.com.au" });
     const expiresAt = Math.floor(Date.now() / 1000) + 3600;
