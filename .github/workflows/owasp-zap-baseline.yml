@@ -1,0 +1,65 @@
+name: OWASP ZAP Baseline
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  zap-baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      TARGET_URL: "https://www.waterapps.com.au"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run OWASP ZAP baseline scan
+        id: zap
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p zap-report
+
+          set +e
+          docker run --rm -v "${PWD}/zap-report:/zap/wrk:rw" -t ghcr.io/zaproxy/zaproxy:stable \
+            zap-baseline.py \
+            -t "${TARGET_URL}" \
+            -m 5 \
+            -J zap-report.json \
+            -w zap-report.md \
+            -r zap-report.html \
+            -I
+          rc=$?
+          set -e
+
+          echo "exit_code=${rc}" >> "${GITHUB_OUTPUT}"
+
+          # ZAP baseline exit codes:
+          # 0 = PASS, 1 = FAIL, 2 = WARN, 3 = ERROR
+          if [ "${rc}" -eq 1 ] || [ "${rc}" -eq 3 ]; then
+            echo "::error::OWASP ZAP baseline reported FAIL/ERROR (exit code ${rc})."
+            exit "${rc}"
+          fi
+
+      - name: Publish scan summary
+        if: always()
+        run: |
+          {
+            echo "## OWASP ZAP Baseline"
+            echo "- Target: ${TARGET_URL}"
+            echo "- Exit code: ${{ steps.zap.outputs.exit_code }}"
+            echo "- Reports are attached as workflow artifacts."
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+      - name: Upload ZAP report artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: owasp-zap-baseline-report
+          path: zap-report/
+          if-no-files-found: warn
