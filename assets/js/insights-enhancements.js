@@ -151,7 +151,7 @@
     var TRUST_CONTENT = {
         "insights-400-enterprise-aws-stack.html": {
             published: "February 27, 2026",
-            lastReviewed: "March 7, 2026",
+            lastReviewed: "March 8, 2026",
             sources: [
                 { label: "AWS Pricing Calculator", url: "https://calculator.aws/" },
                 { label: "AWS Well-Architected Framework", url: "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html" },
@@ -165,7 +165,7 @@
         },
         "insights-australian-compliance-baseline.html": {
             published: "March 1, 2026",
-            lastReviewed: "March 7, 2026",
+            lastReviewed: "March 8, 2026",
             sources: [
                 { label: "OAIC: Australian Privacy Principles", url: "https://www.oaic.gov.au/privacy/australian-privacy-principles" },
                 { label: "ACSC Essential Eight", url: "https://www.cyber.gov.au/resources-business-and-government/essential-cyber-security/essential-eight" },
@@ -179,7 +179,7 @@
         },
         "insights-cyber-scan-devsecops-pipeline.html": {
             published: "March 6, 2026",
-            lastReviewed: "March 7, 2026",
+            lastReviewed: "March 8, 2026",
             sources: [
                 { label: "NIST SSDF (SP 800-218)", url: "https://csrc.nist.gov/pubs/sp/800/218/final" },
                 { label: "OWASP ASVS", url: "https://owasp.org/www-project-application-security-verification-standard/" },
@@ -193,7 +193,7 @@
         },
         "insights-engineering-governance-best-practices.html": {
             published: "March 1, 2026",
-            lastReviewed: "March 7, 2026",
+            lastReviewed: "March 8, 2026",
             sources: [
                 { label: "DORA Research Program", url: "https://dora.dev/research/" },
                 { label: "Google SRE Workbook", url: "https://sre.google/workbook/table-of-contents/" },
@@ -207,7 +207,7 @@
         },
         "insights-finops-50-budget-guardrails.html": {
             published: "March 6, 2026",
-            lastReviewed: "March 7, 2026",
+            lastReviewed: "March 8, 2026",
             sources: [
                 { label: "FinOps Framework", url: "https://www.finops.org/framework/" },
                 { label: "AWS Budgets Documentation", url: "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html" },
@@ -221,7 +221,7 @@
         },
         "insights-iam-access-keys-cicd.html": {
             published: "February 27, 2026",
-            lastReviewed: "March 7, 2026",
+            lastReviewed: "March 8, 2026",
             sources: [
                 { label: "AWS IAM Security Best Practices", url: "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html" },
                 { label: "GitHub Actions OIDC in AWS", url: "https://docs.github.com/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services" },
@@ -235,7 +235,7 @@
         },
         "insights-n8n-aiops-platform.html": {
             published: "February 27, 2026",
-            lastReviewed: "March 7, 2026",
+            lastReviewed: "March 8, 2026",
             sources: [
                 { label: "n8n Documentation", url: "https://docs.n8n.io/" },
                 { label: "n8n Self-Hosting Guide", url: "https://docs.n8n.io/hosting/" },
@@ -249,7 +249,7 @@
         },
         "insights-performance-testing-major-releases.html": {
             published: "February 24, 2026",
-            lastReviewed: "March 7, 2026",
+            lastReviewed: "March 8, 2026",
             sources: [
                 { label: "Google SRE Workbook: Implementing SLOs", url: "https://sre.google/workbook/implementing-slos/" },
                 { label: "AWS Builders Library: Load Shedding", url: "https://aws.amazon.com/builders-library/using-load-shedding-to-avoid-overload/" },
@@ -263,7 +263,7 @@
         },
         "insights-sas-viya-aks-phase00-infrastructure.html": {
             published: "March 5, 2026",
-            lastReviewed: "March 7, 2026",
+            lastReviewed: "March 8, 2026",
             sources: [
                 { label: "AKS Node Pools", url: "https://learn.microsoft.com/azure/aks/use-node-pools" },
                 { label: "AKS Workload Identity", url: "https://learn.microsoft.com/azure/aks/workload-identity-overview" },
@@ -277,7 +277,7 @@
         },
         "insights-terraform-apra-regulated.html": {
             published: "February 27, 2026",
-            lastReviewed: "March 7, 2026",
+            lastReviewed: "March 8, 2026",
             sources: [
                 { label: "Terraform Language Documentation", url: "https://developer.hashicorp.com/terraform/language" },
                 { label: "Terraform Module Development", url: "https://developer.hashicorp.com/terraform/language/modules/develop" },
@@ -291,7 +291,7 @@
         },
         "insights-test-automation-regulated-cicd.html": {
             published: "February 24, 2026",
-            lastReviewed: "March 7, 2026",
+            lastReviewed: "March 8, 2026",
             sources: [
                 { label: "NIST SSDF (SP 800-218)", url: "https://csrc.nist.gov/pubs/sp/800/218/final" },
                 { label: "DORA Research Program", url: "https://dora.dev/research/" },
@@ -305,7 +305,7 @@
         },
         "insights-zero-trust-networking-aws.html": {
             published: "February 27, 2026",
-            lastReviewed: "March 7, 2026",
+            lastReviewed: "March 8, 2026",
             sources: [
                 { label: "NIST SP 800-207: Zero Trust Architecture", url: "https://csrc.nist.gov/pubs/sp/800/207/final" },
                 { label: "CISA Zero Trust Maturity Model", url: "https://www.cisa.gov/zero-trust-maturity-model" },
@@ -423,6 +423,16 @@
         target.insertAdjacentElement("afterend", visualSection);
     }
 
+    function getSectionIntro(title) {
+        if (title === "Sources") {
+            return "Primary standards, official documentation, and reference material used to support the article.";
+        }
+        if (title === "Related WaterApps Links") {
+            return "Related service pages and supporting insights to help you go deeper on the same delivery problem.";
+        }
+        return "";
+    }
+
     function buildLinksSection(title, links) {
         var section = document.createElement("section");
         section.className = "bg-white rounded-xl border border-gray-200 p-8 mb-8";
@@ -431,8 +441,16 @@
         h2.className = "text-2xl font-semibold mb-4";
         h2.textContent = title;
 
+        var introText = getSectionIntro(title);
+        var intro = null;
+        if (introText) {
+            intro = document.createElement("p");
+            intro.className = "insight-section-intro";
+            intro.textContent = introText;
+        }
+
         var list = document.createElement("ul");
-        list.className = "list-disc pl-6 text-gray-700 space-y-2";
+        list.className = "list-disc pl-6 text-gray-700 space-y-2 insight-links-list";
 
         links.forEach(function (item) {
             var li = document.createElement("li");
@@ -449,7 +467,16 @@
         });
 
         section.appendChild(h2);
+        if (intro) {
+            section.appendChild(intro);
+        }
         section.appendChild(list);
+        if (title === "Sources") {
+            var note = document.createElement("div");
+            note.className = "insight-trust-note";
+            note.textContent = "References are selected for direct operational relevance rather than generic reading lists.";
+            section.appendChild(note);
+        }
         return section;
     }
 
