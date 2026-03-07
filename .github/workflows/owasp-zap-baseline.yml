@@ -1,6 +1,7 @@
 name: OWASP ZAP Baseline
 
 on:
+  pull_request:
   schedule:
     - cron: "0 6 * * 1"
   workflow_dispatch:
@@ -13,10 +14,20 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
-      TARGET_URL: "https://www.waterapps.com.au"
+      TARGET_URL: ${{ github.event_name == 'pull_request' && 'http://127.0.0.1:4173' || 'https://www.waterapps.com.au' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Start local site server for pull requests
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m http.server 4173 --directory . >/tmp/waterapps-site-http.log 2>&1 &
+          echo $! > /tmp/waterapps-site-http.pid
+          sleep 3
+          curl -fsS "${TARGET_URL}" >/dev/null
 
       - name: Run OWASP ZAP baseline scan
         id: zap
@@ -27,7 +38,7 @@ jobs:
           chmod -R 777 zap-report
 
           set +e
-          docker run --rm --user root -v "${PWD}/zap-report:/zap/wrk:rw" ghcr.io/zaproxy/zaproxy:stable \
+          docker run --rm --network=host --user root -v "${PWD}/zap-report:/zap/wrk:rw" ghcr.io/zaproxy/zaproxy:stable \
             zap-baseline.py \
             -t "${TARGET_URL}" \
             -m 5 \
