@@ -6,7 +6,12 @@
     "test:portal-auth": "node --test tests/portal-auth.test.js",
     "test:booking-availability": "node --test tests/booking-availability.test.js",
     "test:functional-smoke": "node --test tests/functional-smoke.test.js",
-    "test:playwright": "playwright test"
+    "test:playwright": "playwright test",
+    "test:module:marketing": "node --test tests/marketing-smoke.test.js",
+    "test:module:portal": "node --test tests/portal-auth.test.js tests/portal-ui-smoke.test.js && npx playwright test tests/e2e/portal-login-auth.e2e.spec.js --project=chromium",
+    "test:module:booking": "node --test tests/booking-availability.test.js tests/booking-ui-smoke.test.js && npx playwright test tests/e2e/booking-contact.e2e.spec.js --project=chromium",
+    "test:module:dashboard": "node --test tests/dashboard-ui-smoke.test.js && npx playwright test tests/e2e/management-dashboard-moderation.spec.js --project=chromium",
+    "test:modules": "bash scripts/test-modules.sh"
   },
   "devDependencies": {
     "@playwright/test": "^1.52.0",

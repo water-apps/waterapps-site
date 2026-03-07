@@ -35,6 +35,27 @@ Each release must verify:
 5. Analytics event mapping exists for fallback booking CTA.
 6. End-to-end booking and contact submissions pass with mocked API responses.
 
+## Module Test Matrix
+
+Treat these as separate release modules and test them independently:
+
+1. Marketing module
+   - `npm run test:module:marketing`
+2. Portal/Auth module
+   - `npm run test:module:portal`
+3. Booking & Contact module
+   - `npm run test:module:booking`
+4. Management Dashboard module
+   - `npm run test:module:dashboard`
+
+For a full release gate, run:
+
+```bash
+npm run test:modules
+```
+
+If Playwright is run from a restricted sandboxed agent session, elevate permissions first so the local test server can bind to `127.0.0.1:4173`.
+
 ## Local Pre-PR Commands
 
 Run these before opening or updating a PR:
@@ -45,6 +66,7 @@ npm run test:functional-smoke
 npm run test:playwright
 npm run test:booking-availability
 npm run test:portal-auth
+npm run test:modules
 ```
 
 ## Post-Deploy Smoke Validation
