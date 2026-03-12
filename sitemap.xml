@@ -87,6 +87,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.waterapps.com.au/insights-github-best-practices-features.html</loc>
+    <lastmod>2026-03-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.waterapps.com.au/insights-finops-50-budget-guardrails.html</loc>
     <lastmod>2026-03-05</lastmod>
     <changefreq>monthly</changefreq>
