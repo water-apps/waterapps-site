@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Best Practices: Features That Actually Improve Delivery | WaterApps</title>
+    <meta name="description" content="A practical guide to using GitHub Issues, Projects, Pull Requests, Actions, Environments, CODEOWNERS, security features, and releases without creating delivery friction.">
+    <link rel="canonical" href="https://www.waterapps.com.au/insights-github-best-practices-features.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="GitHub Best Practices: Features That Actually Improve Delivery | WaterApps">
+    <meta property="og:description" content="How to use GitHub features as an operating system for delivery: issues, projects, PRs, Actions, environments, security controls, and release hygiene.">
+    <meta property="og:url" content="https://www.waterapps.com.au/insights-github-best-practices-features.html">
+    <meta property="og:image" content="https://www.waterapps.com.au/logo.png">
+    <meta property="og:image:alt" content="WaterApps logo">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="GitHub Best Practices: Features That Actually Improve Delivery | WaterApps">
+    <meta name="twitter:description" content="A practical GitHub operating model for teams that want stronger controls, cleaner delivery flow, and less workflow chaos.">
+    <meta name="twitter:image" content="https://www.waterapps.com.au/logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="assets/css/tailwind.generated.css">
+    <link rel="stylesheet" href="assets/css/insights-enhancements.css">
+</head>
+<body class="insights-enhanced bg-gray-50 text-gray-900">
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="insight-hero mb-8">
+            <a href="insights.html" class="text-blue-600 hover:text-blue-700 text-sm">&larr; Back to Insights</a>
+            <h1 class="text-4xl font-bold mt-4 mb-4">GitHub Best Practices: Features That Actually Improve Delivery</h1>
+            <p class="text-lg text-gray-700 mb-4">
+                GitHub is not just a code host. Used properly, it becomes a delivery operating system: planning, review, automation, security, approvals, and release traceability all in one place.
+            </p>
+            <p class="insight-meta">
+                This article focuses on practical usage, not feature tourism. The goal is simple: use GitHub features in a way that reduces ambiguity, improves control, and keeps teams moving.
+            </p>
+            <div class="mt-5 flex flex-wrap gap-2 text-sm">
+                <span class="insight-badge">GitHub</span>
+                <span class="insight-badge">Engineering Governance</span>
+                <span class="insight-badge">CI/CD</span>
+                <span class="insight-badge">DevSecOps</span>
+            </div>
+        </div>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">The Common Failure Pattern</h2>
+            <p class="text-gray-700 mb-4">
+                Many teams turn on GitHub features one by one without deciding what operating model they want. They enable branch protection, add Actions, create Projects, maybe set CODEOWNERS, then discover the system feels slower, noisier, and harder to manage.
+            </p>
+            <p class="text-gray-700 mb-4">
+                The problem is rarely the feature itself. The problem is lack of sequencing. GitHub works best when planning, code review, automation, and release controls are designed to support each other.
+            </p>
+            <p class="text-sm text-gray-500">
+                Examples are generalized from enterprise delivery environments to respect confidentiality obligations.
+            </p>
+        </section>
+
+        <section class="insight-diagram-section rounded-xl p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">A Clean GitHub Flow from Idea to Release</h2>
+            <div class="insight-mermaid-wrap">
+                <pre class="mermaid">
+flowchart LR
+    A["Issue or request"] --> B["Project backlog and priority"]
+    B --> C["Feature branch and Pull Request"]
+    C --> D["Checks, security scan, and review"]
+    D --> E["Merge to protected main"]
+    E --> F["GitHub Actions deployment"]
+    F --> G["Environment approval and release notes"]
+                </pre>
+            </div>
+            <p class="text-gray-700 mt-4">
+                Each GitHub feature should make one stage of this path clearer or safer. If a feature adds friction without improving flow or control, it is being used badly.
+            </p>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-5">The Features That Matter Most</h2>
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">1. Issues for Work Definition</h3>
+                    <p class="text-gray-700">
+                        Use Issues to define the work before code exists. Keep title, outcome, scope, acceptance criteria, and risk notes in the issue. That creates traceability and reduces “what was this change for?” conversations later.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">2. Projects for Flow, Not Theater</h3>
+                    <p class="text-gray-700">
+                        GitHub Projects should answer three questions quickly: what matters now, what is blocked, and what is done. Keep fields simple: status, priority, owner, and story points if your team uses them. Avoid turning Projects into a second Jira clone.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">3. Pull Requests for Controlled Change</h3>
+                    <p class="text-gray-700">
+                        Pull Requests are where code, context, and risk meet. Every meaningful change should explain why it exists, what it touches, and how it was validated. Small, focused PRs are easier to review, easier to test, and easier to roll back.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">4. Actions for Repeatable Execution</h3>
+                    <p class="text-gray-700">
+                        GitHub Actions should automate validation, scanning, packaging, and deployment paths. The right rule is not “automate everything.” The right rule is “automate everything that should happen the same way every time.”
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">5. Environments for Production Safety</h3>
+                    <p class="text-gray-700">
+                        Use Environments to protect production with approvals, secrets, and audit trail. For high-blast-radius repos, this is more important than adding yet another Slack notification or dashboard.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">6. Security Features for Early Detection</h3>
+                    <p class="text-gray-700">
+                        Dependabot, secret scanning, code scanning, and advisory visibility are not optional hygiene if code is headed toward production. They help you catch drift and exposure before those problems become release incidents.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-blue-50 border border-blue-200 rounded-xl p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Best Practice by GitHub Feature</h2>
+            <div class="overflow-x-auto">
+                <table class="text-sm text-gray-700">
+                    <thead>
+                        <tr class="text-left border-b border-blue-200">
+                            <th class="py-3 pr-4 font-semibold">Feature</th>
+                            <th class="py-3 pr-4 font-semibold">Use It For</th>
+                            <th class="py-3 font-semibold">Best Practice</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b border-gray-100">
+                            <td class="py-3 pr-4 font-semibold">Issues</td>
+                            <td class="py-3 pr-4">Scope and acceptance</td>
+                            <td class="py-3">Write work in outcome language, not just technical tasks.</td>
+                        </tr>
+                        <tr class="border-b border-gray-100">
+                            <td class="py-3 pr-4 font-semibold">Projects</td>
+                            <td class="py-3 pr-4">Prioritization and status</td>
+                            <td class="py-3">Track flow with a few useful fields, not endless metadata.</td>
+                        </tr>
+                        <tr class="border-b border-gray-100">
+                            <td class="py-3 pr-4 font-semibold">Pull Requests</td>
+                            <td class="py-3 pr-4">Review and traceability</td>
+                            <td class="py-3">Keep them small, explain blast radius, and link the issue.</td>
+                        </tr>
+                        <tr class="border-b border-gray-100">
+                            <td class="py-3 pr-4 font-semibold">Branch Protection</td>
+                            <td class="py-3 pr-4">Runtime safety for code changes</td>
+                            <td class="py-3">Protect `main`, require checks, block force-push, keep linear history.</td>
+                        </tr>
+                        <tr class="border-b border-gray-100">
+                            <td class="py-3 pr-4 font-semibold">CODEOWNERS</td>
+                            <td class="py-3 pr-4">Ownership clarity</td>
+                            <td class="py-3">Use it to show ownership paths; enforce reviews only when the team model supports it.</td>
+                        </tr>
+                        <tr class="border-b border-gray-100">
+                            <td class="py-3 pr-4 font-semibold">Actions</td>
+                            <td class="py-3 pr-4">Automation</td>
+                            <td class="py-3">Separate validate, plan, and apply/deploy stages clearly.</td>
+                        </tr>
+                        <tr class="border-b border-gray-100">
+                            <td class="py-3 pr-4 font-semibold">Environments</td>
+                            <td class="py-3 pr-4">Production controls</td>
+                            <td class="py-3">Put sensitive secrets and approvals behind environment gates.</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 pr-4 font-semibold">Releases</td>
+                            <td class="py-3 pr-4">Change communication</td>
+                            <td class="py-3">Use release notes to explain what shipped and what changed operationally.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">A Practical Setup for Small Teams and Solo Owners</h2>
+            <p class="text-gray-700 mb-4">
+                Small teams often copy enterprise guardrails directly and accidentally create merge deadlocks. For example, if one owner is doing the work and also responsible for merge, requiring independent approvals on every repo may become impossible to satisfy.
+            </p>
+            <p class="text-gray-700 mb-4">
+                A better pattern is to keep the controls that preserve delivery safety, while avoiding unsatisfiable workflow rules:
+            </p>
+            <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                <li>Protect `main` and keep work PR-first</li>
+                <li>Require meaningful status checks before merge</li>
+                <li>Keep signed commits, linear history, and no force-push</li>
+                <li>Use environment approvals for production deploys</li>
+                <li>Keep `CODEOWNERS` for clarity, but enforce code-owner review only when more than one real reviewer exists</li>
+            </ul>
+            <p class="text-gray-700 mt-4">
+                This is not “lowering the bar.” It is matching the GitHub control model to the real operating model so the controls remain useful instead of ceremonial.
+            </p>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Feature Usage Mistakes to Avoid</h2>
+            <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                <li>Using Projects without a clear status policy, so board movement becomes subjective</li>
+                <li>Creating large Pull Requests that mix docs, workflows, infrastructure, and app changes together</li>
+                <li>Running production deployments from branches other than `main`</li>
+                <li>Storing long-lived cloud keys in repo secrets when OIDC federation is available</li>
+                <li>Turning on required reviews without checking whether the team can actually satisfy them</li>
+                <li>Ignoring skipped or flaky GitHub Actions runs because the badge still looks green enough</li>
+            </ul>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">A Weekly GitHub Operating Rhythm</h2>
+            <ol class="list-decimal pl-6 text-gray-700 space-y-2">
+                <li>Review open issues and stale PRs</li>
+                <li>Check failed and skipped workflow runs</li>
+                <li>Review secret scanning, Dependabot, and code scanning alerts</li>
+                <li>Confirm branch protection and environment settings have not drifted</li>
+                <li>Close work with release notes or issue comments that capture what changed</li>
+            </ol>
+            <p class="text-gray-700 mt-4">
+                This takes less time than recovering from silent drift and gives GitHub a clear role in operational discipline, not just source control.
+            </p>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Sources</h2>
+            <p class="text-gray-700 mb-4">
+                This article is a practical interpretation of official GitHub platform features. For product behavior and feature details, refer to GitHub Docs:
+            </p>
+            <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                <li><a href="https://docs.github.com/en/issues/tracking-your-work-with-issues/learning-about-issues/about-issues" class="text-blue-600 hover:text-blue-700">About Issues</a></li>
+                <li><a href="https://docs.github.com/en/issues/planning-and-tracking-with-projects/learning-about-projects/about-projects" class="text-blue-600 hover:text-blue-700">About Projects</a></li>
+                <li><a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests" class="text-blue-600 hover:text-blue-700">About Pull Requests</a></li>
+                <li><a href="https://docs.github.com/en/actions/get-started/understand-github-actions" class="text-blue-600 hover:text-blue-700">Understanding GitHub Actions</a></li>
+                <li><a href="https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments" class="text-blue-600 hover:text-blue-700">Managing Environments for Deployment</a></li>
+                <li><a href="https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches" class="text-blue-600 hover:text-blue-700">About Protected Branches</a></li>
+                <li><a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners" class="text-blue-600 hover:text-blue-700">About CODEOWNERS</a></li>
+                <li><a href="https://docs.github.com/en/code-security/getting-started/github-security-features" class="text-blue-600 hover:text-blue-700">GitHub Security Features</a></li>
+                <li><a href="https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases" class="text-blue-600 hover:text-blue-700">About Releases</a></li>
+            </ul>
+        </section>
+
+        <section class="bg-blue-900 text-white rounded-xl p-8">
+            <h2 class="text-2xl font-semibold mb-3">Need a Cleaner GitHub Operating Model?</h2>
+            <p class="text-blue-100 mb-6">
+                WaterApps helps teams turn GitHub into a reliable delivery platform: branch protection strategy, Actions hardening, environment approvals, security baselines, and operating rules that work in real delivery environments.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a href="index.html#contact" class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-lg font-semibold text-center">Book a Discovery Call</a>
+                <a href="insights-engineering-governance-best-practices.html" class="bg-white text-gray-900 px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-100">Read Governance Article</a>
+                <a href="enterprise-readiness.html" class="bg-transparent border border-blue-300 text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-blue-800">Enterprise Readiness</a>
+            </div>
+        </section>
+    </main>
+    <script src="assets/js/vendor/mermaid.min.js" defer></script>
+    <script src="assets/js/insights-enhancements.js" defer></script>
+</body>
+</html>
