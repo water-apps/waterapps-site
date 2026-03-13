@@ -26,6 +26,18 @@
                 "D --> E[Audit Ready Client Delivery]"
             ].join("\n")
         },
+        "insights-beyond-apply-button-infrastructure-code.html": {
+            slug: "insights-beyond-apply-button-infrastructure-code",
+            title: "Infrastructure Code Operating Model",
+            description: "How module design, testing, state discipline, and release controls reinforce each other at scale.",
+            mermaid: [
+                "flowchart LR",
+                "A[Provider and Environment Reality] --> B[Service-Oriented Module Boundaries]",
+                "B --> C[Remote State and Locking Discipline]",
+                "C --> D[Automated Test Pyramid]",
+                "D --> E[Versioned Promotion and Release Evidence]"
+            ].join("\n")
+        },
         "insights-cyber-scan-devsecops-pipeline.html": {
             slug: "insights-cyber-scan-devsecops-pipeline",
             title: "DevSecOps Scan Orchestration",
@@ -174,6 +186,21 @@
             related: [
                 { label: "Enterprise Readiness", url: "enterprise-readiness.html" },
                 { label: "Capability Statement", url: "capability-statement.html" },
+                { label: "Book a Discovery Call", url: "index.html#contact" }
+            ]
+        },
+        "insights-beyond-apply-button-infrastructure-code.html": {
+            published: "March 13, 2026",
+            lastReviewed: "March 13, 2026",
+            sources: [
+                { label: "Terraform Language Documentation", url: "https://developer.hashicorp.com/terraform/language" },
+                { label: "Terratest Documentation", url: "https://terratest.gruntwork.io/" },
+                { label: "Packer Documentation", url: "https://developer.hashicorp.com/packer/docs" },
+                { label: "Yevgeniy Brikman: Terraform Up & Running", url: "https://www.terraformupandrunning.com/" }
+            ],
+            related: [
+                { label: "Terraform Module Design for APRA-Regulated Environments", url: "insights-terraform-apra-regulated.html" },
+                { label: "GitHub Best Practices: Features That Actually Improve Delivery", url: "insights-github-best-practices-features.html" },
                 { label: "Book a Discovery Call", url: "index.html#contact" }
             ]
         },

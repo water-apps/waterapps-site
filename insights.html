@@ -4,233 +4,370 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Insights | WaterApps</title>
-    <meta name="description" content="WaterApps insights on audit-ready CI/CD, platform engineering, quality engineering, cloud modernization, and DevSecOps in regulated environments.">
+    <meta name="description" content="WaterApps insights on audit-ready CI/CD, platform engineering, quality engineering, cloud modernization, DevSecOps, and infrastructure delivery in regulated environments.">
     <link rel="canonical" href="https://www.waterapps.com.au/insights.html">
     <meta property="og:type" content="website">
     <meta property="og:title" content="Insights | WaterApps">
-    <meta property="og:description" content="Practical notes on audit-ready CI/CD, platform engineering, quality engineering, and cloud modernization in regulated environments.">
+    <meta property="og:description" content="Practical notes on audit-ready CI/CD, platform engineering, Infrastructure as Code, quality engineering, and cloud modernization in regulated environments.">
     <meta property="og:url" content="https://www.waterapps.com.au/insights.html">
     <meta property="og:image" content="https://www.waterapps.com.au/logo.png">
     <meta property="og:image:alt" content="WaterApps logo">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Insights | WaterApps">
-    <meta name="twitter:description" content="Practical notes on audit-ready CI/CD, platform engineering, quality engineering, and cloud modernization in regulated environments.">
+    <meta name="twitter:description" content="Practical notes on platform engineering, Infrastructure as Code, DevSecOps, quality engineering, and cloud modernization.">
     <meta name="twitter:image" content="https://www.waterapps.com.au/logo.png">
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="stylesheet" href="assets/css/tailwind.generated.css">
+    <link rel="stylesheet" href="assets/css/insights-enhancements.css">
 </head>
-<body class="bg-gray-50 text-gray-900">
+<body class="insights-index bg-gray-50 text-gray-900">
     <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <a href="index.html" class="text-blue-600 hover:text-blue-700 text-sm">&larr; Back to WaterApps</a>
-        <div class="mt-4 mb-10">
-            <h1 class="text-4xl font-bold mb-4">Insights</h1>
-            <p class="text-lg text-gray-600 max-w-4xl">
-                Practical notes on platform engineering, DevSecOps, cloud modernization, and delivery in control-heavy enterprise environments.
-            </p>
-        </div>
 
-        <section class="grid lg:grid-cols-2 gap-8 mb-10">
-            <article class="bg-white rounded-xl border border-gray-200 p-8 shadow-sm">
-                <div class="text-xs font-semibold uppercase tracking-wide text-blue-600 mb-3">Featured</div>
-                <h2 class="text-2xl font-bold mb-3">Designing Audit-Ready CI/CD in Regulated Environments</h2>
-                <p class="text-gray-700 mb-4">
-                    A practical approach to speeding up delivery without weakening traceability, approvals, or evidence generation. Focused on control-heavy engineering environments, not generic pipeline advice.
+        <section class="insights-index-hero mt-4 mb-10">
+            <div class="insights-index-hero-copy">
+                <span class="insights-index-kicker">WaterApps Knowledge Base</span>
+                <h1 class="text-4xl font-bold mb-4">Insights Built for Enterprise Buyers and Delivery Teams</h1>
+                <p class="text-lg text-gray-700 max-w-3xl mb-5">
+                    Practical articles on platform engineering, Infrastructure as Code, DevSecOps, quality engineering, cloud modernization, and delivery governance in control-heavy environments.
                 </p>
-                <ul class="list-disc pl-6 text-sm text-gray-700 space-y-1 mb-6">
-                    <li>Where delivery speed usually breaks auditability</li>
-                    <li>How to reduce manual control overhead</li>
-                    <li>What “audit-ready” looks like in pipeline design</li>
+                <div class="insights-index-chip-row" aria-label="Popular topics">
+                    <span class="insights-index-chip">Terraform &amp; IaC</span>
+                    <span class="insights-index-chip">Platform Engineering</span>
+                    <span class="insights-index-chip">DevSecOps</span>
+                    <span class="insights-index-chip">Quality Engineering</span>
+                    <span class="insights-index-chip">Cloud Security</span>
+                </div>
+            </div>
+            <div class="insights-index-hero-panel">
+                <h2 class="text-2xl font-bold mb-3">How to Use This Library</h2>
+                <ul class="list-disc pl-6 space-y-2 text-gray-700">
+                    <li>Start with the latest or filter by delivery problem.</li>
+                    <li>Use the search box to find topics like Terraform, APRA, GitHub, or test automation.</li>
+                    <li>Open related service pages when you want implementation support, not just background reading.</li>
                 </ul>
-                <div class="flex flex-col sm:flex-row gap-3">
-                    <a href="index.html#contact" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg font-semibold text-center">Discuss Your CI/CD Constraints</a>
-                    <a href="insights-test-automation-regulated-cicd.html" class="bg-gray-100 hover:bg-gray-200 text-gray-900 px-5 py-3 rounded-lg font-semibold text-center">Read Checklist Article</a>
+                <p class="text-sm text-gray-500 mt-5">
+                    Some examples are generalized to respect confidentiality obligations.
+                </p>
+            </div>
+        </section>
+
+        <section class="insights-latest mb-8">
+            <div class="insights-section-head">
+                <div>
+                    <span class="insights-section-label">Latest</span>
+                    <h2 class="text-3xl font-bold mt-2">Start Here</h2>
+                </div>
+                <a href="index.html#contact" class="text-blue-600 font-semibold hover:text-blue-700">Discuss a Similar Challenge &rarr;</a>
+            </div>
+            <article class="insights-latest-card bg-white rounded-xl border border-gray-200 p-8 shadow-sm">
+                <div class="grid lg:grid-cols-2 gap-8 items-start">
+                    <div>
+                        <div class="text-xs font-semibold uppercase tracking-wide text-blue-600 mb-3">New Infrastructure as Code</div>
+                        <h3 class="text-3xl font-bold mb-3">Beyond the "Apply" Button: Lessons from 300,000 Lines of Infrastructure Code</h3>
+                        <p class="text-gray-700 mb-4">
+                            What changes when Terraform and IaC stop being a few scripts and become a software product in their own right: state discipline, module boundaries, testing, versioned releases, and the engineering habits that keep large estates stable.
+                        </p>
+                        <ul class="list-disc pl-6 text-sm text-gray-700 space-y-1 mb-6">
+                            <li>Why provider behavior and state handling matter as much as syntax</li>
+                            <li>How to find the right service-oriented module boundary</li>
+                            <li>What an actual infrastructure testing pyramid looks like</li>
+                        </ul>
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <a href="insights-beyond-apply-button-infrastructure-code.html" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg font-semibold text-center">Read the New Article</a>
+                            <a href="insights-terraform-apra-regulated.html" class="bg-gray-100 hover:bg-gray-200 text-gray-900 px-5 py-3 rounded-lg font-semibold text-center">Compare with Terraform Governance</a>
+                        </div>
+                    </div>
+                    <div class="insights-latest-side rounded-xl p-6">
+                        <h4 class="text-lg font-semibold mb-3">Reader Paths</h4>
+                        <div class="space-y-4 text-sm">
+                            <div>
+                                <div class="font-semibold text-gray-900">If you care about release safety</div>
+                                <a href="insights-test-automation-regulated-cicd.html" class="text-blue-600 hover:text-blue-700">Read the regulated CI/CD testing article</a>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-gray-900">If you care about module design</div>
+                                <a href="insights-terraform-apra-regulated.html" class="text-blue-600 hover:text-blue-700">Read the APRA-focused Terraform article</a>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-gray-900">If you care about delivery controls</div>
+                                <a href="insights-github-best-practices-features.html" class="text-blue-600 hover:text-blue-700">Read the GitHub operating model article</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </article>
+        </section>
 
-            <div class="bg-blue-900 text-white rounded-xl p-8">
-                <h2 class="text-2xl font-bold mb-3">What You’ll Find Here</h2>
-                <ul class="list-disc pl-6 space-y-2 text-blue-100">
-                    <li>Architecture and platform engineering patterns that work under governance constraints</li>
-                    <li>DevSecOps trade-offs and sequencing decisions for enterprise delivery teams</li>
-                    <li>Operational and observability practices that improve Day 2 outcomes</li>
-                    <li>Procurement-aware technical content for enterprise evaluation workflows</li>
-                </ul>
-                <p class="text-xs text-blue-200 mt-5">
-                    Some examples and references are generalized to respect confidentiality obligations.
-                </p>
+        <section class="insights-browser bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <div class="insights-section-head mb-6">
+                <div>
+                    <span class="insights-section-label">Browse</span>
+                    <h2 class="text-2xl font-bold mt-2">Find Articles by Topic or Keyword</h2>
+                </div>
+                <p class="text-sm text-gray-500 max-w-xl">The list below updates as you filter, so readers can jump straight to the delivery problem they care about.</p>
+            </div>
+
+            <div class="insights-browser-controls">
+                <label class="insights-search" for="insights-search-input">
+                    <span class="sr-only">Search insights</span>
+                    <input id="insights-search-input" type="search" placeholder="Search Terraform, APRA, GitHub, testing, zero trust..." autocomplete="off">
+                </label>
+                <div class="insights-filter-row" role="toolbar" aria-label="Insight topic filters">
+                    <button type="button" class="insights-filter is-active" data-filter="all">All topics</button>
+                    <button type="button" class="insights-filter" data-filter="infrastructure-code">Infrastructure as Code</button>
+                    <button type="button" class="insights-filter" data-filter="platform-engineering">Platform Engineering</button>
+                    <button type="button" class="insights-filter" data-filter="cloud-security">Cloud Security</button>
+                    <button type="button" class="insights-filter" data-filter="quality-engineering">Quality Engineering</button>
+                    <button type="button" class="insights-filter" data-filter="delivery-governance">Delivery Governance</button>
+                    <button type="button" class="insights-filter" data-filter="automation-finops">Automation &amp; FinOps</button>
+                </div>
+            </div>
+
+            <div class="insights-browser-status mt-5">
+                <p class="text-sm text-gray-600"><span id="insights-results-count">13</span> published articles</p>
             </div>
         </section>
 
         <section class="mb-8">
-            <h2 class="text-2xl font-bold mb-4">Cloud Infrastructure &amp; Security</h2>
-            <div class="grid md:grid-cols-2 gap-6">
-                <article class="bg-white rounded-xl border border-gray-200 p-6">
-                    <div class="text-xs uppercase tracking-wide text-blue-600 font-semibold mb-2">Compliance Strategy</div>
-                    <h3 class="text-xl font-semibold mb-2">Australian Compliance Baseline for Customer Teams (Without Starting with SOC 2)</h3>
-                    <p class="text-gray-700 text-sm mb-4">
-                        A practical path for delivery teams: prioritize Privacy Act obligations, Spam Act controls, ACL-safe claims, and Essential Eight-aligned security before optional SOC 2.
-                    </p>
-                    <a href="insights-australian-compliance-baseline.html" class="text-blue-600 font-semibold hover:text-blue-700">Read Article &rarr;</a>
-                </article>
-
-                <article class="bg-white rounded-xl border border-gray-200 p-6">
-                    <div class="text-xs uppercase tracking-wide text-blue-600 font-semibold mb-2">Azure / AKS / SAS Viya</div>
-                    <h3 class="text-xl font-semibold mb-2">SAS Viya on AKS: Phase 00 Infrastructure Done Right</h3>
-                    <p class="text-gray-700 text-sm mb-4">
-                        A practical infrastructure blueprint for SAS Viya on AKS covering node pool sizing, Azure CNI, Key Vault hardening, Workload Identity, and OIDC-based Terraform delivery aligned to APRA, Essential Eight, and PCI DSS.
-                    </p>
-                    <a href="insights-sas-viya-aks-phase00-infrastructure.html" class="text-blue-600 font-semibold hover:text-blue-700">Read Article &rarr;</a>
-                </article>
-
-                <article class="bg-white rounded-xl border border-gray-200 p-6">
-                    <div class="text-xs uppercase tracking-wide text-blue-600 font-semibold mb-2">AWS Security</div>
-                    <h3 class="text-xl font-semibold mb-2">Why Australian Banks Should Stop Using IAM Access Keys in CI/CD</h3>
-                    <p class="text-gray-700 text-sm mb-4">
-                        Long-lived AWS access keys in GitHub Secrets are a preventable APRA compliance risk. Replace them with GitHub OIDC federation — a practical guide with before/after code.
-                    </p>
-                    <a href="insights-iam-access-keys-cicd.html" class="text-blue-600 font-semibold hover:text-blue-700">Read Article &rarr;</a>
-                </article>
-
-                <article class="bg-white rounded-xl border border-gray-200 p-6">
-                    <div class="text-xs uppercase tracking-wide text-blue-600 font-semibold mb-2">Terraform / IaC</div>
-                    <h3 class="text-xl font-semibold mb-2">Terraform Module Design for APRA-Regulated Environments</h3>
-                    <p class="text-gray-700 text-sm mb-4">
-                        Opinionated patterns for IaC in regulated environments — remote state, data sovereignty in ap-southeast-2, mandatory tagging, security scanning, and the pre-merge checklist.
-                    </p>
-                    <a href="insights-terraform-apra-regulated.html" class="text-blue-600 font-semibold hover:text-blue-700">Read Article &rarr;</a>
-                </article>
-
-                <article class="bg-white rounded-xl border border-gray-200 p-6">
-                    <div class="text-xs uppercase tracking-wide text-blue-600 font-semibold mb-2">Cloud Architecture</div>
-                    <h3 class="text-xl font-semibold mb-2">The $400/Month Enterprise AWS Stack — What's Actually In It</h3>
-                    <p class="text-gray-700 text-sm mb-4">
-                        A transparent, line-by-line cost breakdown of a production-ready AWS footprint for regulated workloads — VPC, ECS Fargate, RDS, CloudFront, KMS, monitoring, and CI/CD.
-                    </p>
-                    <a href="insights-400-enterprise-aws-stack.html" class="text-blue-600 font-semibold hover:text-blue-700">Read Article &rarr;</a>
-                </article>
-
-                <article class="bg-white rounded-xl border border-gray-200 p-6">
-                    <div class="text-xs uppercase tracking-wide text-blue-600 font-semibold mb-2">AIOps / Automation</div>
-                    <h3 class="text-xl font-semibold mb-2">n8n as an AIOps Platform: Replacing $50k/yr Tools with Open Source</h3>
-                    <p class="text-gray-700 text-sm mb-4">
-                        Self-hosted n8n for incident enrichment, change management automation, compliance evidence collection, and AI-augmented operations — with full data sovereignty.
-                    </p>
-                    <a href="insights-n8n-aiops-platform.html" class="text-blue-600 font-semibold hover:text-blue-700">Read Article &rarr;</a>
-                </article>
-
-                <article class="bg-white rounded-xl border border-gray-200 p-6 md:col-span-2">
-                    <div class="text-xs uppercase tracking-wide text-blue-600 font-semibold mb-2">Network Security</div>
-                    <h3 class="text-xl font-semibold mb-2">Zero-Trust Networking on AWS for Financial Services</h3>
-                    <p class="text-gray-700 text-sm mb-4">
-                        Practical zero-trust network architecture for APRA-regulated AWS workloads — 3-tier VPC design, Security Groups as code, VPC endpoints, no bastion hosts, and a CPS 234 controls mapping.
-                    </p>
-                    <a href="insights-zero-trust-networking-aws.html" class="text-blue-600 font-semibold hover:text-blue-700">Read Article &rarr;</a>
-                </article>
+            <div class="insights-section-head mb-4">
+                <div>
+                    <span class="insights-section-label">Published</span>
+                    <h2 class="text-2xl font-bold mt-2">All Insight Articles</h2>
+                </div>
             </div>
-        </section>
-
-        <section class="mb-8">
-            <h2 class="text-2xl font-bold mb-4">Upcoming and In-Progress Articles</h2>
-            <div class="grid md:grid-cols-2 gap-6">
-                <article class="bg-white rounded-xl border border-gray-200 p-6">
-                    <div class="text-xs uppercase tracking-wide text-gray-500 mb-2">Platform Engineering</div>
-                    <h3 class="text-xl font-semibold mb-2">Platform Engineering for Regulated Environments: Reduce Variance Before Speed</h3>
+            <div class="grid md:grid-cols-2 gap-6" data-insights-catalog>
+                <article class="insight-card bg-white rounded-xl border border-gray-200 p-6" data-topic="infrastructure-code delivery-governance" data-keywords="terraform infrastructure as code iac state modules testing release engineering brikman packer terratest">
+                    <div class="insight-card-topic">Infrastructure as Code</div>
+                    <h3 class="text-xl font-semibold mb-2">Beyond the "Apply" Button: Lessons from 300,000 Lines of Infrastructure Code</h3>
                     <p class="text-gray-700 text-sm mb-4">
-                        Why standardization, release discipline, and operational consistency usually produce bigger gains than chasing pipeline speed first.
+                        Large-scale IaC is a software engineering problem: provider behavior, state safety, module boundaries, testing, versioned releases, and documentation all matter.
                     </p>
-                    <a href="index.html#case-studies" class="text-blue-600 font-semibold hover:text-blue-700">See Case Study Proof &rarr;</a>
-                </article>
-
-                <article class="bg-white rounded-xl border border-gray-200 p-6">
-                    <div class="text-xs uppercase tracking-wide text-gray-500 mb-2">Cloud Architecture</div>
-                    <h3 class="text-xl font-semibold mb-2">Terraform vs Bicep for Enterprise Azure Teams: A Decision Framework</h3>
-                    <p class="text-gray-700 text-sm mb-4">
-                        A practical framework for choosing Terraform, Bicep, or a mixed model in Azure-heavy organizations with governance and delivery constraints.
-                    </p>
-                    <a href="enterprise-readiness.html" class="text-blue-600 font-semibold hover:text-blue-700">Enterprise Readiness &rarr;</a>
-                </article>
-
-                <article class="bg-white rounded-xl border border-gray-200 p-6">
-                    <div class="text-xs uppercase tracking-wide text-gray-500 mb-2">Operations</div>
-                    <h3 class="text-xl font-semibold mb-2">Day 2 Operations Is Where Platform ROI Is Won</h3>
-                    <p class="text-gray-700 text-sm mb-4">
-                        Provisioning gets attention. Alert quality, runbooks, observability coverage, and incident response determine whether a platform program actually delivers value.
-                    </p>
-                    <a href="enterprise-readiness.html" class="text-blue-600 font-semibold hover:text-blue-700">Review Delivery Model &rarr;</a>
-                </article>
-
-                <article class="bg-white rounded-xl border border-gray-200 p-6">
-                    <div class="text-xs uppercase tracking-wide text-gray-500 mb-2">Procurement / GTM</div>
-                    <h3 class="text-xl font-semibold mb-2">What Enterprise Buyers Need Before Booking a Discovery Call</h3>
-                    <p class="text-gray-700 text-sm mb-4">
-                        Capability statement, risk-ready positioning, realistic claims, and a low-friction path to evaluate technical fit without a meeting first.
-                    </p>
-                    <a href="capability-statement.html" class="text-blue-600 font-semibold hover:text-blue-700">Capability Statement &rarr;</a>
-                </article>
-            </div>
-        </section>
-
-        <section class="mb-8">
-            <h2 class="text-2xl font-bold mb-4">New Service-Led Topics We Can Publish Next</h2>
-            <p class="text-gray-700 mb-5">
-                Based on a review of adjacent consulting firms' offerings and content patterns, these topics can strengthen WaterApps' buyer education while staying aligned to regulated delivery and platform modernization work.
-            </p>
-            <div class="grid md:grid-cols-2 gap-6">
-                <article class="bg-white rounded-xl border border-gray-200 p-6">
-                    <div class="text-xs uppercase tracking-wide text-gray-500 mb-2">Engineering Management / Platform</div>
-                    <h3 class="text-xl font-semibold mb-2">Engineering Governance That Speeds Delivery (Not Slows It)</h3>
-                    <p class="text-gray-700 text-sm mb-4">
-                        A practical baseline for PR-first delivery, GitOps approvals, story points, branch protection, and CI/CD guardrails that reduces regressions without creating process theater.
-                    </p>
-                    <a href="insights-engineering-governance-best-practices.html" class="text-blue-600 font-semibold hover:text-blue-700">Read Article &rarr;</a>
-                </article>
-
-                <article class="bg-white rounded-xl border border-gray-200 p-6">
-                    <div class="text-xs uppercase tracking-wide text-gray-500 mb-2">GitHub / DevSecOps</div>
-                    <h3 class="text-xl font-semibold mb-2">GitHub Best Practices: Features That Actually Improve Delivery</h3>
-                    <p class="text-gray-700 text-sm mb-4">
-                        How to use GitHub Issues, Projects, Pull Requests, Actions, Environments, branch protection, and security features as one coherent delivery system.
-                    </p>
-                    <a href="insights-github-best-practices-features.html" class="text-blue-600 font-semibold hover:text-blue-700">Read Article &rarr;</a>
-                </article>
-
-                <article class="bg-white rounded-xl border border-gray-200 p-6">
-                    <div class="text-xs uppercase tracking-wide text-gray-500 mb-2">Quality Engineering</div>
-                    <h3 class="text-xl font-semibold mb-2">Test Automation in Regulated CI/CD: What to Automate First</h3>
-                    <p class="text-gray-700 text-sm mb-4">
-                        A risk-based framework for sequencing unit, integration, E2E, and control evidence checks without overbuilding the test stack.
-                    </p>
-                    <div class="flex flex-col gap-2">
-                        <a href="insights-test-automation-regulated-cicd.html" class="text-blue-600 font-semibold hover:text-blue-700">Read Article &rarr;</a>
-                        <a href="quality-engineering.html" class="text-gray-700 font-semibold hover:text-gray-900">Quality Engineering Service &rarr;</a>
+                    <div class="insight-card-footer">
+                        <span class="insight-card-meta">New</span>
+                        <a href="insights-beyond-apply-button-infrastructure-code.html" class="text-blue-600 font-semibold hover:text-blue-700">Read Article &rarr;</a>
                     </div>
                 </article>
 
-                <article class="bg-white rounded-xl border border-gray-200 p-6">
-                    <div class="text-xs uppercase tracking-wide text-gray-500 mb-2">Performance & Reliability</div>
+                <article class="insight-card bg-white rounded-xl border border-gray-200 p-6" data-topic="delivery-governance platform-engineering" data-keywords="github issues projects pull requests actions branch protection environments codeowners release governance devsecops">
+                    <div class="insight-card-topic">GitHub / Delivery Governance</div>
+                    <h3 class="text-xl font-semibold mb-2">GitHub Best Practices: Features That Actually Improve Delivery</h3>
+                    <p class="text-gray-700 text-sm mb-4">
+                        How to use GitHub Issues, Projects, Pull Requests, Actions, Environments, and security controls as one coherent delivery system.
+                    </p>
+                    <div class="insight-card-footer">
+                        <span class="insight-card-meta">Published March 2026</span>
+                        <a href="insights-github-best-practices-features.html" class="text-blue-600 font-semibold hover:text-blue-700">Read Article &rarr;</a>
+                    </div>
+                </article>
+
+                <article class="insight-card bg-white rounded-xl border border-gray-200 p-6" data-topic="delivery-governance quality-engineering" data-keywords="regulated cicd test automation compliance qa smoke integration e2e release risk">
+                    <div class="insight-card-topic">Quality Engineering</div>
+                    <h3 class="text-xl font-semibold mb-2">Test Automation in Regulated CI/CD: What to Automate First</h3>
+                    <p class="text-gray-700 text-sm mb-4">
+                        A risk-based framework for sequencing unit, integration, end-to-end, and control evidence checks without overbuilding the test stack.
+                    </p>
+                    <div class="insight-card-footer">
+                        <span class="insight-card-meta">Published February 2026</span>
+                        <a href="insights-test-automation-regulated-cicd.html" class="text-blue-600 font-semibold hover:text-blue-700">Read Article &rarr;</a>
+                    </div>
+                </article>
+
+                <article class="insight-card bg-white rounded-xl border border-gray-200 p-6" data-topic="infrastructure-code cloud-security" data-keywords="terraform apra modules remote state tagging policy scan regulated environments">
+                    <div class="insight-card-topic">Terraform / IaC</div>
+                    <h3 class="text-xl font-semibold mb-2">Terraform Module Design for APRA-Regulated Environments</h3>
+                    <p class="text-gray-700 text-sm mb-4">
+                        Opinionated patterns for IaC in regulated environments covering remote state, sovereignty, mandatory tagging, scanning, and pre-merge review.
+                    </p>
+                    <div class="insight-card-footer">
+                        <span class="insight-card-meta">Published February 2026</span>
+                        <a href="insights-terraform-apra-regulated.html" class="text-blue-600 font-semibold hover:text-blue-700">Read Article &rarr;</a>
+                    </div>
+                </article>
+
+                <article class="insight-card bg-white rounded-xl border border-gray-200 p-6" data-topic="cloud-security platform-engineering" data-keywords="azure aks sas viya terraform oidc key vault workload identity cni apra pci">
+                    <div class="insight-card-topic">Azure / AKS / SAS Viya</div>
+                    <h3 class="text-xl font-semibold mb-2">SAS Viya on AKS: Phase 00 Infrastructure Done Right</h3>
+                    <p class="text-gray-700 text-sm mb-4">
+                        A practical infrastructure blueprint for SAS Viya on AKS covering node pool sizing, identity, Key Vault hardening, and OIDC-based Terraform delivery.
+                    </p>
+                    <div class="insight-card-footer">
+                        <span class="insight-card-meta">Published March 2026</span>
+                        <a href="insights-sas-viya-aks-phase00-infrastructure.html" class="text-blue-600 font-semibold hover:text-blue-700">Read Article &rarr;</a>
+                    </div>
+                </article>
+
+                <article class="insight-card bg-white rounded-xl border border-gray-200 p-6" data-topic="cloud-security delivery-governance" data-keywords="aws iam access keys github actions oidc apra cicd security secrets federation">
+                    <div class="insight-card-topic">AWS Security</div>
+                    <h3 class="text-xl font-semibold mb-2">Why Australian Banks Should Stop Using IAM Access Keys in CI/CD</h3>
+                    <p class="text-gray-700 text-sm mb-4">
+                        Long-lived AWS access keys in GitHub Secrets are a preventable compliance and exposure risk. Replace them with short-lived OIDC federation.
+                    </p>
+                    <div class="insight-card-footer">
+                        <span class="insight-card-meta">Published February 2026</span>
+                        <a href="insights-iam-access-keys-cicd.html" class="text-blue-600 font-semibold hover:text-blue-700">Read Article &rarr;</a>
+                    </div>
+                </article>
+
+                <article class="insight-card bg-white rounded-xl border border-gray-200 p-6" data-topic="cloud-security platform-engineering" data-keywords="zero trust aws financial services cps 234 vpc endpoints security groups bastion">
+                    <div class="insight-card-topic">Network Security</div>
+                    <h3 class="text-xl font-semibold mb-2">Zero-Trust Networking on AWS for Financial Services</h3>
+                    <p class="text-gray-700 text-sm mb-4">
+                        Practical zero-trust network architecture for APRA-regulated AWS workloads covering segmentation, verified access, and control mapping.
+                    </p>
+                    <div class="insight-card-footer">
+                        <span class="insight-card-meta">Published February 2026</span>
+                        <a href="insights-zero-trust-networking-aws.html" class="text-blue-600 font-semibold hover:text-blue-700">Read Article &rarr;</a>
+                    </div>
+                </article>
+
+                <article class="insight-card bg-white rounded-xl border border-gray-200 p-6" data-topic="platform-engineering cloud-security" data-keywords="compliance privacy act essential eight oaic controls australia baseline governance">
+                    <div class="insight-card-topic">Compliance Strategy</div>
+                    <h3 class="text-xl font-semibold mb-2">Australian Compliance Baseline for Customer Teams (Without Starting with SOC 2)</h3>
+                    <p class="text-gray-700 text-sm mb-4">
+                        A practical path for delivery teams: prioritize Privacy Act obligations, Essential Eight-aligned security, and realistic control sequencing before optional certifications.
+                    </p>
+                    <div class="insight-card-footer">
+                        <span class="insight-card-meta">Published March 2026</span>
+                        <a href="insights-australian-compliance-baseline.html" class="text-blue-600 font-semibold hover:text-blue-700">Read Article &rarr;</a>
+                    </div>
+                </article>
+
+                <article class="insight-card bg-white rounded-xl border border-gray-200 p-6" data-topic="platform-engineering delivery-governance" data-keywords="engineering governance branch protection gitops approvals operating model dora release discipline">
+                    <div class="insight-card-topic">Engineering Management</div>
+                    <h3 class="text-xl font-semibold mb-2">Engineering Governance That Speeds Delivery (Not Slows It)</h3>
+                    <p class="text-gray-700 text-sm mb-4">
+                        A practical baseline for PR-first delivery, GitOps approvals, branch protection, and CI/CD guardrails that reduce regressions without creating process theater.
+                    </p>
+                    <div class="insight-card-footer">
+                        <span class="insight-card-meta">Published March 2026</span>
+                        <a href="insights-engineering-governance-best-practices.html" class="text-blue-600 font-semibold hover:text-blue-700">Read Article &rarr;</a>
+                    </div>
+                </article>
+
+                <article class="insight-card bg-white rounded-xl border border-gray-200 p-6" data-topic="quality-engineering delivery-governance" data-keywords="performance testing release readiness load resilience regression major release reliability">
+                    <div class="insight-card-topic">Performance &amp; Reliability</div>
                     <h3 class="text-xl font-semibold mb-2">Performance Testing Before Major Releases: A Practical Readiness Checklist</h3>
                     <p class="text-gray-700 text-sm mb-4">
                         How to scope load, resilience, and dependency testing for enterprise releases when time and environment parity are limited.
                     </p>
-                    <a href="insights-performance-testing-major-releases.html" class="text-blue-600 font-semibold hover:text-blue-700">Read Article &rarr;</a>
+                    <div class="insight-card-footer">
+                        <span class="insight-card-meta">Published February 2026</span>
+                        <a href="insights-performance-testing-major-releases.html" class="text-blue-600 font-semibold hover:text-blue-700">Read Article &rarr;</a>
+                    </div>
                 </article>
 
-                <article class="bg-white rounded-xl border border-gray-200 p-6">
-                    <div class="text-xs uppercase tracking-wide text-gray-500 mb-2">Transformation Delivery</div>
-                    <h3 class="text-xl font-semibold mb-2">Why Modernization Programs Stall: 5 Delivery Mistakes and How to Avoid Them</h3>
+                <article class="insight-card bg-white rounded-xl border border-gray-200 p-6" data-topic="cloud-security delivery-governance" data-keywords="devsecops sast sca secret scanning triage risk gates pipeline">
+                    <div class="insight-card-topic">DevSecOps</div>
+                    <h3 class="text-xl font-semibold mb-2">Cyber Scanning in DevSecOps Pipelines: What Actually Matters</h3>
                     <p class="text-gray-700 text-sm mb-4">
-                        Common failure points across architecture, operating model, approvals, and sequencing that quietly derail transformation outcomes.
+                        Scanning stages aligned to release decisions, false-positive control, and practical gating instead of checkbox security theater.
                     </p>
-                    <a href="capability-statement.html" class="text-blue-600 font-semibold hover:text-blue-700">Capability Statement &rarr;</a>
+                    <div class="insight-card-footer">
+                        <span class="insight-card-meta">Published March 2026</span>
+                        <a href="insights-cyber-scan-devsecops-pipeline.html" class="text-blue-600 font-semibold hover:text-blue-700">Read Article &rarr;</a>
+                    </div>
                 </article>
 
-                <article class="bg-white rounded-xl border border-gray-200 p-6">
-                    <div class="text-xs uppercase tracking-wide text-gray-500 mb-2">Release Assurance</div>
-                    <h3 class="text-xl font-semibold mb-2">Regression Testing Strategy for Fast-Moving Enterprise Teams</h3>
+                <article class="insight-card bg-white rounded-xl border border-gray-200 p-6" data-topic="automation-finops platform-engineering" data-keywords="n8n aiops automation incident change management evidence open source sovereignty">
+                    <div class="insight-card-topic">AIOps / Automation</div>
+                    <h3 class="text-xl font-semibold mb-2">n8n as an AIOps Platform: Replacing $50k/yr Tools with Open Source</h3>
                     <p class="text-gray-700 text-sm mb-4">
-                        How to reduce release risk with critical-path regression suites, flaky-test controls, and promotion gates tied to business impact.
+                        Self-hosted n8n for incident enrichment, change automation, evidence collection, and AI-augmented operations with data sovereignty.
                     </p>
-                    <a href="index.html#contact" class="text-blue-600 font-semibold hover:text-blue-700">Discuss Release Risk &rarr;</a>
+                    <div class="insight-card-footer">
+                        <span class="insight-card-meta">Published February 2026</span>
+                        <a href="insights-n8n-aiops-platform.html" class="text-blue-600 font-semibold hover:text-blue-700">Read Article &rarr;</a>
+                    </div>
+                </article>
+
+                <article class="insight-card bg-white rounded-xl border border-gray-200 p-6" data-topic="automation-finops platform-engineering" data-keywords="finops budgets cost controls anomaly detection aws guardrails spend">
+                    <div class="insight-card-topic">FinOps</div>
+                    <h3 class="text-xl font-semibold mb-2">FinOps Guardrails That Keep Cloud Spend Under Control</h3>
+                    <p class="text-gray-700 text-sm mb-4">
+                        A practical weekly guardrail loop for keeping cloud spend low without slowing delivery or stripping away observability and security controls.
+                    </p>
+                    <div class="insight-card-footer">
+                        <span class="insight-card-meta">Published March 2026</span>
+                        <a href="insights-finops-50-budget-guardrails.html" class="text-blue-600 font-semibold hover:text-blue-700">Read Article &rarr;</a>
+                    </div>
+                </article>
+
+                <article class="insight-card bg-white rounded-xl border border-gray-200 p-6" data-topic="platform-engineering cloud-security" data-keywords="aws enterprise stack vpc ecs rds cloudfront kms monitoring cost architecture">
+                    <div class="insight-card-topic">Cloud Architecture</div>
+                    <h3 class="text-xl font-semibold mb-2">The $400/Month Enterprise AWS Stack: What's Actually In It</h3>
+                    <p class="text-gray-700 text-sm mb-4">
+                        A transparent cost breakdown of a production-ready AWS footprint for regulated workloads: network, compute, database, edge, encryption, monitoring, and delivery.
+                    </p>
+                    <div class="insight-card-footer">
+                        <span class="insight-card-meta">Published February 2026</span>
+                        <a href="insights-400-enterprise-aws-stack.html" class="text-blue-600 font-semibold hover:text-blue-700">Read Article &rarr;</a>
+                    </div>
+                </article>
+            </div>
+            <div id="insights-empty-state" class="insights-empty-state hidden">
+                <h3 class="text-xl font-semibold mb-2">No articles match that filter yet</h3>
+                <p class="text-gray-600 mb-4">Try a broader topic or search term. If you want a specific delivery problem covered, WaterApps can publish into that gap.</p>
+                <a href="mailto:varun@waterapps.com.au?subject=WaterApps%20Insights%20Topic%20Request" class="text-blue-600 font-semibold hover:text-blue-700">Suggest a topic &rarr;</a>
+            </div>
+        </section>
+
+        <section class="mb-8">
+            <div class="insights-section-head mb-4">
+                <div>
+                    <span class="insights-section-label">Explore by Need</span>
+                    <h2 class="text-2xl font-bold mt-2">Quick Paths for Different Readers</h2>
+                </div>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6">
+                <article class="bg-white rounded-xl border border-gray-200 p-6">
+                    <div class="text-xs uppercase tracking-wide text-blue-600 font-semibold mb-2">Technical Buyer</div>
+                    <h3 class="text-xl font-semibold mb-2">Evaluating Delivery Capability</h3>
+                    <p class="text-gray-700 text-sm mb-4">Start with governance, Terraform, and release-quality articles if you need evidence that controls and speed can coexist.</p>
+                    <a href="enterprise-readiness.html" class="text-blue-600 font-semibold hover:text-blue-700">View Enterprise Readiness &rarr;</a>
+                </article>
+                <article class="bg-white rounded-xl border border-gray-200 p-6">
+                    <div class="text-xs uppercase tracking-wide text-blue-600 font-semibold mb-2">Engineering Lead</div>
+                    <h3 class="text-xl font-semibold mb-2">Improving Delivery Flow</h3>
+                    <p class="text-gray-700 text-sm mb-4">Use the GitHub, test automation, and performance testing articles to shape a practical operating model.</p>
+                    <a href="quality-engineering.html" class="text-blue-600 font-semibold hover:text-blue-700">Review Quality Engineering &rarr;</a>
+                </article>
+                <article class="bg-white rounded-xl border border-gray-200 p-6">
+                    <div class="text-xs uppercase tracking-wide text-blue-600 font-semibold mb-2">Platform Owner</div>
+                    <h3 class="text-xl font-semibold mb-2">Modernizing Infrastructure Safely</h3>
+                    <p class="text-gray-700 text-sm mb-4">Use the IaC, identity, zero-trust, and cost-control pieces to map out the first safe modernization steps.</p>
+                    <a href="index.html#contact" class="text-blue-600 font-semibold hover:text-blue-700">Discuss Your Platform Constraints &rarr;</a>
+                </article>
+            </div>
+        </section>
+
+        <section class="bg-gray-900 text-white rounded-xl p-8 mb-8">
+            <div class="insights-section-head mb-4">
+                <div>
+                    <span class="insights-section-label insights-section-label-dark">Pipeline</span>
+                    <h2 class="text-2xl font-bold mt-2">Upcoming and In-Progress Topics</h2>
+                </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6 text-gray-100">
+                <article class="border border-blue-800 rounded-xl p-6 bg-gray-900">
+                    <div class="text-xs uppercase tracking-wide text-gray-300 mb-2">Platform Engineering</div>
+                    <h3 class="text-xl font-semibold mb-2">Platform Engineering for Regulated Environments: Reduce Variance Before Speed</h3>
+                    <p class="text-sm text-gray-300">Why standardization, release discipline, and operational consistency usually produce bigger gains than chasing pipeline speed first.</p>
+                </article>
+                <article class="border border-blue-800 rounded-xl p-6 bg-gray-900">
+                    <div class="text-xs uppercase tracking-wide text-gray-300 mb-2">Cloud Architecture</div>
+                    <h3 class="text-xl font-semibold mb-2">Terraform vs Bicep for Enterprise Azure Teams: A Decision Framework</h3>
+                    <p class="text-sm text-gray-300">A practical framework for choosing Terraform, Bicep, or a mixed model in Azure-heavy organizations with governance and delivery constraints.</p>
+                </article>
+                <article class="border border-blue-800 rounded-xl p-6 bg-gray-900">
+                    <div class="text-xs uppercase tracking-wide text-gray-300 mb-2">Operations</div>
+                    <h3 class="text-xl font-semibold mb-2">Day 2 Operations Is Where Platform ROI Is Won</h3>
+                    <p class="text-sm text-gray-300">Provisioning gets attention. Alert quality, runbooks, observability coverage, and incident response determine whether platform programs actually deliver value.</p>
+                </article>
+                <article class="border border-blue-800 rounded-xl p-6 bg-gray-900">
+                    <div class="text-xs uppercase tracking-wide text-gray-300 mb-2">Procurement / GTM</div>
+                    <h3 class="text-xl font-semibold mb-2">What Enterprise Buyers Need Before Booking a Discovery Call</h3>
+                    <p class="text-sm text-gray-300">Capability statement, risk-ready positioning, and a low-friction path to evaluate technical fit without a meeting first.</p>
                 </article>
             </div>
         </section>
@@ -238,7 +375,7 @@
         <section class="bg-white rounded-xl border border-gray-200 p-8">
             <h2 class="text-2xl font-bold mb-3">Want a Specific Topic Covered?</h2>
             <p class="text-gray-700 mb-5">
-                If you are evaluating platform modernization, cloud architecture, DevSecOps controls, or operating model changes in a regulated environment, send a topic and context. We can tailor a future article or discuss it directly.
+                If you are evaluating platform modernization, cloud architecture, DevSecOps controls, or operating model changes in a regulated environment, send the topic and context. We can tailor a future article or discuss it directly.
             </p>
             <div class="flex flex-col sm:flex-row gap-4">
                 <a href="mailto:varun@waterapps.com.au?subject=WaterApps%20Insights%20Topic%20Request" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold text-center">
@@ -250,5 +387,6 @@
             </div>
         </section>
     </main>
+    <script src="assets/js/insights-index.js" defer></script>
 </body>
 </html>
