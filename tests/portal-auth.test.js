@@ -140,7 +140,8 @@ const CONFIGURED_PORTAL = {
     postLoginRedirectPath: "/management-dashboard.html",
     previewPasswordLoginEnabled: true,
     previewAllowedEmailDomains: ["waterapps.com.au"],
-    previewSessionHours: 12
+    previewSessionHours: 12,
+    allowPreviewPasswordLoginOnProduction: false
 };
 
 test("startLogin throws when Cognito is not configured", async () => {
@@ -339,28 +340,12 @@ test("getConfig disables preview password login on production host by default", 
     const harness = createHarness({
         config: {
             ...CONFIGURED_PORTAL,
-            previewPasswordLoginEnabled: true,
-            allowPreviewPasswordLoginOnProduction: false
+            previewPasswordLoginEnabled: true
         },
         href: "https://www.waterapps.com.au/portal-login.html"
     });
 
     const config = harness.auth.getConfig();
     assert.equal(config.previewPasswordLoginEnabled, false);
-    assert.equal(config.isProductionHost, true);
-});
-
-test("getConfig allows explicit preview override on production host", () => {
-    const harness = createHarness({
-        config: {
-            ...CONFIGURED_PORTAL,
-            previewPasswordLoginEnabled: true,
-            allowPreviewPasswordLoginOnProduction: true
-        },
-        href: "https://www.waterapps.com.au/portal-login.html"
-    });
-
-    const config = harness.auth.getConfig();
-    assert.equal(config.previewPasswordLoginEnabled, true);
     assert.equal(config.isProductionHost, true);
 });

@@ -147,16 +147,16 @@
                 </div>
 
                 <div class="mb-5 rounded-xl border border-emerald-300/35 bg-emerald-300/10 p-4 text-emerald-100">
-                    <p class="text-sm font-semibold"><i class="fas fa-key mr-2"></i>Login details to use now</p>
-                    <p class="mt-2 text-sm">User: <code class="bg-black/20 px-1 py-0.5 rounded">varun@waterapps.com.au</code></p>
-                    <p class="mt-1 text-xs text-emerald-50/90">Fallback password (temporary): any 10+ characters. Example: <code class="bg-black/20 px-1 py-0.5 rounded">Waterapps1234</code></p>
+                    <p class="text-sm font-semibold"><i class="fas fa-key mr-2"></i>Access policy</p>
+                    <p class="mt-2 text-sm">Production access uses Cognito SSO with your provisioned enterprise account.</p>
+                    <p class="mt-1 text-xs text-emerald-50/90">Preview password access is restricted to approved non-production hosts during controlled testing only.</p>
                 </div>
 
                 <form id="portalLoginForm" class="space-y-4" novalidate>
                     <div id="ssoPrimaryPanel" class="hidden rounded-xl border border-cyan-300/30 bg-cyan-300/10 p-4">
                         <p class="text-sm font-semibold text-cyan-100"><i class="fas fa-shield-halved mr-2"></i>Enterprise SSO</p>
                         <p class="mt-2 text-sm text-cyan-50/90">
-                            Continue with Cognito to access your dashboard. If SSO fails, use temporary WaterApps fallback credentials below.
+                            Continue with Cognito to access your dashboard. If access has not been provisioned yet, request access below.
                         </p>
                         <button id="cognitoPrimaryBtn" type="button" class="mt-4 w-full rounded-xl bg-cyan-500 hover:bg-cyan-400 px-4 py-3 font-semibold text-slate-900 transition">
                             <i class="fas fa-user-shield mr-2"></i>Continue With Cognito
@@ -165,7 +165,7 @@
 
                     <div id="passwordLoginFields" class="space-y-4">
                         <p id="previewLoginHint" class="rounded-lg border border-indigo-300/20 bg-indigo-300/10 px-3 py-2 text-xs text-indigo-100">
-                            Temporary fallback login is enabled for <code>@waterapps.com.au</code> while SSO is being stabilized.
+                            Preview password login is available only on approved non-production hosts for controlled testing.
                         </p>
 
                         <div>
@@ -366,7 +366,7 @@
                 );
             } else if (config.previewPasswordLoginEnabled) {
                 const domains = (config.previewAllowedEmailDomains || []).join(', ');
-                showMessage('info', 'Cognito SSO is available. Temporary fallback password login is also enabled' + (domains ? ' for domains: <code>' + domains + '</code>.' : '.') + '.');
+                showMessage('info', 'Cognito SSO is available. Preview password login is enabled only for approved non-production testing hosts' + (domains ? ' and domains: <code>' + domains + '</code>.' : '.') + '.');
                 setPasswordLoginState(true);
             } else if (window.WaterAppsPortalAuth.isConfigured()) {
                 showMessage('info', 'Production sign-in uses Cognito SSO. Continue with Cognito to authenticate.');
@@ -464,7 +464,7 @@
                 return;
             }
 
-            showMessage('error', 'Invalid credentials for preview login. Use your WaterApps email and a password with at least 10 characters.');
+            showMessage('error', 'Invalid credentials for preview login. Use an approved WaterApps test account and a password with at least 10 characters.');
         });
 
         initPortalLogin();

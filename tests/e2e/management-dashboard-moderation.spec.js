@@ -97,4 +97,49 @@ test.describe("management dashboard moderation", () => {
     test("renders pending reviews and rejects a submission", async ({ context, page }) => {
         await runModerationDecisionFlow(context, page, "rejected");
     });
+
+    test("renders unsafe linkedin URLs as non-clickable text", async ({ context, page }) => {
+        const expiresAt = Math.floor(Date.now() / 1000) + 3600;
+        const idToken = createJwt({ email: "qa.tester@waterapps.com.au" });
+
+        await context.addInitScript(({ token, expires }) => {
+            window.sessionStorage.setItem(
+                "waterapps.portal.tokens",
+                JSON.stringify({
+                    id_token: token,
+                    access_token: "access-token",
+                    expires_at: expires
+                })
+            );
+        }, { token: idToken, expires: expiresAt });
+
+        await page.route("**/reviews?status=pending&limit=25", async (route) => {
+            await route.fulfill({
+                status: 200,
+                contentType: "application/json",
+                body: JSON.stringify({
+                    reviews: [
+                        {
+                            review_id: "review-unsafe-link",
+                            created_at: "2026-03-01T10:00:00Z",
+                            name: "Unsafe Link Tester",
+                            email: "unsafe@example.com",
+                            role: "Reviewer",
+                            company: "WaterApps",
+                            linkedin: "javascript:alert(1)",
+                            rating: "5",
+                            review: "Checks unsafe link handling."
+                        }
+                    ]
+                })
+            });
+        });
+
+        await page.goto("/management-dashboard.html");
+
+        const unsafeCard = page.locator("#reviewsModerationList article[data-review-id='review-unsafe-link']");
+        await expect(unsafeCard).toBeVisible();
+        await expect(unsafeCard.getByRole("link", { name: "LinkedIn profile" })).toHaveCount(0);
+        await expect(unsafeCard).toContainText("LinkedIn profile unavailable");
+    });
 });

@@ -10,5 +10,5 @@ window.WATERAPPS_PORTAL_AUTH_CONFIG = {
     previewPasswordLoginEnabled: true,
     previewAllowedEmailDomains: ["waterapps.com.au"],
     previewSessionHours: 12,
-    allowPreviewPasswordLoginOnProduction: true
+    allowPreviewPasswordLoginOnProduction: false
 };
