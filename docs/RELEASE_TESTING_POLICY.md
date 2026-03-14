@@ -14,10 +14,16 @@ If functional testing is not complete, release is blocked.
 
 All pull requests to `main` must pass:
 
+1. `author-email-guard`
 1. `checks` workflow job
 2. `portal-auth-tests`
 3. `booking-availability-tests`
 4. `zap-baseline`
+
+Identity guard requirements:
+
+1. Commits must use an approved WaterApps email or approved GitHub noreply identity.
+2. Cross-account author/committer emails are blocked before merge.
 
 The `checks` job must include:
 
