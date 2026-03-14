@@ -1,0 +1,16 @@
+* @vkaushik13
+
+# Protect workflow and deployment controls.
+/.github/workflows/* @vkaushik13
+/CNAME @vkaushik13
+/sitemap.xml @vkaushik13
+/robots.txt @vkaushik13
+
+# Protect core public entry points.
+/index.html @vkaushik13
+/insights.html @vkaushik13
+/capability-statement.html @vkaushik13
+/privacy.html @vkaushik13
+/terms.html @vkaushik13
+/portal-login.html @vkaushik13
+/management-dashboard.html @vkaushik13

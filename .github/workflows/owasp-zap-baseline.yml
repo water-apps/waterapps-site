@@ -17,7 +17,9 @@ jobs:
       TARGET_URL: ${{ github.event_name == 'pull_request' && 'http://127.0.0.1:4173' || 'https://www.waterapps.com.au' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          persist-credentials: false
 
       - name: Start local site server for pull requests
         if: github.event_name == 'pull_request'
@@ -70,7 +72,7 @@ jobs:
 
       - name: Upload ZAP report artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: owasp-zap-baseline-report
           path: zap-report/
