@@ -19,256 +19,797 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
-        body { font-family: 'Manrope', sans-serif; }
-        .portal-bg {
+        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap');
+
+        :root {
+            --bg: #0a0f1c;
+            --bg-soft: #111a2b;
+            --panel: rgba(10, 15, 28, 0.78);
+            --panel-strong: rgba(13, 21, 38, 0.92);
+            --line: rgba(148, 163, 184, 0.18);
+            --line-strong: rgba(148, 163, 184, 0.3);
+            --text: #e5eefb;
+            --muted: #9fb0ca;
+            --accent: #5eead4;
+            --accent-strong: #22c55e;
+            --accent-warm: #fbbf24;
+            --danger: #fda4af;
+            --shadow: 0 24px 80px rgba(2, 6, 23, 0.45);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Manrope', sans-serif;
+            color: var(--text);
             background:
-                radial-gradient(circle at 10% 10%, rgba(14, 116, 144, 0.2), transparent 40%),
-                radial-gradient(circle at 90% 15%, rgba(30, 64, 175, 0.14), transparent 40%),
-                linear-gradient(180deg, #020617 0%, #0b1325 45%, #0f172a 100%);
+                radial-gradient(circle at top left, rgba(34, 197, 94, 0.18), transparent 32%),
+                radial-gradient(circle at top right, rgba(34, 211, 238, 0.15), transparent 28%),
+                radial-gradient(circle at bottom center, rgba(251, 191, 36, 0.12), transparent 26%),
+                linear-gradient(160deg, #050814 0%, #0a0f1c 45%, #101827 100%);
         }
-        .glass-panel {
-            background: rgba(2, 6, 23, 0.88);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(148, 163, 184, 0.3);
-            box-shadow: 0 14px 36px rgba(2, 6, 23, 0.35);
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 48px 48px;
+            mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.4), transparent 85%);
         }
-        .glass-panel .text-slate-400 { color: #e2e8f0 !important; }
-        .glass-panel .text-slate-300 { color: #f1f5f9 !important; }
-        .glass-panel .text-slate-200 { color: #f8fafc !important; }
-        .glass-panel input { color: #ffffff; }
-        .glass-panel input::placeholder { color: #cbd5e1 !important; opacity: 1; }
-        .field-focus:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+
+        .frame {
+            position: relative;
+            isolation: isolate;
         }
-        .tile-hover {
-            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+
+        .shell {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 24px;
         }
-        .tile-hover:hover {
-            transform: translateY(-2px);
-            border-color: rgba(96, 165, 250, 0.55);
-            box-shadow: 0 14px 30px rgba(2, 6, 23, 0.25);
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 16px 18px;
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            background: rgba(8, 13, 24, 0.72);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 10px 30px rgba(2, 6, 23, 0.2);
         }
-        .brand-logo {
-            width: 32px;
-            height: 32px;
-            max-width: 32px;
-            max-height: 32px;
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .brand-mark {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04));
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            display: grid;
+            place-items: center;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        .brand-mark img {
+            width: 26px;
+            height: 26px;
             object-fit: contain;
-            flex: none;
         }
-        .diag-list dt {
-            color: #cbd5e1;
-            font-size: 0.75rem;
+
+        .brand-eyebrow {
+            display: block;
+            font-size: 0.72rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--accent);
         }
-        .diag-list dd {
-            color: #f8fafc;
+
+        .brand-name {
+            display: block;
+            font-size: 1rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .ghost-link,
+        .primary-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-height: 42px;
+            padding: 0 16px;
+            border-radius: 999px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: transform 0.18s ease, background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+        }
+
+        .ghost-link {
+            color: var(--muted);
+            border: 1px solid transparent;
+        }
+
+        .ghost-link:hover,
+        .ghost-link:focus-visible {
+            color: var(--text);
+            border-color: var(--line);
+            background: rgba(255, 255, 255, 0.03);
+            outline: none;
+        }
+
+        .primary-link {
+            background: linear-gradient(135deg, #5eead4, #22c55e);
+            color: #042f2e;
+            box-shadow: 0 16px 32px rgba(34, 197, 94, 0.22);
+        }
+
+        .primary-link:hover,
+        .primary-link:focus-visible {
+            transform: translateY(-1px);
+            outline: none;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.12fr) minmax(360px, 0.88fr);
+            gap: 28px;
+            margin-top: 28px;
+        }
+
+        .panel {
+            border: 1px solid var(--line);
+            border-radius: 32px;
+            background: var(--panel);
+            backdrop-filter: blur(22px);
+            box-shadow: var(--shadow);
+        }
+
+        .hero-copy {
+            position: relative;
+            overflow: hidden;
+            padding: 36px;
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 35%),
+                linear-gradient(145deg, rgba(10, 15, 28, 0.92), rgba(12, 20, 36, 0.82));
+        }
+
+        .hero-copy::after {
+            content: '';
+            position: absolute;
+            right: -80px;
+            bottom: -80px;
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(94, 234, 212, 0.24), transparent 68%);
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(94, 234, 212, 0.08);
+            border: 1px solid rgba(94, 234, 212, 0.22);
+            color: #b7fff0;
+            font-size: 0.78rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-weight: 800;
+        }
+
+        .hero-copy h1 {
+            margin: 24px 0 16px;
+            max-width: 12ch;
+            font-family: 'Fraunces', serif;
+            font-size: clamp(2.8rem, 5vw, 4.75rem);
+            line-height: 0.95;
+            letter-spacing: -0.05em;
+        }
+
+        .hero-copy .lede {
+            max-width: 58ch;
+            color: var(--muted);
+            font-size: 1.03rem;
+            line-height: 1.75;
+        }
+
+        .signal-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 28px;
+        }
+
+        .signal-card {
+            padding: 18px;
+            border-radius: 22px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .signal-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-size: 0.84rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #d7e4f9;
+            font-weight: 800;
+        }
+
+        .signal-card p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.94rem;
+            line-height: 1.6;
+        }
+
+        .hero-footer {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 28px;
+            color: #d7e4f9;
+            font-size: 0.9rem;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: rgba(251, 191, 36, 0.12);
+            border: 1px solid rgba(251, 191, 36, 0.24);
+            color: #ffe9ae;
+            font-weight: 700;
+        }
+
+        .login-panel {
+            padding: 24px;
+            background: linear-gradient(180deg, rgba(13, 21, 38, 0.94), rgba(9, 14, 25, 0.98));
+        }
+
+        .login-shell {
+            padding: 28px;
+            border-radius: 26px;
+            background: rgba(7, 12, 22, 0.72);
+            border: 1px solid rgba(148, 163, 184, 0.16);
+        }
+
+        .login-kicker {
+            color: var(--accent);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            font-weight: 800;
+        }
+
+        .login-shell h2 {
+            margin: 10px 0 8px;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+        }
+
+        .login-shell p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        .stack {
+            display: grid;
+            gap: 16px;
+            margin-top: 26px;
+        }
+
+        .field {
+            display: grid;
+            gap: 8px;
+        }
+
+        .field label {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #dbe7f8;
+        }
+
+        .field input {
+            width: 100%;
+            min-height: 56px;
+            padding: 0 16px;
+            border-radius: 18px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            background: rgba(9, 14, 25, 0.95);
+            color: var(--text);
+            font-size: 1rem;
+            transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+        }
+
+        .field input::placeholder {
+            color: #64748b;
+        }
+
+        .field input:focus {
+            outline: none;
+            border-color: rgba(94, 234, 212, 0.6);
+            box-shadow: 0 0 0 4px rgba(94, 234, 212, 0.12);
+            transform: translateY(-1px);
+        }
+
+        .helper-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            color: var(--muted);
+            font-size: 0.88rem;
+        }
+
+        .helper-row a {
+            color: #c4fff5;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .helper-row a:hover,
+        .helper-row a:focus-visible {
+            text-decoration: underline;
+            outline: none;
+        }
+
+        .checkbox-row {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-row input {
+            width: 18px;
+            height: 18px;
+            accent-color: #5eead4;
+        }
+
+        .submit-button,
+        .secondary-button {
+            width: 100%;
+            min-height: 56px;
+            border-radius: 18px;
+            border: none;
+            font-size: 0.98rem;
+            font-weight: 800;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+        }
+
+        .submit-button {
+            background: linear-gradient(135deg, #5eead4, #22c55e);
+            color: #052e2b;
+            box-shadow: 0 20px 36px rgba(34, 197, 94, 0.18);
+        }
+
+        .submit-button:hover,
+        .submit-button:focus-visible,
+        .secondary-button:hover,
+        .secondary-button:focus-visible {
+            transform: translateY(-1px);
+            outline: none;
+        }
+
+        .secondary-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .secondary-button {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+        }
+
+        .secondary-button:hover,
+        .secondary-button:focus-visible {
+            border-color: rgba(94, 234, 212, 0.34);
+            background: rgba(94, 234, 212, 0.06);
+        }
+
+        .message {
+            display: none;
+            margin-top: 16px;
+            padding: 14px 16px;
+            border-radius: 18px;
+            border: 1px solid transparent;
+            font-size: 0.94rem;
+            line-height: 1.6;
+        }
+
+        .destinations {
+            margin-top: 22px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(148, 163, 184, 0.14);
+        }
+
+        .destinations-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .destinations-head h3 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        .destinations-head span {
+            color: var(--muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+
+        .destination-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .destination-card {
+            display: block;
+            padding: 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(148, 163, 184, 0.14);
+            background: rgba(255, 255, 255, 0.03);
+            color: inherit;
+            text-decoration: none;
+            transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+        }
+
+        .destination-card:hover,
+        .destination-card:focus-visible {
+            transform: translateY(-2px);
+            border-color: rgba(94, 234, 212, 0.28);
+            background: rgba(94, 234, 212, 0.05);
+            outline: none;
+        }
+
+        .destination-card strong {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.94rem;
+        }
+
+        .destination-card span {
+            display: block;
+            color: var(--muted);
             font-size: 0.82rem;
-            font-weight: 600;
-            word-break: break-word;
+            line-height: 1.55;
+        }
+
+        .access-strip {
+            margin-top: 28px;
+            padding: 22px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            border-radius: 26px;
+            border: 1px solid var(--line);
+            background: rgba(8, 13, 24, 0.78);
+            backdrop-filter: blur(18px);
+        }
+
+        .access-strip h3 {
+            margin: 0 0 6px;
+            font-size: 1.2rem;
+            font-weight: 800;
+        }
+
+        .access-strip p {
+            margin: 0;
+            max-width: 60ch;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .status-card {
+            margin-top: 16px;
+            padding: 18px;
+            border-radius: 20px;
+            border: 1px solid rgba(251, 191, 36, 0.18);
+            background: rgba(251, 191, 36, 0.08);
+            color: #ffeab8;
+        }
+
+        .status-card strong {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.92rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+
+        .status-card p {
+            margin: 0;
+            color: #ffeab8;
+        }
+
+        @media (max-width: 1080px) {
+            .hero {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .shell {
+                padding: 16px;
+            }
+
+            .topbar,
+            .hero-copy,
+            .login-panel,
+            .access-strip {
+                border-radius: 24px;
+            }
+
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .login-shell,
+            .hero-copy {
+                padding: 22px;
+            }
+
+            .signal-grid,
+            .destination-grid,
+            .secondary-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-copy h1 {
+                max-width: none;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation: none !important;
+                transition: none !important;
+                scroll-behavior: auto !important;
+            }
         }
     </style>
 </head>
-<body class="portal-bg min-h-screen text-slate-100">
-    <header class="border-b border-white/10 bg-slate-950/50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-3">
-                <img src="logo.png" alt="WaterApps logo" width="32" height="32" class="brand-logo rounded-md ring-1 ring-white/20 bg-slate-950/40 p-0.5">
+<body>
+    <div class="frame">
+        <div class="shell">
+            <header class="topbar">
+                <a href="index.html" class="brand">
+                    <span class="brand-mark">
+                        <img src="logo.png" alt="WaterApps logo">
+                    </span>
+                    <span>
+                        <span class="brand-eyebrow">Secure Workspace</span>
+                        <span class="brand-name">WaterApps Management Portal</span>
+                    </span>
+                </a>
+
+                <div class="topbar-actions">
+                    <a href="index.html" class="ghost-link">Back to website</a>
+                    <a href="#access-request" class="primary-link">Request Access</a>
+                </div>
+            </header>
+
+            <main class="hero">
+                <section class="panel hero-copy" aria-labelledby="portal-heading">
+                    <div class="eyebrow">
+                        <i class="fas fa-shield-check" aria-hidden="true"></i>
+                        Controlled entry point for client dashboards
+                    </div>
+
+                    <h1 id="portal-heading">Serious access, not a generic login screen.</h1>
+
+                    <p class="lede">
+                        This portal is where WaterApps clients review delivery posture, cloud operations, release readiness,
+                        and security evidence for live engagements. Keep the access surface tight, clear, and trustworthy.
+                    </p>
+
+                    <div class="signal-grid">
+                        <article class="signal-card">
+                            <div class="signal-label"><i class="fas fa-gauge-high" aria-hidden="true"></i> Delivery signal</div>
+                            <p>Release confidence, blockers, sprint drift, and operational readiness in one place.</p>
+                        </article>
+                        <article class="signal-card">
+                            <div class="signal-label"><i class="fas fa-cloud-arrow-down" aria-hidden="true"></i> Platform posture</div>
+                            <p>Environment health, spend trends, alarms, and deployment status without dashboard sprawl.</p>
+                        </article>
+                        <article class="signal-card">
+                            <div class="signal-label"><i class="fas fa-shield-halved" aria-hidden="true"></i> Security view</div>
+                            <p>Compliance signals, control drift, and review evidence aligned to customer-facing reporting.</p>
+                        </article>
+                        <article class="signal-card">
+                            <div class="signal-label"><i class="fas fa-user-lock" aria-hidden="true"></i> Controlled access</div>
+                            <p>Role-based access should be backed by SSO, MFA, and explicit tenant provisioning before go-live.</p>
+                        </article>
+                    </div>
+
+                    <div class="hero-footer">
+                        <span class="hero-badge"><i class="fas fa-lock" aria-hidden="true"></i> Secure session required</span>
+                        <span>TLS-only entry point. Identity provider integration recommended for production use.</span>
+                    </div>
+
+                    <div class="status-card">
+                        <strong>Implementation note</strong>
+                        <p>Frontend portal UI is ready. Production access should be wired to Cognito, Microsoft Entra ID, Auth0, or Okta with MFA and session controls.</p>
+                    </div>
+                </section>
+
+                <section class="panel login-panel" aria-labelledby="sign-in-heading">
+                    <div class="login-shell">
+                        <div class="login-kicker">Management access</div>
+                        <h2 id="sign-in-heading">Sign in</h2>
+                        <p>Use your approved WaterApps management account. If SSO is configured for your tenant, use the identity-provider flow instead of the placeholder form.</p>
+
+                        <form id="portalLoginForm" class="stack" novalidate>
+                            <div id="ssoPrimaryPanel" class="hidden rounded-[22px] border border-cyan-300/30 bg-cyan-300/10 p-5">
+                                <p class="text-sm font-bold uppercase tracking-[0.16em] text-cyan-100">Enterprise SSO</p>
+                                <p class="mt-2 text-sm text-cyan-50/90">
+                                    Continue with Cognito to access your dashboard. If access has not been provisioned yet, request access below.
+                                </p>
+                                <button id="cognitoPrimaryBtn" type="button" class="submit-button mt-4">
+                                    <i class="fas fa-user-shield mr-2" aria-hidden="true"></i>
+                                    Continue with Cognito
+                                </button>
+                            </div>
+
+                            <div id="passwordLoginFields" class="stack mt-0">
+                                <p id="previewLoginHint" class="rounded-[18px] border border-indigo-300/20 bg-indigo-300/10 px-4 py-3 text-xs text-indigo-100">
+                                    Preview password login is available only on approved non-production hosts for controlled testing.
+                                </p>
+
+                                <div class="field">
+                                    <label for="email">Work email</label>
+                                    <input id="email" name="email" type="email" autocomplete="email" placeholder="name@company.com.au">
+                                </div>
+
+                                <div class="field">
+                                    <label for="password">Password</label>
+                                    <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter password">
+                                </div>
+
+                                <div class="field">
+                                    <label for="mfa">MFA code <span class="text-slate-400">(optional placeholder)</span></label>
+                                    <input id="mfa" name="mfa" inputmode="numeric" pattern="[0-9]*" maxlength="8" placeholder="123456">
+                                </div>
+
+                                <div class="helper-row">
+                                    <label class="checkbox-row">
+                                        <input type="checkbox">
+                                        <span>Remember this device for 12 hours</span>
+                                    </label>
+                                    <a href="#access-request">Need access?</a>
+                                </div>
+
+                                <button id="passwordLoginSubmitBtn" type="submit" class="submit-button">
+                                    <i class="fas fa-right-to-bracket mr-2" aria-hidden="true"></i>
+                                    Sign in to portal
+                                </button>
+                            </div>
+
+                            <div id="secondaryAuthOptions" class="secondary-actions">
+                                <button id="cognitoLoginBtn" type="button" class="secondary-button">
+                                    <i class="fas fa-user-shield mr-2 text-cyan-300" aria-hidden="true"></i>
+                                    Sign in with Cognito
+                                </button>
+                                <button id="googleLoginBtn" type="button" class="secondary-button">
+                                    <i class="fab fa-google mr-2 text-emerald-300" aria-hidden="true"></i>
+                                    Sign in with Google
+                                </button>
+                                <button type="button" class="secondary-button">
+                                    <i class="fas fa-link mr-2 text-emerald-300" aria-hidden="true"></i>
+                                    Send magic link
+                                </button>
+                            </div>
+
+                            <p id="formMessage" class="message"></p>
+
+                            <details id="loginDiagnostics" class="rounded-[18px] border border-slate-700/80 bg-slate-950/40 px-4 py-3 text-sm text-slate-200">
+                                <summary class="cursor-pointer text-xs font-semibold uppercase tracking-[0.14em] text-slate-300">Login diagnostics</summary>
+                                <dl class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                    <div><dt class="text-xs uppercase tracking-[0.12em] text-slate-400">Host</dt><dd id="diagHost" class="mt-1 break-all font-semibold text-slate-100">-</dd></div>
+                                    <div><dt class="text-xs uppercase tracking-[0.12em] text-slate-400">Cognito enabled</dt><dd id="diagCognito" class="mt-1 break-all font-semibold text-slate-100">-</dd></div>
+                                    <div><dt class="text-xs uppercase tracking-[0.12em] text-slate-400">Redirect URI</dt><dd id="diagRedirect" class="mt-1 break-all font-semibold text-slate-100">-</dd></div>
+                                    <div><dt class="text-xs uppercase tracking-[0.12em] text-slate-400">Password fallback</dt><dd id="diagFallback" class="mt-1 break-all font-semibold text-slate-100">-</dd></div>
+                                    <div class="sm:col-span-2"><dt class="text-xs uppercase tracking-[0.12em] text-slate-400">Last error</dt><dd id="diagError" class="mt-1 break-all font-semibold text-slate-100">none</dd></div>
+                                </dl>
+                            </details>
+                        </form>
+
+                        <div class="destinations">
+                            <div class="destinations-head">
+                                <h3>Portal destinations</h3>
+                                <span>Post-login routes</span>
+                            </div>
+                            <div class="destination-grid">
+                                <a class="destination-card" href="management-dashboard.html">
+                                    <strong>Executive overview</strong>
+                                    <span>Program health, risk posture, release summary, and open actions.</span>
+                                </a>
+                                <a class="destination-card" href="management-dashboard.html#delivery">
+                                    <strong>Delivery control tower</strong>
+                                    <span>Sprint movement, blockers, environment readiness, and approvals.</span>
+                                </a>
+                                <a class="destination-card" href="management-dashboard.html#security">
+                                    <strong>Security and compliance</strong>
+                                    <span>Findings, exception posture, evidence links, and review signals.</span>
+                                </a>
+                                <a class="destination-card" href="management-dashboard.html#cost">
+                                    <strong>Cost and platform ops</strong>
+                                    <span>Budgets, anomalies, uptime, and operational guardrails.</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <section id="access-request" class="access-strip">
                 <div>
-                    <div class="font-bold tracking-tight">WaterApps</div>
-                    <div class="text-xs text-slate-400">Management Portal</div>
+                    <h3>Need management portal access?</h3>
+                    <p>Access is provisioned per engagement. WaterApps enables the tenant, assigns roles, and aligns SSO and MFA policy before inviting client users.</p>
                 </div>
-            </a>
-            <div class="flex items-center gap-3">
-                <a href="index.html" class="text-sm text-slate-300 hover:text-white transition">Back to site</a>
-                <a href="#access-request" class="text-sm bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg transition">Request Access</a>
-            </div>
-        </div>
-    </header>
-
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-        <div class="grid lg:grid-cols-2 gap-8 items-start">
-            <section class="glass-panel rounded-2xl p-7 lg:p-9">
-                <div class="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-sm text-emerald-200">
-                    <i class="fas fa-shield-check"></i>
-                    <span>Dashboard access point for WaterApps engagements</span>
-                </div>
-
-                <h1 class="mt-5 text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">
-                    Sign in to your
-                    <span class="text-blue-300">management dashboards</span>
-                </h1>
-
-                <p class="mt-4 text-slate-300 leading-relaxed">
-                    Use your allocated enterprise account to access delivery reporting, cloud posture, release controls,
-                    and executive summaries for your WaterApps-managed environments.
-                </p>
-
-                <div class="mt-8 grid sm:grid-cols-2 gap-4">
-                    <div class="rounded-xl border border-white/10 bg-white/5 p-4">
-                        <div class="text-blue-300 text-sm font-semibold"><i class="fas fa-chart-line mr-2"></i>Delivery & Release</div>
-                        <p class="mt-2 text-sm text-slate-300">Sprint health, release readiness, deployment risk, approvals.</p>
-                    </div>
-                    <div class="rounded-xl border border-white/10 bg-white/5 p-4">
-                        <div class="text-cyan-300 text-sm font-semibold"><i class="fas fa-cloud mr-2"></i>Cloud & Cost</div>
-                        <p class="mt-2 text-sm text-slate-300">Environment status, usage trends, alerts, spend guardrails.</p>
-                    </div>
-                    <div class="rounded-xl border border-white/10 bg-white/5 p-4">
-                        <div class="text-emerald-300 text-sm font-semibold"><i class="fas fa-shield-alt mr-2"></i>Security & Compliance</div>
-                        <p class="mt-2 text-sm text-slate-300">Policy posture, drift signals, WAF events, audit evidence links.</p>
-                    </div>
-                    <div class="rounded-xl border border-white/10 bg-white/5 p-4">
-                        <div class="text-amber-300 text-sm font-semibold"><i class="fas fa-bell mr-2"></i>Operational Alerts</div>
-                        <p class="mt-2 text-sm text-slate-300">Incident status, alarm summaries, escalation pathways, SLAs.</p>
-                    </div>
-                </div>
-
-                <div class="mt-8 rounded-xl border border-amber-400/20 bg-amber-300/10 p-4 text-sm text-amber-100">
-                    <div class="font-semibold mb-1"><i class="fas fa-triangle-exclamation mr-2"></i>Implementation note</div>
-                    <p>
-                        This page is a frontend portal UI. Before production use, connect it to an identity provider
-                        (AWS Cognito, Microsoft Entra ID, Auth0, or Okta) with MFA and session controls.
-                    </p>
-                </div>
-            </section>
-
-            <section class="glass-panel rounded-2xl p-7 lg:p-9">
-                <div class="flex items-center justify-between mb-6">
-                    <div>
-                        <h2 class="text-2xl font-bold">Portal Sign In</h2>
-                        <p class="text-sm text-slate-300 mt-1">Use your approved WaterApps management account.</p>
-                    </div>
-                    <div class="hidden sm:flex items-center gap-2 text-xs text-slate-400">
-                        <i class="fas fa-lock"></i>
-                        <span>TLS required</span>
-                    </div>
-                </div>
-
-                <div class="mb-5 rounded-xl border border-emerald-300/35 bg-emerald-300/10 p-4 text-emerald-100">
-                    <p class="text-sm font-semibold"><i class="fas fa-key mr-2"></i>Access policy</p>
-                    <p class="mt-2 text-sm">Production access uses Cognito SSO with your provisioned enterprise account.</p>
-                    <p class="mt-1 text-xs text-emerald-50/90">Preview password access is restricted to approved non-production hosts during controlled testing only.</p>
-                </div>
-
-                <form id="portalLoginForm" class="space-y-4" novalidate>
-                    <div id="ssoPrimaryPanel" class="hidden rounded-xl border border-cyan-300/30 bg-cyan-300/10 p-4">
-                        <p class="text-sm font-semibold text-cyan-100"><i class="fas fa-shield-halved mr-2"></i>Enterprise SSO</p>
-                        <p class="mt-2 text-sm text-cyan-50/90">
-                            Continue with Cognito to access your dashboard. If access has not been provisioned yet, request access below.
-                        </p>
-                        <button id="cognitoPrimaryBtn" type="button" class="mt-4 w-full rounded-xl bg-cyan-500 hover:bg-cyan-400 px-4 py-3 font-semibold text-slate-900 transition">
-                            <i class="fas fa-user-shield mr-2"></i>Continue With Cognito
-                        </button>
-                    </div>
-
-                    <div id="passwordLoginFields" class="space-y-4">
-                        <p id="previewLoginHint" class="rounded-lg border border-indigo-300/20 bg-indigo-300/10 px-3 py-2 text-xs text-indigo-100">
-                            Preview password login is available only on approved non-production hosts for controlled testing.
-                        </p>
-
-                        <div>
-                            <label for="email" class="block text-sm font-medium text-slate-200 mb-2">Work Email</label>
-                            <input id="email" name="email" type="email" autocomplete="email" placeholder="name@company.com.au"
-                                   class="field-focus w-full rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-white placeholder:text-slate-500">
-                        </div>
-
-                        <div>
-                            <label for="password" class="block text-sm font-medium text-slate-200 mb-2">Password</label>
-                            <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter password"
-                                   class="field-focus w-full rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-white placeholder:text-slate-500">
-                        </div>
-
-                        <div>
-                            <label for="mfa" class="block text-sm font-medium text-slate-200 mb-2">MFA Code (Optional UI Placeholder)</label>
-                            <input id="mfa" name="mfa" inputmode="numeric" pattern="[0-9]*" maxlength="8" placeholder="123456"
-                                   class="field-focus w-full rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-white placeholder:text-slate-500">
-                        </div>
-
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-sm">
-                            <label class="inline-flex items-center gap-2 text-slate-300">
-                                <input type="checkbox" class="rounded border-slate-600 bg-slate-900 text-blue-600">
-                                Remember this device (12 hours)
-                            </label>
-                            <a href="#access-request" class="text-blue-300 hover:text-blue-200">Need access?</a>
-                        </div>
-
-                        <button id="passwordLoginSubmitBtn" type="submit" class="w-full rounded-xl bg-blue-600 hover:bg-blue-500 px-4 py-3 font-semibold transition">
-                            <i class="fas fa-right-to-bracket mr-2"></i>Sign In
-                        </button>
-                    </div>
-
-                    <div id="secondaryAuthOptions" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <button id="cognitoLoginBtn" type="button" class="rounded-xl border border-slate-700 bg-slate-900/60 px-4 py-3 text-sm hover:border-slate-500 transition">
-                            <i class="fas fa-user-shield mr-2 text-cyan-300"></i>Sign in with Cognito
-                        </button>
-                        <button id="googleLoginBtn" type="button" class="rounded-xl border border-slate-700 bg-slate-900/60 px-4 py-3 text-sm hover:border-slate-500 transition">
-                            <i class="fab fa-google mr-2 text-emerald-300"></i>Sign in with Google
-                        </button>
-                        <button type="button" class="rounded-xl border border-slate-700 bg-slate-900/60 px-4 py-3 text-sm hover:border-slate-500 transition">
-                            <i class="fas fa-link mr-2 text-blue-300"></i>Send Magic Link
-                        </button>
-                    </div>
-
-                    <p id="formMessage" class="hidden rounded-lg border px-3 py-2 text-sm"></p>
-
-                    <details id="loginDiagnostics" class="rounded-lg border border-slate-700/80 bg-slate-950/40 px-3 py-2">
-                        <summary class="cursor-pointer text-xs text-slate-300">Login diagnostics</summary>
-                        <dl class="diag-list mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
-                            <div><dt>Host</dt><dd id="diagHost">-</dd></div>
-                            <div><dt>Cognito Enabled</dt><dd id="diagCognito">-</dd></div>
-                            <div><dt>Redirect URI</dt><dd id="diagRedirect">-</dd></div>
-                            <div><dt>Password Fallback</dt><dd id="diagFallback">-</dd></div>
-                            <div class="sm:col-span-2"><dt>Last Error</dt><dd id="diagError">none</dd></div>
-                        </dl>
-                    </details>
-                </form>
-
-                <div class="mt-8">
-                    <div class="flex items-center justify-between mb-3">
-                        <h3 class="font-semibold text-slate-100">Dashboard Destinations</h3>
-                        <span class="text-xs text-slate-400">Post-login landing options</span>
-                    </div>
-                    <div class="grid sm:grid-cols-2 gap-3">
-                        <a class="tile-hover rounded-xl border border-white/10 bg-white/5 p-4 block" href="management-dashboard.html">
-                            <div class="text-sm font-semibold text-blue-200">Executive Overview</div>
-                            <p class="text-xs text-slate-400 mt-1">KPIs, risk posture, release summary, open actions.</p>
-                        </a>
-                        <a class="tile-hover rounded-xl border border-white/10 bg-white/5 p-4 block" href="management-dashboard.html#delivery">
-                            <div class="text-sm font-semibold text-cyan-200">Delivery Control Tower</div>
-                            <p class="text-xs text-slate-400 mt-1">Sprint throughput, blockers, environment readiness.</p>
-                        </a>
-                        <a class="tile-hover rounded-xl border border-white/10 bg-white/5 p-4 block" href="management-dashboard.html#security">
-                            <div class="text-sm font-semibold text-emerald-200">Security & Compliance</div>
-                            <p class="text-xs text-slate-400 mt-1">Findings, WAF alerts, evidence packs, exceptions.</p>
-                        </a>
-                        <a class="tile-hover rounded-xl border border-white/10 bg-white/5 p-4 block" href="management-dashboard.html#cost">
-                            <div class="text-sm font-semibold text-amber-200">Cost & Platform Ops</div>
-                            <p class="text-xs text-slate-400 mt-1">Budgets, anomalies, cloud usage trends, uptime.</p>
-                        </a>
-                    </div>
-                </div>
+                <a href="index.html#contact" class="primary-link">
+                    <i class="fas fa-envelope" aria-hidden="true"></i>
+                    Contact WaterApps
+                </a>
             </section>
         </div>
-
-        <section id="access-request" class="mt-10 glass-panel rounded-2xl p-6">
-            <div class="grid md:grid-cols-3 gap-4 items-center">
-                <div class="md:col-span-2">
-                    <h2 class="text-xl font-bold">Need Management Portal Access?</h2>
-                    <p class="text-slate-300 mt-2 text-sm">
-                        Access is provisioned per client engagement. Contact WaterApps to enable a tenant, assign roles,
-                        and configure your SSO/MFA policy.
-                    </p>
-                </div>
-                <div class="md:text-right">
-                    <a href="index.html#contact" class="inline-flex items-center justify-center rounded-xl bg-white text-slate-900 px-5 py-3 font-semibold hover:bg-slate-100 transition">
-                        <i class="fas fa-envelope mr-2"></i>Contact WaterApps
-                    </a>
-                </div>
-            </div>
-        </section>
-    </main>
+    </div>
 
     <script src="scripts/portal-auth-config.js"></script>
     <script src="scripts/portal-auth.js"></script>
@@ -290,18 +831,20 @@
 
         function showMessage(type, html) {
             const styles = {
-                error: 'border-red-400/30 bg-red-400/10 text-red-200',
-                success: 'border-emerald-400/30 bg-emerald-400/10 text-emerald-200',
-                info: 'border-blue-400/30 bg-blue-400/10 text-blue-200',
-                warn: 'border-amber-400/30 bg-amber-400/10 text-amber-100'
+                error: 'message border border-red-300/25 bg-red-400/10 text-red-100',
+                success: 'message border border-emerald-300/25 bg-emerald-400/10 text-emerald-100',
+                info: 'message border border-cyan-300/25 bg-cyan-400/10 text-cyan-100',
+                warn: 'message border border-amber-300/25 bg-amber-400/10 text-amber-100'
             };
-            message.className = 'rounded-lg border px-3 py-2 text-sm ' + (styles[type] || styles.info);
+            message.className = styles[type] || styles.info;
             message.innerHTML = html;
-            message.classList.remove('hidden');
+            message.style.display = 'block';
         }
 
         function setPasswordLoginState(enabled) {
-            if (!passwordLoginFields) return;
+            if (!passwordLoginFields) {
+                return;
+            }
             const controls = passwordLoginFields.querySelectorAll('input, button');
             controls.forEach(function (control) {
                 control.disabled = !enabled;
@@ -317,8 +860,8 @@
             }
             if (passwordLoginSubmitBtn) {
                 passwordLoginSubmitBtn.innerHTML = enabled
-                    ? '<i class="fas fa-right-to-bracket mr-2"></i>Sign In'
-                    : '<i class="fas fa-ban mr-2"></i>Password Sign-In Disabled';
+                    ? '<i class="fas fa-right-to-bracket mr-2" aria-hidden="true"></i>Sign in to portal'
+                    : '<i class="fas fa-ban mr-2" aria-hidden="true"></i>Password sign-in disabled';
             }
         }
 
@@ -345,6 +888,7 @@
                 showMessage('error', 'Portal auth script failed to load.');
                 return;
             }
+
             const config = window.WaterAppsPortalAuth.getConfig();
             renderDiagnostics(config, null);
 
@@ -359,11 +903,7 @@
                     return;
                 }
                 renderDiagnostics(config, callbackResult.error || 'unknown callback failure');
-                showMessage(
-                    'error',
-                    'Cognito sign-in failed: ' + callbackResult.error +
-                    '<br><br>Checks: callback URL in Cognito must include <code>https://www.waterapps.com.au/portal-login.html</code>, user must be confirmed, and app client must allow Authorization Code + PKCE.'
-                );
+                showMessage('error', 'Cognito sign-in failed: ' + callbackResult.error + '<br><br>Checks: callback URL in Cognito must include <code>https://www.waterapps.com.au/portal-login.html</code>, user must be confirmed, and app client must allow Authorization Code + PKCE.');
             } else if (config.previewPasswordLoginEnabled) {
                 const domains = (config.previewAllowedEmailDomains || []).join(', ');
                 showMessage('info', 'Cognito SSO is available. Preview password login is enabled only for approved non-production testing hosts' + (domains ? ' and domains: <code>' + domains + '</code>.' : '.') + '.');
@@ -414,7 +954,9 @@
         if (cognitoPrimaryBtn) {
             cognitoPrimaryBtn.addEventListener('click', startCognitoLogin);
         }
-        googleLoginBtn.addEventListener('click', startGoogleLogin);
+        if (googleLoginBtn) {
+            googleLoginBtn.addEventListener('click', startGoogleLogin);
+        }
 
         form.addEventListener('submit', function (event) {
             event.preventDefault();
@@ -436,6 +978,7 @@
 
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value.trim();
+
             if (!email || !password) {
                 showMessage('error', 'Enter your work email and password.');
                 return;
@@ -449,7 +992,6 @@
             }
 
             if (result && result.reason === 'domain_not_allowed') {
-                const config = window.WaterAppsPortalAuth.getConfig();
                 const domains = (config.previewAllowedEmailDomains || []).join(', ');
                 showMessage('error', 'Email domain not allowed for preview login. Allowed domain(s): <code>' + domains + '</code>.');
                 return;
