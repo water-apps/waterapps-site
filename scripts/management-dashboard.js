@@ -44,6 +44,20 @@
             .replace(/'/g, '&#39;');
     }
 
+    function sanitizeExternalUrl(value) {
+        const raw = String(value || '').trim();
+        if (!raw) return '';
+        try {
+            const parsed = new URL(raw, window.location.origin);
+            if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+                return '';
+            }
+            return parsed.toString();
+        } catch (_error) {
+            return '';
+        }
+    }
+
     function getAuthToken() {
         if (!window.WaterAppsPortalAuth || typeof window.WaterAppsPortalAuth.getTokens !== 'function') {
             return null;
@@ -74,9 +88,12 @@
             const email = escapeHtml(review.email || '');
             const role = escapeHtml(review.role || 'Not provided');
             const company = escapeHtml(review.company || 'Not provided');
-            const linkedin = escapeHtml(review.linkedin || '');
+            const linkedin = sanitizeExternalUrl(review.linkedin || '');
             const rating = escapeHtml(review.rating || 'Not provided');
             const text = escapeHtml(review.review || '');
+            const linkedinMarkup = linkedin
+                ? '<p class="mt-3 text-xs"><a class="text-blue-700 underline" target="_blank" rel="noopener noreferrer" href="' + escapeHtml(linkedin) + '">LinkedIn profile</a></p>'
+                : '<p class="mt-3 text-xs text-slate-500">LinkedIn profile unavailable</p>';
 
             return [
                 '<article class="rounded-xl border border-slate-200 bg-white p-4" data-review-id="', reviewId, '">',
@@ -94,7 +111,7 @@
                 '<div><dt class="text-xs uppercase tracking-wide text-slate-500">Rating</dt><dd>', rating, '</dd></div>',
                 '</dl>',
                 '<p class="mt-3 text-sm text-slate-700 whitespace-pre-wrap">', text, '</p>',
-                '<p class="mt-3 text-xs"><a class="text-blue-700 underline" target="_blank" rel="noopener noreferrer" href="', linkedin, '">LinkedIn profile</a></p>',
+                linkedinMarkup,
                 '<div class="mt-4 flex flex-wrap items-center gap-2">',
                 '<button type="button" class="review-moderate-btn rounded-lg bg-emerald-600 px-3 py-2 text-xs font-semibold text-white hover:bg-emerald-700" data-review-id="', reviewId, '" data-decision="approved">Approve</button>',
                 '<button type="button" class="review-moderate-btn rounded-lg bg-rose-600 px-3 py-2 text-xs font-semibold text-white hover:bg-rose-700" data-review-id="', reviewId, '" data-decision="rejected">Reject</button>',

@@ -8,12 +8,16 @@ const INDEX_JS_PATH = path.join(__dirname, "..", "assets", "js", "index.js");
 const SCHEDULEASE_PATH = path.join(__dirname, "..", "schedulease.html");
 const MANAGEMENT_DASHBOARD_PATH = path.join(__dirname, "..", "management-dashboard.html");
 const MANAGEMENT_DASHBOARD_JS_PATH = path.join(__dirname, "..", "scripts", "management-dashboard.js");
+const PORTAL_LOGIN_PATH = path.join(__dirname, "..", "portal-login.html");
+const PORTAL_AUTH_CONFIG_PATH = path.join(__dirname, "..", "scripts", "portal-auth-config.js");
 
 const indexHtml = fs.readFileSync(INDEX_PATH, "utf8");
 const indexJs = fs.readFileSync(INDEX_JS_PATH, "utf8");
 const scheduleaseHtml = fs.readFileSync(SCHEDULEASE_PATH, "utf8");
 const managementDashboardHtml = fs.readFileSync(MANAGEMENT_DASHBOARD_PATH, "utf8");
 const managementDashboardJs = fs.readFileSync(MANAGEMENT_DASHBOARD_JS_PATH, "utf8");
+const portalLoginHtml = fs.readFileSync(PORTAL_LOGIN_PATH, "utf8");
+const portalAuthConfigJs = fs.readFileSync(PORTAL_AUTH_CONFIG_PATH, "utf8");
 
 test("booking flow critical UI exists on homepage", () => {
     assert.match(indexHtml, /id="booking-form"/);
@@ -87,4 +91,20 @@ test("management dashboard moderation script calls review moderation endpoints",
     assert.match(managementDashboardJs, /\/reviews\/'\s*\+\s*encodeURIComponent\(reviewId\)\s*\+\s*'\/moderate/);
     assert.match(managementDashboardJs, /data-decision="approved"/);
     assert.match(managementDashboardJs, /data-decision="rejected"/);
+});
+
+test("production portal config disables preview password login on live host", () => {
+    assert.match(portalAuthConfigJs, /allowPreviewPasswordLoginOnProduction:\s*false/);
+});
+
+test("portal login page does not publish fallback credentials", () => {
+    assert.doesNotMatch(portalLoginHtml, /Login details to use now/);
+    assert.doesNotMatch(portalLoginHtml, /Fallback password \(temporary\): any 10\+ characters/);
+    assert.doesNotMatch(portalLoginHtml, /Waterapps1234/);
+});
+
+test("management dashboard sanitizes external review profile links", () => {
+    assert.match(managementDashboardJs, /function sanitizeExternalUrl/);
+    assert.match(managementDashboardJs, /parsed\.protocol !== 'http:' && parsed\.protocol !== 'https:'/);
+    assert.match(managementDashboardJs, /LinkedIn profile unavailable/);
 });
