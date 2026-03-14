@@ -8,15 +8,8 @@
     <meta name="robots" content="noindex,nofollow">
     <link rel="canonical" href="https://www.waterapps.com.au/portal-login.html">
     <link rel="icon" type="image/png" href="logo.png">
-    <script>
-        (function enforceCanonicalHost() {
-            var host = window.location.hostname.toLowerCase();
-            if (host === "waterapps.com.au") {
-                window.location.replace("https://www.waterapps.com.au" + window.location.pathname + window.location.search + window.location.hash);
-            }
-        })();
-    </script>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="scripts/portal-login-canonical.js"></script>
+    <link rel="stylesheet" href="assets/css/tailwind.generated.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap');
@@ -39,6 +32,18 @@
 
         * {
             box-sizing: border-box;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .pointer-events-none {
+            pointer-events: none !important;
+        }
+
+        .opacity-50 {
+            opacity: 0.5 !important;
         }
 
         html {
@@ -813,203 +818,6 @@
 
     <script src="scripts/portal-auth-config.js"></script>
     <script src="scripts/portal-auth.js"></script>
-    <script>
-        const form = document.getElementById('portalLoginForm');
-        const message = document.getElementById('formMessage');
-        const ssoPrimaryPanel = document.getElementById('ssoPrimaryPanel');
-        const cognitoPrimaryBtn = document.getElementById('cognitoPrimaryBtn');
-        const secondaryAuthOptions = document.getElementById('secondaryAuthOptions');
-        const passwordLoginFields = document.getElementById('passwordLoginFields');
-        const passwordLoginSubmitBtn = document.getElementById('passwordLoginSubmitBtn');
-        const cognitoLoginBtn = document.getElementById('cognitoLoginBtn');
-        const googleLoginBtn = document.getElementById('googleLoginBtn');
-        const diagHost = document.getElementById('diagHost');
-        const diagCognito = document.getElementById('diagCognito');
-        const diagRedirect = document.getElementById('diagRedirect');
-        const diagFallback = document.getElementById('diagFallback');
-        const diagError = document.getElementById('diagError');
-
-        function showMessage(type, html) {
-            const styles = {
-                error: 'message border border-red-300/25 bg-red-400/10 text-red-100',
-                success: 'message border border-emerald-300/25 bg-emerald-400/10 text-emerald-100',
-                info: 'message border border-cyan-300/25 bg-cyan-400/10 text-cyan-100',
-                warn: 'message border border-amber-300/25 bg-amber-400/10 text-amber-100'
-            };
-            message.className = styles[type] || styles.info;
-            message.innerHTML = html;
-            message.style.display = 'block';
-        }
-
-        function setPasswordLoginState(enabled) {
-            if (!passwordLoginFields) {
-                return;
-            }
-            const controls = passwordLoginFields.querySelectorAll('input, button');
-            controls.forEach(function (control) {
-                control.disabled = !enabled;
-            });
-            passwordLoginFields.classList.toggle('hidden', !enabled);
-            passwordLoginFields.classList.toggle('opacity-50', !enabled);
-            passwordLoginFields.classList.toggle('pointer-events-none', !enabled);
-            if (ssoPrimaryPanel) {
-                ssoPrimaryPanel.classList.toggle('hidden', enabled);
-            }
-            if (secondaryAuthOptions) {
-                secondaryAuthOptions.classList.toggle('hidden', !enabled);
-            }
-            if (passwordLoginSubmitBtn) {
-                passwordLoginSubmitBtn.innerHTML = enabled
-                    ? '<i class="fas fa-right-to-bracket mr-2" aria-hidden="true"></i>Sign in to portal'
-                    : '<i class="fas fa-ban mr-2" aria-hidden="true"></i>Password sign-in disabled';
-            }
-        }
-
-        function renderDiagnostics(config, lastError) {
-            if (diagHost) {
-                diagHost.textContent = window.location.hostname;
-            }
-            if (diagCognito) {
-                diagCognito.textContent = window.WaterAppsPortalAuth && window.WaterAppsPortalAuth.isConfigured() ? 'configured' : 'not configured';
-            }
-            if (diagRedirect) {
-                diagRedirect.textContent = config && config.redirectUri ? config.redirectUri : 'not set';
-            }
-            if (diagFallback) {
-                diagFallback.textContent = config && config.previewPasswordLoginEnabled ? 'enabled' : 'disabled';
-            }
-            if (diagError) {
-                diagError.textContent = lastError || 'none';
-            }
-        }
-
-        async function initPortalLogin() {
-            if (!window.WaterAppsPortalAuth) {
-                showMessage('error', 'Portal auth script failed to load.');
-                return;
-            }
-
-            const config = window.WaterAppsPortalAuth.getConfig();
-            renderDiagnostics(config, null);
-
-            const callbackResult = await window.WaterAppsPortalAuth.handleCallbackIfPresent().catch(function (error) {
-                return { handled: true, success: false, error: error.message || String(error) };
-            });
-
-            if (callbackResult && callbackResult.handled) {
-                if (callbackResult.success) {
-                    showMessage('success', 'Cognito sign-in successful. Redirecting to dashboard...');
-                    window.location.assign(callbackResult.redirectPath || 'management-dashboard.html');
-                    return;
-                }
-                renderDiagnostics(config, callbackResult.error || 'unknown callback failure');
-                showMessage('error', 'Cognito sign-in failed: ' + callbackResult.error + '<br><br>Checks: callback URL in Cognito must include <code>https://www.waterapps.com.au/portal-login.html</code>, user must be confirmed, and app client must allow Authorization Code + PKCE.');
-            } else if (config.previewPasswordLoginEnabled) {
-                const domains = (config.previewAllowedEmailDomains || []).join(', ');
-                showMessage('info', 'Cognito SSO is available. Preview password login is enabled only for approved non-production testing hosts' + (domains ? ' and domains: <code>' + domains + '</code>.' : '.') + '.');
-                setPasswordLoginState(true);
-            } else if (window.WaterAppsPortalAuth.isConfigured()) {
-                showMessage('info', 'Production sign-in uses Cognito SSO. Continue with Cognito to authenticate.');
-                setPasswordLoginState(false);
-            } else {
-                showMessage('warn', 'No active authentication method configured. Enable Cognito or preview password login in <code>scripts/portal-auth-config.js</code>.');
-                setPasswordLoginState(false);
-            }
-        }
-
-        function startCognitoLogin() {
-            if (!window.WaterAppsPortalAuth || !window.WaterAppsPortalAuth.isConfigured()) {
-                showMessage('warn', 'Cognito is not configured yet. Update <code>scripts/portal-auth-config.js</code> first.');
-                return;
-            }
-            window.WaterAppsPortalAuth.startLogin({ postLoginRedirect: '/management-dashboard.html' })
-                .catch(function (error) {
-                    const config = window.WaterAppsPortalAuth.getConfig();
-                    renderDiagnostics(config, error.message || String(error));
-                    showMessage('error', 'Unable to start Cognito login: ' + (error.message || String(error)));
-                });
-        }
-
-        function startGoogleLogin() {
-            if (!window.WaterAppsPortalAuth || !window.WaterAppsPortalAuth.isConfigured()) {
-                showMessage('warn', 'Cognito is not configured yet. Update <code>scripts/portal-auth-config.js</code> first.');
-                return;
-            }
-
-            const config = window.WaterAppsPortalAuth.getConfig();
-            if (!config.googleLoginEnabled) {
-                showMessage('warn', 'Google login is not enabled yet. Enable Google IdP in Cognito first.');
-                return;
-            }
-
-            window.WaterAppsPortalAuth.startLogin({
-                postLoginRedirect: '/management-dashboard.html',
-                identityProvider: 'Google'
-            }).catch(function (error) {
-                showMessage('error', 'Unable to start Google login: ' + (error.message || String(error)));
-            });
-        }
-
-        cognitoLoginBtn.addEventListener('click', startCognitoLogin);
-        if (cognitoPrimaryBtn) {
-            cognitoPrimaryBtn.addEventListener('click', startCognitoLogin);
-        }
-        if (googleLoginBtn) {
-            googleLoginBtn.addEventListener('click', startGoogleLogin);
-        }
-
-        form.addEventListener('submit', function (event) {
-            event.preventDefault();
-
-            if (!window.WaterAppsPortalAuth) {
-                showMessage('error', 'Portal auth script failed to load.');
-                return;
-            }
-
-            const config = window.WaterAppsPortalAuth.getConfig();
-            if (!config.previewPasswordLoginEnabled) {
-                if (window.WaterAppsPortalAuth.isConfigured()) {
-                    startCognitoLogin();
-                } else {
-                    showMessage('warn', 'Password sign-in is disabled and Cognito is not fully configured.');
-                }
-                return;
-            }
-
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value.trim();
-
-            if (!email || !password) {
-                showMessage('error', 'Enter your work email and password.');
-                return;
-            }
-
-            const result = window.WaterAppsPortalAuth.signInWithPassword(email, password);
-            if (result && result.success) {
-                showMessage('success', 'Sign-in successful. Redirecting to dashboard...');
-                window.location.assign(result.redirectPath || 'management-dashboard.html');
-                return;
-            }
-
-            if (result && result.reason === 'domain_not_allowed') {
-                const domains = (config.previewAllowedEmailDomains || []).join(', ');
-                showMessage('error', 'Email domain not allowed for preview login. Allowed domain(s): <code>' + domains + '</code>.');
-                return;
-            }
-
-            if (result && result.reason === 'disabled') {
-                if (window.WaterAppsPortalAuth.isConfigured()) {
-                    startCognitoLogin();
-                    return;
-                }
-                showMessage('warn', 'Password sign-in is disabled and Cognito is not fully configured.');
-                return;
-            }
-
-            showMessage('error', 'Invalid credentials for preview login. Use an approved WaterApps test account and a password with at least 10 characters.');
-        });
-
-        initPortalLogin();
-    </script>
+    <script src="scripts/portal-login-page.js"></script>
 </body>
 </html>
