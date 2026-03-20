@@ -5,8 +5,15 @@ on:
     branches: [main]
   pull_request:
 
+concurrency:
+  group: site-quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 jobs:
   author-email-guard:
@@ -17,6 +24,12 @@ jobs:
 
   checks:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+    env:
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
@@ -29,17 +42,8 @@ jobs:
       - name: Run static site quality checks
         run: ./scripts/check-site.sh
 
-      - name: Setup Node.js
-        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
-        with:
-          node-version: "24"
-          cache: "npm"
-
       - name: Install dependencies
-        run: npm ci
-
-      - name: Install Playwright browser
-        run: npx playwright install --with-deps chromium
+        run: npm ci --prefer-offline --no-audit
 
       - name: Run functional smoke tests (release gate)
         run: node --test tests/functional-smoke.test.js
@@ -47,34 +51,72 @@ jobs:
       - name: Run Playwright e2e tests (release gate)
         run: npx playwright test --project=chromium
 
+      - name: Upload Playwright HTML report
+        if: always()
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
+        with:
+          name: playwright-report
+          path: playwright-report/
+          if-no-files-found: warn
+
   portal-auth-tests:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    container:
+      image: node:24-bookworm-slim
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           persist-credentials: false
-
-      - name: Setup Node.js
-        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
-        with:
-          node-version: "24"
 
       - name: Run portal auth unit tests
         run: node --test tests/portal-auth.test.js
 
   booking-availability-tests:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    container:
+      image: node:24-bookworm-slim
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           persist-credentials: false
 
-      - name: Setup Node.js
-        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
-        with:
-          node-version: "24"
-
       - name: Run booking availability unit tests
         run: node --test tests/booking-availability.test.js
+
+  ci-context:
+    if: always()
+    needs:
+      - checks
+      - portal-auth-tests
+      - booking-availability-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    container:
+      image: python:3.11-slim-bookworm
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          persist-credentials: false
+
+      - name: Generate MCP-ready CI context
+        run: |
+          python3 scripts/generate_ci_context.py \
+            --checks-result "${{ needs.checks.result }}" \
+            --portal-auth-result "${{ needs.portal-auth-tests.result }}" \
+            --booking-availability-result "${{ needs.booking-availability-tests.result }}" \
+            --output-dir artifacts/ci-context
+
+      - name: Publish CI context summary
+        run: cat artifacts/ci-context/site-quality-context.md >> "${GITHUB_STEP_SUMMARY}"
+
+      - name: Upload CI context artifact
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
+        with:
+          name: site-quality-context
+          path: artifacts/ci-context/
+          if-no-files-found: error

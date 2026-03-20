@@ -1,7 +1,7 @@
 # Release Testing Policy
 
-Status: Active  
-Last updated: 2026-03-07  
+Status: Active
+Last updated: 2026-03-20
 Owner: Website Engineering
 
 ## Mandatory Rule
@@ -30,6 +30,10 @@ The `checks` job must include:
 1. `scripts/check-site.sh`
 2. `tests/functional-smoke.test.js`
 3. Playwright e2e tests (`tests/e2e/*.spec.js`) against a local web server
+4. Playwright HTML artifact upload on every CI run
+5. Containerized execution using the Playwright Docker image to avoid per-run browser bootstrap drift
+
+The CI workflow must also publish an MCP-ready quality context artifact so downstream agent/reporting workflows can consume release status without scraping raw logs.
 
 The `zap-baseline` job must:
 
