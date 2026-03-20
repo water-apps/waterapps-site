@@ -1,0 +1,13 @@
+{
+  "$schema": "https://html-validate.org/schemas/config.json",
+  "extends": [
+    "html-validate:standard",
+    "html-validate:a11y",
+    "html-validate:document"
+  ],
+  "rules": {
+    "require-sri": "off",
+    "no-raw-characters": "off",
+    "prefer-native-element": "off"
+  }
+}
