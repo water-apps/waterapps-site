@@ -77,3 +77,23 @@ jobs:
 
       - name: Run booking availability unit tests
         run: node --test tests/booking-availability.test.js
+
+
+  accessibility-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+        with:
+          node-version: "24"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run accessibility validation
+        run: npm run test:accessibility
