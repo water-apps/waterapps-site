@@ -1,7 +1,7 @@
 # Release Testing Policy
 
 Status: Active  
-Last updated: 2026-03-07  
+Last updated: 2026-03-20  
 Owner: Website Engineering
 
 ## Mandatory Rule
@@ -15,7 +15,8 @@ If functional testing is not complete, release is blocked.
 All pull requests to `main` must pass:
 
 1. `author-email-guard`
-1. `checks` workflow job
+2. `checks` workflow job
+3. `accessibility-checks`
 2. `portal-auth-tests`
 3. `booking-availability-tests`
 4. `zap-baseline`
@@ -36,6 +37,12 @@ The `zap-baseline` job must:
 1. Scan the pull request build against a local web server before merge.
 2. Scan `https://www.waterapps.com.au` weekly for drift and production regressions.
 3. Upload report artifacts on every run.
+
+The `accessibility-checks` job must:
+
+1. Run `html-validate` against all root HTML pages.
+2. Fail on accessibility-related markup regressions before merge.
+3. Enforce the repository accessibility baseline through `.htmlvalidate.json`.
 
 ## Required Functional Coverage (Minimum)
 
@@ -58,6 +65,7 @@ npm run test:functional-smoke
 npm run test:playwright
 npm run test:booking-availability
 npm run test:portal-auth
+npm run test:accessibility
 ```
 
 ## Post-Deploy Smoke Validation
