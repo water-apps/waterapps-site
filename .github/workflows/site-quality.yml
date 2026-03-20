@@ -13,6 +13,7 @@ jobs:
     uses: water-apps/waterapps-05-cicd-workflows/.github/workflows/commit-author-guard.yml@main
     with:
       allowed_emails: "varun.kaushik.au@gmail.com,varun@waterapps.com.au,65931645+vk103365@users.noreply.github.com"
+      allowed_actors: "vkaushik13"
 
   checks:
     runs-on: ubuntu-latest
