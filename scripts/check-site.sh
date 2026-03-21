@@ -20,10 +20,15 @@ required_files=(
   "terms.html"
   "enterprise-readiness.html"
   "schedulease.html"
+  "service-overview.html"
+  "reference-architecture.html"
   "portal-login.html"
   "robots.txt"
   "sitemap.xml"
   "CNAME"
+  "assets/docs/capability-statement.pdf"
+  "assets/docs/service-overview.pdf"
+  "assets/docs/reference-architecture.pdf"
 )
 
 for f in "${required_files[@]}"; do
@@ -32,11 +37,14 @@ done
 pass "required files present"
 
 # Basic HTML closing tag sanity (cheap guard against accidental truncation)
-for f in index.html privacy.html terms.html enterprise-readiness.html schedulease.html portal-login.html management-dashboard.html; do
+for f in index.html privacy.html terms.html enterprise-readiness.html schedulease.html service-overview.html reference-architecture.html portal-login.html management-dashboard.html; do
   tail -20 "$f" | grep -q '</html>' || fail "$f missing closing </html>"
   tail -20 "$f" | grep -q '</body>' || fail "$f missing closing </body>"
 done
 pass "html files close correctly"
+
+grep -q 'assets/docs/capability-statement.pdf' capability-statement-download.html || fail "Expected capability statement download route to use assets/docs path"
+pass "public document download path is wired"
 
 # Internal href targets (local html files + anchors) in index page
 while IFS= read -r href; do
