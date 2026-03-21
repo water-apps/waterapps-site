@@ -14,13 +14,13 @@ permissions:
 
 jobs:
   author-email-guard:
-    uses: water-apps/waterapps-05-cicd-workflows/.github/workflows/commit-author-guard.yml@main
+    uses: water-apps/waterapps-05-cicd-workflows/.github/workflows/commit-author-guard.yml@d220f5dae0e8b8b7cf7803b4ad0aa6b25f7194c4
     with:
       allowed_emails: "varun.kaushik.au@gmail.com,varun@waterapps.com.au,65931645+vk103365@users.noreply.github.com"
       allowed_actors: "vkaushik13"
 
   checks:
-    uses: water-apps/waterapps-05-cicd-workflows/.github/workflows/static-site-quality.yml@main
+    uses: water-apps/waterapps-05-cicd-workflows/.github/workflows/static-site-quality.yml@d220f5dae0e8b8b7cf7803b4ad0aa6b25f7194c4
     with:
       check_script: scripts/check-site.sh
 
