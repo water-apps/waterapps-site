@@ -63,6 +63,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.waterapps.com.au/insights-gitops-regulated-releases.html</loc>
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.waterapps.com.au/quality-engineering.html</loc>
     <lastmod>2026-02-24</lastmod>
     <changefreq>monthly</changefreq>
