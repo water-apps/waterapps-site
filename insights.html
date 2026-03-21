@@ -63,27 +63,27 @@
             <article class="insights-latest-card bg-white rounded-xl border border-gray-200 p-8 shadow-sm">
                 <div class="grid lg:grid-cols-2 gap-8 items-start">
                     <div>
-                        <div class="text-xs font-semibold uppercase tracking-wide text-blue-600 mb-3">New Infrastructure as Code</div>
-                        <h3 class="text-3xl font-bold mb-3">Beyond the "Apply" Button: Lessons from 300,000 Lines of Infrastructure Code</h3>
+                        <div class="text-xs font-semibold uppercase tracking-wide text-blue-600 mb-3">New Azure / Kubernetes</div>
+                        <h3 class="text-3xl font-bold mb-3">AKS Scaling in Enterprise Environments: Tools, Architecture, and What Actually Breaks</h3>
                         <p class="text-gray-700 mb-4">
-                            What changes when Terraform and IaC stop being a few scripts and become a software product in their own right: state discipline, module boundaries, testing, versioned releases, and the engineering habits that keep large estates stable.
+                            A design-led view of the current AKS scaling stack, the policy and scheduling issues that really break scaling, and a generalized field example of resolving a non-prod bottleneck in two focused days.
                         </p>
                         <ul class="list-disc pl-6 text-sm text-gray-700 space-y-1 mb-6">
-                            <li>Why provider behavior and state handling matter as much as syntax</li>
-                            <li>How to find the right service-oriented module boundary</li>
-                            <li>What an actual infrastructure testing pyramid looks like</li>
+                            <li>Cluster Autoscaler, HPA, KEDA, VPA, NAP, and AKS Automatic in one practical model</li>
+                            <li>Why admission control, zones, and workload intent matter more than tool toggles</li>
+                            <li>How WaterApps approaches diagnosis, fix, and documentation</li>
                         </ul>
                         <div class="flex flex-col sm:flex-row gap-3">
-                            <a href="insights-beyond-apply-button-infrastructure-code.html" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg font-semibold text-center">Read the New Article</a>
-                            <a href="insights-terraform-apra-regulated.html" class="bg-gray-100 hover:bg-gray-200 text-gray-900 px-5 py-3 rounded-lg font-semibold text-center">Compare with Terraform Governance</a>
+                            <a href="insights-aks-scaling-enterprise.html" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg font-semibold text-center">Read the New Article</a>
+                            <a href="index.html#contact" class="bg-gray-100 hover:bg-gray-200 text-gray-900 px-5 py-3 rounded-lg font-semibold text-center">Discuss a Similar AKS Problem</a>
                         </div>
                     </div>
                     <div class="insights-latest-side rounded-xl p-6">
                         <h4 class="text-lg font-semibold mb-3">Reader Paths</h4>
                         <div class="space-y-4 text-sm">
                             <div>
-                                <div class="font-semibold text-gray-900">If you care about release safety</div>
-                                <a href="insights-test-automation-regulated-cicd.html" class="text-blue-600 hover:text-blue-700">Read the regulated CI/CD testing article</a>
+                                <div class="font-semibold text-gray-900">If you care about platform scaling</div>
+                                <a href="insights-sas-viya-aks-phase00-infrastructure.html" class="text-blue-600 hover:text-blue-700">Read the SAS Viya on AKS platform article</a>
                             </div>
                             <div>
                                 <div class="font-semibold text-gray-900">If you care about module design</div>
@@ -125,7 +125,7 @@
             </div>
 
             <div class="insights-browser-status mt-5">
-                <p class="text-sm text-gray-600"><span id="insights-results-count">13</span> published articles</p>
+                <p class="text-sm text-gray-600"><span id="insights-results-count">14</span> published articles</p>
             </div>
         </section>
 
@@ -137,6 +137,18 @@
                 </div>
             </div>
             <div class="grid md:grid-cols-2 gap-6" data-insights-catalog>
+                <article class="insight-card bg-white rounded-xl border border-gray-200 p-6" data-topic="platform-engineering cloud-security" data-keywords="aks kubernetes scaling cluster autoscaler hpa keda vpa nap automatic kyverno zones scheduling">
+                    <div class="insight-card-topic">Azure / Kubernetes</div>
+                    <h3 class="text-xl font-semibold mb-2">AKS Scaling in Enterprise Environments: Tools, Architecture, and What Actually Breaks</h3>
+                    <p class="text-gray-700 text-sm mb-4">
+                        A practical AKS scaling article covering the current toolset, architecture decisions, and the policy or scheduling issues that often cause real scaling failures.
+                    </p>
+                    <div class="insight-card-footer">
+                        <span class="insight-card-meta">New</span>
+                        <a href="insights-aks-scaling-enterprise.html" class="text-blue-600 font-semibold hover:text-blue-700">Read Article &rarr;</a>
+                    </div>
+                </article>
+
                 <article class="insight-card bg-white rounded-xl border border-gray-200 p-6" data-topic="infrastructure-code delivery-governance" data-keywords="terraform infrastructure as code iac state modules testing release engineering brikman packer terratest">
                     <div class="insight-card-topic">Infrastructure as Code</div>
                     <h3 class="text-xl font-semibold mb-2">Beyond the "Apply" Button: Lessons from 300,000 Lines of Infrastructure Code</h3>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AKS Scaling in Enterprise Environments: Tools, Architecture, and What Actually Breaks | WaterApps</title>
+    <meta name="description" content="A practical WaterApps architecture article on AKS scaling: Cluster Autoscaler, HPA, KEDA, VPA, Node Autoprovisioning, AKS Automatic, and the policy or scheduling issues that often break scaling in enterprise environments.">
+    <link rel="canonical" href="https://www.waterapps.com.au/insights-aks-scaling-enterprise.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="AKS Scaling in Enterprise Environments: Tools, Architecture, and What Actually Breaks | WaterApps">
+    <meta property="og:description" content="A design-led look at AKS scaling, including current tools, architecture trade-offs, and a generalized field example from an enterprise environment.">
+    <meta property="og:url" content="https://www.waterapps.com.au/insights-aks-scaling-enterprise.html">
+    <meta property="og:image" content="https://www.waterapps.com.au/logo.png">
+    <meta property="og:image:alt" content="WaterApps logo">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="AKS Scaling in Enterprise Environments: Tools, Architecture, and What Actually Breaks | WaterApps">
+    <meta name="twitter:description" content="A practical AKS scaling article for enterprise platform teams, covering tools, architecture, and common failure patterns.">
+    <meta name="twitter:image" content="https://www.waterapps.com.au/logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="assets/css/tailwind.generated.css">
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="mb-8">
+            <a href="insights.html" class="text-blue-600 hover:text-blue-700 text-sm">&larr; Back to Insights</a>
+            <div class="mt-4 flex flex-wrap items-center gap-3 text-sm">
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-semibold">Azure / Kubernetes</span>
+                <span class="bg-slate-100 text-slate-700 px-3 py-1 rounded-full font-semibold">Architecture Article</span>
+                <span class="text-slate-500">Published: March 22, 2026</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold mt-4 mb-4 leading-tight">AKS Scaling in Enterprise Environments: Tools, Architecture, and What Actually Breaks</h1>
+            <p class="text-xl text-slate-600 max-w-4xl">
+                Most AKS scaling issues are not caused by a missing autoscaler. They come from the architecture around the autoscaler: node-pool intent, policy layers, workload placement, and the reality of how scaling is tested in controlled environments.
+            </p>
+        </div>
+
+        <section class="grid lg:grid-cols-[1.1fr_0.9fr] gap-6 mb-8">
+            <article class="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
+                <h2 class="text-2xl font-semibold mb-4">Why this matters</h2>
+                <p class="text-slate-700 mb-4">
+                    Enterprise platform teams often enable AKS scaling features but still see workloads stall, schedule inconsistently, or scale into the wrong place. That creates operational ambiguity exactly where the team expects automation to reduce it.
+                </p>
+                <p class="text-slate-700">
+                    For regulated or control-heavy environments, predictable scaling matters because release confidence, environment consistency, and incident response all depend on the platform behaving in a way the team can explain.
+                </p>
+            </article>
+
+            <aside class="bg-slate-900 text-white rounded-3xl p-8">
+                <h2 class="text-2xl font-semibold mb-4">WaterApps view</h2>
+                <ul class="space-y-3 text-slate-200">
+                    <li><strong class="text-white">Tools are necessary,</strong> but they are not the hard part anymore.</li>
+                    <li><strong class="text-white">Architecture and policy fit</strong> determine whether scaling works under real load.</li>
+                    <li><strong class="text-white">Documentation matters</strong> because scaling fixes need to survive handover and the next environment test.</li>
+                </ul>
+            </aside>
+        </section>
+
+        <section class="bg-white rounded-3xl border border-slate-200 p-8 mb-8 shadow-sm">
+            <div class="flex items-center justify-between gap-4 mb-6">
+                <div>
+                    <div class="text-xs uppercase tracking-[0.18em] text-blue-700 font-semibold mb-2">Reference Architecture</div>
+                    <h2 class="text-2xl font-semibold">A simple design model for AKS scaling</h2>
+                </div>
+            </div>
+            <div class="grid md:grid-cols-3 gap-4 mb-4">
+                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                    <div class="text-xs uppercase tracking-wide text-slate-500 font-semibold mb-2">Workload Layer</div>
+                    <h3 class="font-semibold text-slate-900 mb-2">HPA or KEDA</h3>
+                    <p class="text-sm text-slate-700">Scale pods from resource pressure or events, based on how the application really behaves.</p>
+                </div>
+                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                    <div class="text-xs uppercase tracking-wide text-slate-500 font-semibold mb-2">Placement Layer</div>
+                    <h3 class="font-semibold text-slate-900 mb-2">Node pools, zones, priorities</h3>
+                    <p class="text-sm text-slate-700">Translate workload intent into node-pool design, taints, labels, and zone alignment.</p>
+                </div>
+                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                    <div class="text-xs uppercase tracking-wide text-slate-500 font-semibold mb-2">Control Layer</div>
+                    <h3 class="font-semibold text-slate-900 mb-2">Policies and guardrails</h3>
+                    <p class="text-sm text-slate-700">Admission control and workload rules must support scaling decisions instead of quietly blocking them.</p>
+                </div>
+            </div>
+            <div class="grid md:grid-cols-3 gap-4">
+                <div class="rounded-2xl border border-slate-200 bg-blue-50 p-5">
+                    <div class="text-xs uppercase tracking-wide text-blue-700 font-semibold mb-2">Node Scaling</div>
+                    <h3 class="font-semibold text-slate-900 mb-2">Cluster Autoscaler</h3>
+                    <p class="text-sm text-slate-700">Increase or reduce node capacity when pending pods or idle capacity warrant it.</p>
+                </div>
+                <div class="rounded-2xl border border-slate-200 bg-blue-50 p-5">
+                    <div class="text-xs uppercase tracking-wide text-blue-700 font-semibold mb-2">Resource Shape</div>
+                    <h3 class="font-semibold text-slate-900 mb-2">VPA and right-sizing</h3>
+                    <p class="text-sm text-slate-700">Tune pod requests and limits so scheduling reflects actual needs rather than guessed capacity.</p>
+                </div>
+                <div class="rounded-2xl border border-slate-200 bg-blue-50 p-5">
+                    <div class="text-xs uppercase tracking-wide text-blue-700 font-semibold mb-2">Feedback Loop</div>
+                    <h3 class="font-semibold text-slate-900 mb-2">Observability and tests</h3>
+                    <p class="text-sm text-slate-700">Validate scale-up behavior, placement, and policy interactions under realistic conditions.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-3xl border border-slate-200 p-8 mb-8 shadow-sm">
+            <h2 class="text-2xl font-semibold mb-5">Current AKS scaling toolset</h2>
+            <div class="grid md:grid-cols-2 gap-5">
+                <article class="rounded-2xl border border-slate-200 p-5">
+                    <h3 class="font-semibold text-slate-900 mb-2">Cluster Autoscaler</h3>
+                    <p class="text-sm text-slate-700">Scales node pools up and down based on pending pods and unused capacity. This is still the core starting point for node capacity management in AKS.</p>
+                </article>
+                <article class="rounded-2xl border border-slate-200 p-5">
+                    <h3 class="font-semibold text-slate-900 mb-2">Horizontal Pod Autoscaler (HPA)</h3>
+                    <p class="text-sm text-slate-700">Scales replica count from CPU or memory metrics and remains the default workload-level scaler for many enterprise applications.</p>
+                </article>
+                <article class="rounded-2xl border border-slate-200 p-5">
+                    <h3 class="font-semibold text-slate-900 mb-2">KEDA</h3>
+                    <p class="text-sm text-slate-700">Adds event-driven scaling for queues, HTTP traffic, and messaging patterns that resource-only scaling does not capture well.</p>
+                </article>
+                <article class="rounded-2xl border border-slate-200 p-5">
+                    <h3 class="font-semibold text-slate-900 mb-2">Vertical Pod Autoscaler (VPA)</h3>
+                    <p class="text-sm text-slate-700">Adjusts pod requests and limits automatically, which helps teams reduce waste and improve scheduling accuracy.</p>
+                </article>
+                <article class="rounded-2xl border border-slate-200 p-5">
+                    <h3 class="font-semibold text-slate-900 mb-2">Node Autoprovisioning (NAP)</h3>
+                    <p class="text-sm text-slate-700">Creates node shapes dynamically instead of relying only on a fixed set of pre-created node pools, which is useful when workloads vary sharply.</p>
+                </article>
+                <article class="rounded-2xl border border-slate-200 p-5">
+                    <h3 class="font-semibold text-slate-900 mb-2">AKS Automatic</h3>
+                    <p class="text-sm text-slate-700">Bundles more of the operational management around scaling, node handling, and platform behavior into a more managed model.</p>
+                </article>
+            </div>
+            <p class="text-sm text-slate-600 mt-5">
+                Practical default for most enterprise AKS environments: start with HPA plus Cluster Autoscaler, add KEDA for event-driven workloads, and evaluate NAP or AKS Automatic where greenfield platform design justifies more automation.
+            </p>
+        </section>
+
+        <section class="bg-slate-900 text-white rounded-3xl p-8 mb-8">
+            <div class="text-xs uppercase tracking-[0.18em] text-blue-300 font-semibold mb-2">Generalized field example</div>
+            <h2 class="text-3xl font-semibold mb-4">When scaling looks broken, the issue is often around the autoscaler rather than inside it</h2>
+            <p class="text-slate-200 mb-5">
+                In one enterprise non-production AKS environment, workloads were not scaling into the intended zone even though the core scaling components were already present. The platform looked close to correct on paper, but actual behavior under test said otherwise.
+            </p>
+            <div class="grid md:grid-cols-3 gap-4">
+                <div class="rounded-2xl bg-white/10 border border-white/10 p-5">
+                    <div class="text-xs uppercase tracking-wide text-blue-200 font-semibold mb-2">Observed issue</div>
+                    <p class="text-sm text-slate-100">Node-pool scale-up and workload placement were not behaving predictably in non-prod.</p>
+                </div>
+                <div class="rounded-2xl bg-white/10 border border-white/10 p-5">
+                    <div class="text-xs uppercase tracking-wide text-blue-200 font-semibold mb-2">Root cause</div>
+                    <p class="text-sm text-slate-100">Admission control plus a missing configuration value affecting zone-based scheduling.</p>
+                </div>
+                <div class="rounded-2xl bg-white/10 border border-white/10 p-5">
+                    <div class="text-xs uppercase tracking-wide text-blue-200 font-semibold mb-2">Effort</div>
+                    <p class="text-sm text-slate-100">Two focused days to isolate, correct, validate, and document.</p>
+                </div>
+            </div>
+            <p class="text-xs text-slate-300 mt-5">
+                Details are generalized to respect confidentiality obligations, but the pattern is real and common across enterprise Kubernetes platforms.
+            </p>
+        </section>
+
+        <section class="bg-white rounded-3xl border border-slate-200 p-8 mb-8 shadow-sm">
+            <h2 class="text-2xl font-semibold mb-4">Implementation snapshot</h2>
+            <ul class="list-disc pl-6 text-slate-700 space-y-2">
+                <li>Enabled Cluster Autoscaler and moved away from manual-only scaling</li>
+                <li>Updated the autoscaler expander profile to align with intended node-pool selection</li>
+                <li>Applied and verified required configuration changes</li>
+                <li>Validated the existing policy layer for workload scheduling behavior</li>
+                <li>Retested in the development cluster and sandbox namespace before broader rollout</li>
+            </ul>
+        </section>
+
+        <section class="bg-white rounded-3xl border border-slate-200 p-8 mb-8 shadow-sm">
+            <h2 class="text-2xl font-semibold mb-4">What we learned</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <article>
+                    <h3 class="font-semibold text-slate-900 mb-2">1. Scaling is architecture, not just configuration</h3>
+                    <p class="text-slate-700 text-sm">The autoscaler can only make useful decisions when node pools, labels, taints, zones, and workload rules already express the intended behavior clearly.</p>
+                </article>
+                <article>
+                    <h3 class="font-semibold text-slate-900 mb-2">2. Policy layers can become invisible bottlenecks</h3>
+                    <p class="text-slate-700 text-sm">Admission control and workload policies often look unrelated to scaling until they quietly prevent the placement the autoscaler is trying to create.</p>
+                </article>
+                <article>
+                    <h3 class="font-semibold text-slate-900 mb-2">3. Non-prod tests should still reflect real scaling paths</h3>
+                    <p class="text-slate-700 text-sm">If the non-production design hides or distorts the intended node-pool behavior, teams learn the wrong lessons before production.</p>
+                </article>
+                <article>
+                    <h3 class="font-semibold text-slate-900 mb-2">4. Documentation is part of the fix</h3>
+                    <p class="text-slate-700 text-sm">A good resolution leaves behind the context needed for the next engineer or the next test run, not just a one-time config correction.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="bg-blue-900 text-white rounded-3xl p-8">
+            <h2 class="text-2xl font-semibold mb-3">Closing thought</h2>
+            <p class="text-blue-100 mb-6">
+                If AKS scaling only works "most of the time," that usually means the surrounding architecture still needs attention. The fastest route to stable scaling is not to add more tools. It is to make the current stack easier to understand, test, and explain.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a href="index.html#contact" class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-lg font-semibold text-center">Discuss Your AKS Platform</a>
+                <a href="insights.html" class="bg-white text-slate-900 px-6 py-3 rounded-lg font-semibold text-center hover:bg-slate-100">Explore More Insights</a>
+            </div>
+            <p class="text-xs text-blue-200 mt-5">
+                This article is informed by current AKS scaling capabilities documented by Microsoft, including Cluster Autoscaler, HPA, KEDA, VPA, Node Autoprovisioning, and AKS Automatic.
+            </p>
+        </section>
+    </main>
+</body>
+</html>
