@@ -315,12 +315,12 @@
                         Enterprise platform delivery for control-heavy environments
                     </div>
                     <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-                        Ship faster with
+                        Reduce release risk with
                         <span class="display-accent text-blue-200">clear architecture</span>
                         and audit-ready delivery.
                     </h1>
                     <p class="text-xl text-blue-100 mb-8 leading-relaxed max-w-2xl">
-                        WaterApps helps banks, government, and enterprise teams modernize delivery platforms, release pipelines, and cloud infrastructure without losing traceability, security gates, or operational confidence.
+                        WaterApps helps banks, government, and enterprise platform teams fix release bottlenecks, environment drift, and Kubernetes delivery risk without losing traceability, security gates, or operational confidence.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4 mb-8">
                         <a href="#contact" class="bg-blue-500 hover:bg-blue-600 text-white px-8 py-4 rounded-xl font-semibold text-center transition shadow-lg">
@@ -492,6 +492,65 @@
                 <p class="text-gray-800">
                     <strong>What this means in practice:</strong> you get strategic platform thinking and hands-on execution in the same engagement, with delivery discipline that fits enterprise change control and audit expectations.
                 </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Spotlight Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-8 items-stretch">
+                <article class="insight-spotlight-card rounded-3xl p-8 md:p-10">
+                    <div class="flex flex-wrap items-center gap-3 mb-4">
+                        <span class="insight-pill">Architecture Insight</span>
+                        <span class="text-sm text-gray-500">New this week</span>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">AKS scaling works best when the architecture is clear before the autoscaler is enabled.</h2>
+                    <p class="text-lg text-gray-700 mb-6 max-w-3xl">
+                        The most common AKS scaling failures are not tool gaps. They come from policy conflicts, weak node-pool design, and missing scheduling values that only show up when real workloads need to scale.
+                    </p>
+                    <div class="grid md:grid-cols-3 gap-4 mb-6">
+                        <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4">
+                            <div class="text-xs uppercase tracking-wide text-blue-700 font-semibold mb-2">Problem</div>
+                            <p class="text-sm text-gray-700">Non-prod workloads were not scaling predictably into the intended zone.</p>
+                        </div>
+                        <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4">
+                            <div class="text-xs uppercase tracking-wide text-blue-700 font-semibold mb-2">Root Cause</div>
+                            <p class="text-sm text-gray-700">Admission control plus a missing scheduling value created a hidden placement bottleneck.</p>
+                        </div>
+                        <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4">
+                            <div class="text-xs uppercase tracking-wide text-blue-700 font-semibold mb-2">Outcome</div>
+                            <p class="text-sm text-gray-700">The issue was isolated, corrected, and documented in two focused days.</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <a href="insights-aks-scaling-enterprise.html" class="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold">
+                            Read the AKS Scaling Article
+                        </a>
+                        <a href="#case-studies" class="inline-flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-900 px-6 py-3 rounded-xl font-semibold">
+                            See Delivery Examples
+                        </a>
+                    </div>
+                </article>
+
+                <aside class="bg-gray-900 text-white rounded-3xl p-8 md:p-10">
+                    <div class="text-xs uppercase tracking-[0.18em] text-blue-300 font-semibold mb-3">What the article covers</div>
+                    <h3 class="text-2xl font-bold mb-5">A design-led view of AKS scaling for enterprise teams</h3>
+                    <div class="grid gap-4">
+                        <div class="hero-mini-card rounded-2xl p-5">
+                            <h4 class="text-lg font-semibold text-white mb-2">Current AKS scaling stack</h4>
+                            <p class="text-sm text-blue-100">Cluster Autoscaler, HPA, KEDA, VPA, Node Autoprovisioning, and AKS Automatic in one practical decision model.</p>
+                        </div>
+                        <div class="hero-mini-card rounded-2xl p-5">
+                            <h4 class="text-lg font-semibold text-white mb-2">Architecture before configuration</h4>
+                            <p class="text-sm text-blue-100">Why node pools, zones, policy layers, and workload intent matter more than simply turning autoscaling on.</p>
+                        </div>
+                        <div class="hero-mini-card rounded-2xl p-5">
+                            <h4 class="text-lg font-semibold text-white mb-2">Implementation with evidence</h4>
+                            <p class="text-sm text-blue-100">A generalized field example showing how WaterApps diagnoses bottlenecks, fixes the right layer, and leaves documentation behind.</p>
+                        </div>
+                    </div>
+                </aside>
             </div>
         </div>
     </section>
@@ -846,6 +905,46 @@
             </div>
 
             <div class="space-y-8">
+                <div class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white rounded-3xl p-8 md:p-10">
+                    <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8">
+                        <div class="max-w-3xl">
+                            <div class="inline-flex items-center gap-2 bg-white/10 border border-white/10 text-blue-100 px-4 py-2 rounded-full text-sm mb-4">
+                                <i class="fas fa-diagram-project"></i>Real Case Example
+                            </div>
+                            <h3 class="text-3xl font-bold mb-4">AKS non-prod scaling bottleneck resolved in 2 focused days</h3>
+                            <p class="text-blue-100 text-lg mb-5">
+                                A banking platform team had autoscaling enabled but workloads still were not landing in the right scale zone. The issue was not raw capacity. It was the interaction between admission control and a missing scheduling value.
+                            </p>
+                            <div class="grid md:grid-cols-3 gap-4">
+                                <div class="rounded-2xl bg-white/10 border border-white/10 p-4">
+                                    <div class="text-xs uppercase tracking-wide text-blue-200 font-semibold mb-2">Root Cause</div>
+                                    <p class="text-sm text-blue-50">Admission control policy plus a missing config value affecting zone-based scheduling.</p>
+                                </div>
+                                <div class="rounded-2xl bg-white/10 border border-white/10 p-4">
+                                    <div class="text-xs uppercase tracking-wide text-blue-200 font-semibold mb-2">What Changed</div>
+                                    <p class="text-sm text-blue-50">Cluster autoscaler settings, expander profile, supporting config, and workload policy alignment were reviewed and corrected.</p>
+                                </div>
+                                <div class="rounded-2xl bg-white/10 border border-white/10 p-4">
+                                    <div class="text-xs uppercase tracking-wide text-blue-200 font-semibold mb-2">Outcome</div>
+                                    <p class="text-sm text-blue-50">Scaling behavior became predictable again, with clearer documentation for future tests and handovers.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white text-slate-900 rounded-3xl p-6 lg:max-w-sm">
+                            <div class="text-xs uppercase tracking-[0.18em] text-blue-700 font-semibold mb-3">Why this matters</div>
+                            <p class="text-sm text-gray-700 mb-4">
+                                This is the pattern WaterApps sees often in enterprise Kubernetes: tools are present, but policies, node-pool intent, and real scheduling behavior are not aligned.
+                            </p>
+                            <a href="insights-aks-scaling-enterprise.html" class="inline-flex items-center text-blue-700 hover:text-blue-800 font-semibold text-sm">
+                                Read the full architecture article <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <p class="text-xs text-blue-200 mt-5">
+                        Client and environment details are generalized to respect confidentiality obligations. The example reflects a real enterprise pattern and real remediation work.
+                    </p>
+                </div>
+
                 <!-- Case Study 1 -->
                 <div class="case-study-card bg-gray-50 p-8 rounded-xl">
                     <div class="flex items-start justify-between mb-6">
@@ -1354,23 +1453,23 @@
     <section id="approach" class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-gray-900 mb-4">Clear Delivery. No Surprises.</h2>
-                <p class="text-xl text-gray-600">A pragmatic engagement model for regulated environments</p>
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">How We Work</h2>
+                <p class="text-xl text-gray-600 max-w-4xl mx-auto">A structured delivery model for platform teams that need clear decisions, controlled implementation, and documentation strong enough to survive handover.</p>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-8">
+            <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-8">
                 <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-8 rounded-xl relative">
                     <div class="absolute -top-4 left-8 bg-blue-600 text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold">
                         1
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mt-6 mb-4">Discovery</h3>
+                    <h3 class="text-2xl font-bold text-gray-900 mt-6 mb-4">Understand the Stack</h3>
                     <p class="text-gray-700 mb-4">
-                        Align on scope, constraints, and what success looks like—including risk boundaries.
+                        Start with the real platform, not assumptions. We review current architecture, constraints, policies, and where delivery is actually breaking down.
                     </p>
                     <ul class="space-y-2 text-sm text-gray-700">
-                        <li><i class="fas fa-check text-blue-600 mr-2"></i>Problem framing + success metrics</li>
-                        <li><i class="fas fa-check text-blue-600 mr-2"></i>Stakeholder + approval mapping</li>
-                        <li><i class="fas fa-check text-blue-600 mr-2"></i>First deliverables in 1–2 weeks</li>
+                        <li><i class="fas fa-check text-blue-600 mr-2"></i>Problem framing + business impact</li>
+                        <li><i class="fas fa-check text-blue-600 mr-2"></i>Environment and policy review</li>
+                        <li><i class="fas fa-check text-blue-600 mr-2"></i>Success criteria before changes begin</li>
                     </ul>
                 </div>
 
@@ -1378,14 +1477,14 @@
                     <div class="absolute -top-4 left-8 bg-green-600 text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold">
                         2
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mt-6 mb-4">Assessment</h3>
+                    <h3 class="text-2xl font-bold text-gray-900 mt-6 mb-4">Design the Path</h3>
                     <p class="text-gray-700 mb-4">
-                        Map the current state: pipelines, environments, controls, and operational pain points.
+                        Turn analysis into a practical design: target architecture, rollout sequence, control points, and the fastest safe path to value.
                     </p>
                     <ul class="space-y-2 text-sm text-gray-700">
-                        <li><i class="fas fa-check text-green-600 mr-2"></i>Architecture review + risk notes</li>
-                        <li><i class="fas fa-check text-green-600 mr-2"></i>Control gaps + quick wins</li>
-                        <li><i class="fas fa-check text-green-600 mr-2"></i>Roadmap + phased delivery plan</li>
+                        <li><i class="fas fa-check text-green-600 mr-2"></i>Architecture options + trade-offs</li>
+                        <li><i class="fas fa-check text-green-600 mr-2"></i>Quick wins and sequencing</li>
+                        <li><i class="fas fa-check text-green-600 mr-2"></i>Owner-ready roadmap</li>
                     </ul>
                 </div>
 
@@ -1393,14 +1492,29 @@
                     <div class="absolute -top-4 left-8 bg-purple-600 text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold">
                         3
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mt-6 mb-4">Delivery</h3>
+                    <h3 class="text-2xl font-bold text-gray-900 mt-6 mb-4">Implement the Fix</h3>
                     <p class="text-gray-700 mb-4">
-                        Build, automate, and enable teams—with documentation and handover built in.
+                        Resolve the bottleneck properly. That can mean infrastructure, policies, deployment flow, observability, or the operating model around them.
                     </p>
                     <ul class="space-y-2 text-sm text-gray-700">
                         <li><i class="fas fa-check text-purple-600 mr-2"></i>Infrastructure + pipelines + guardrails</li>
-                        <li><i class="fas fa-check text-purple-600 mr-2"></i>Monitoring + runbooks</li>
-                        <li><i class="fas fa-check text-purple-600 mr-2"></i>Training + clean handover</li>
+                        <li><i class="fas fa-check text-purple-600 mr-2"></i>Policy and scheduling validation</li>
+                        <li><i class="fas fa-check text-purple-600 mr-2"></i>Testing in the right environment</li>
+                    </ul>
+                </div>
+
+                <div class="bg-gradient-to-br from-amber-50 to-amber-100 p-8 rounded-xl relative">
+                    <div class="absolute -top-4 left-8 bg-amber-600 text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold">
+                        4
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mt-6 mb-4">Document and Enable</h3>
+                    <p class="text-gray-700 mb-4">
+                        Leave behind something repeatable. Clear documentation and handover matter as much as the implementation itself.
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                        <li><i class="fas fa-check text-amber-600 mr-2"></i>Runbooks and architecture notes</li>
+                        <li><i class="fas fa-check text-amber-600 mr-2"></i>Operational handover</li>
+                        <li><i class="fas fa-check text-amber-600 mr-2"></i>Lessons captured for future runs</li>
                     </ul>
                 </div>
             </div>

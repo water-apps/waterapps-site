@@ -1,0 +1,25 @@
+{
+  "aria_label": "Flow diagram for GitOps in regulated release environments",
+  "steps": [
+    {
+      "title": "Change Request and Issue",
+      "subtitle": "Scope and risk"
+    },
+    {
+      "title": "Pull Request and Review",
+      "subtitle": "Checks and approval"
+    },
+    {
+      "title": "GitOps Source of Truth",
+      "subtitle": "Versioned manifests"
+    },
+    {
+      "title": "Controlled Promotion",
+      "subtitle": "Environment gates"
+    },
+    {
+      "title": "Release Evidence",
+      "subtitle": "Audit and rollback clarity"
+    }
+  ]
+}
