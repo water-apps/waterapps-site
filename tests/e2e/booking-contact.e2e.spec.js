@@ -39,10 +39,18 @@ test("booking flow supports native scheduler with Google Calendar fallback", asy
     await expect(fallbackLink).toHaveCount(1);
     await expect(fallbackLink).toHaveAttribute("target", "_blank");
     await expect(fallbackLink).toHaveAttribute("rel", "noopener noreferrer");
+    await expect(page.locator("#booking-timezone-summary")).toContainText("Slots are shown in your selected timezone:");
 
     await expect(page.locator('#booking-slot option[value="2030-04-02T01:00:00Z"]')).toHaveCount(1);
     await expect.poll(() => availabilityCalls.length).toBeGreaterThan(0);
     expect(availabilityCalls[0].searchParams.get("days")).toBe("7");
+
+    const initialOptionText = await page.locator('#booking-slot option[value="2030-04-02T01:00:00Z"]').textContent();
+    await page.fill("#booking-timezone", "America/New_York");
+    await page.dispatchEvent("#booking-timezone", "change");
+    const updatedOptionText = await page.locator('#booking-slot option[value="2030-04-02T01:00:00Z"]').textContent();
+    expect(updatedOptionText).not.toBe(initialOptionText);
+    await expect(page.locator("#booking-timezone-summary")).toContainText("America/New_York");
 
     await page.fill("#booking-date", "2030-04-03");
     await page.dispatchEvent("#booking-date", "change");
@@ -98,4 +106,3 @@ test("contact form submits successfully", async ({ page }) => {
     expect(contactPayload.name).toBe("Contact Test");
     expect(contactPayload.email).toBe("contact.test@example.com");
 });
-
