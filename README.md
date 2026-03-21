@@ -6,7 +6,17 @@ Official website for **Water Apps Pty Ltd** — DevOps transformation, platform 
 
 ---
 
-## Deployment (GitHub Pages)
+## Deployment
+
+Current production is temporarily restored via GitHub Pages behind Cloudflare.
+
+Target hosting model:
+
+`private source repo -> GitHub Actions -> S3 -> CloudFront -> Cloudflare -> users`
+
+For the active rollout path, use `/private/tmp/waterapps-site-cloudfront/docs/DEPLOYMENT_GUIDE.md`.
+
+### Emergency Recovery (GitHub Pages)
 
 ### Step 1: Create the repository
 
@@ -90,6 +100,15 @@ git push
 
 GitHub Pages auto-deploys on every push to `main`. Changes go live within 1–2 minutes.
 
+### CloudFront Target State
+
+The repo also includes a manual CloudFront deployment workflow:
+
+- `.github/workflows/deploy-cloudfront.yml`
+
+This workflow packages the static site, uploads it to an S3 origin, and invalidates CloudFront after upload.
+It is designed for a staged migration where GitHub Pages stays live until the CloudFront path is fully validated.
+
 ---
 
 ## Contact + Booking API Integration (Serverless Backend)
@@ -143,7 +162,7 @@ Team note:
 
 ### Website Security Header Grade (Cloudflare Active)
 
-The website is served from GitHub Pages behind Cloudflare. Security headers are now injected at Cloudflare for production traffic.
+The website is currently served from GitHub Pages behind Cloudflare as a recovery path. Security headers are injected at Cloudflare for production traffic today, and the migration target is CloudFront behind Cloudflare.
 
 Operational runbooks:
 - `/Users/varunau/Projects/waterapps/waterapps-site/docs/cloudflare-security-headers-rollout.md`
