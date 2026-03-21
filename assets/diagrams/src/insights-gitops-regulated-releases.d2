@@ -1,0 +1,54 @@
+direction: right
+
+classes: {
+  control: {
+    style: {
+      fill: "#eff6ff"
+      stroke: "#2563eb"
+      font-color: "#0f172a"
+      shadow: true
+    }
+  }
+  record: {
+    style: {
+      fill: "#f8fafc"
+      stroke: "#475569"
+      font-color: "#0f172a"
+      shadow: true
+    }
+  }
+  evidence: {
+    style: {
+      fill: "#dbeafe"
+      stroke: "#1d4ed8"
+      font-color: "#0f172a"
+      shadow: true
+    }
+  }
+}
+
+request: {
+  label: "Change request\nscope and risk"
+  class: record
+}
+review: {
+  label: "Pull request review\nchecks and approval"
+  class: control
+}
+source: {
+  label: "GitOps source of truth\nversioned manifests"
+  class: record
+}
+promotion: {
+  label: "Controlled promotion\nenvironment gates"
+  class: control
+}
+evidence: {
+  label: "Release evidence\naudit and rollback clarity"
+  class: evidence
+}
+
+request -> review: "intent becomes\nreviewable change"
+review -> source: "approved desired\nstate"
+source -> promotion: "controller sync +\nenvironment policy"
+promotion -> evidence: "traceable release\noutcome"

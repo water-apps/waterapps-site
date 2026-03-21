@@ -59,13 +59,13 @@
             <div class="flex items-center justify-between gap-4 mb-6">
                 <div>
                     <div class="text-xs uppercase tracking-[0.18em] text-blue-700 font-semibold mb-2">Reference Architecture</div>
-                    <h2 class="text-2xl font-semibold">A simple design model for AKS scaling</h2>
+                    <h2 class="text-2xl font-semibold">A D2 reference model for AKS scaling</h2>
                 </div>
             </div>
             <figure class="mb-8">
                 <img src="assets/diagrams/insights/insights-aks-scaling-enterprise.svg" alt="AKS scaling architecture flow showing workload signal, placement intent, policy validation, node pool scale decision, and validated capacity" class="w-full rounded-2xl border border-slate-200 bg-slate-50">
                 <figcaption class="mt-3 text-sm text-slate-500">
-                    A simplified WaterApps reference flow: scaling works when workload signals, placement intent, policy layers, and node-pool decisions are aligned.
+                    This D2 architecture view keeps the scaling path explicit: workload signal, placement intent, policy validation, autoscaler decision, and validated landing capacity.
                 </figcaption>
             </figure>
             <div class="grid md:grid-cols-3 gap-4 mb-4">
@@ -170,6 +170,7 @@
                 <li>Applied and verified required configuration changes</li>
                 <li>Validated the existing policy layer for workload scheduling behavior</li>
                 <li>Retested in the development cluster and sandbox namespace before broader rollout</li>
+                <li>Converted the reference architecture to D2 so the diagram can evolve with the platform design instead of drifting from the article text</li>
             </ul>
         </section>
 

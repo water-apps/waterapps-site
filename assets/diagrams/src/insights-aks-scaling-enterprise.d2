@@ -1,0 +1,54 @@
+direction: right
+
+classes: {
+  signal: {
+    style: {
+      fill: "#eff6ff"
+      stroke: "#2563eb"
+      font-color: "#0f172a"
+      shadow: true
+    }
+  }
+  control: {
+    style: {
+      fill: "#f8fafc"
+      stroke: "#475569"
+      font-color: "#0f172a"
+      shadow: true
+    }
+  }
+  outcome: {
+    style: {
+      fill: "#dbeafe"
+      stroke: "#1d4ed8"
+      font-color: "#0f172a"
+      shadow: true
+    }
+  }
+}
+
+workload: {
+  label: "Workload signal\nHPA or KEDA"
+  class: signal
+}
+placement: {
+  label: "Placement intent\nlabels, taints, zones"
+  class: control
+}
+policy: {
+  label: "Policy + scheduling\nadmission control"
+  class: control
+}
+autoscaler: {
+  label: "Node pool scale decision\nCluster Autoscaler"
+  class: signal
+}
+outcome: {
+  label: "Validated capacity\npredictable landing"
+  class: outcome
+}
+
+workload -> placement: "pending pods\nor event pressure"
+placement -> policy: "eligible nodes\nand affinity"
+policy -> autoscaler: "allowed scale-up\npath"
+autoscaler -> outcome: "new nodes in\nthe right zone"

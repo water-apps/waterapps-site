@@ -58,12 +58,12 @@
         <section class="bg-white rounded-3xl border border-slate-200 p-8 mb-8 shadow-sm">
             <div class="mb-6">
                 <div class="text-xs uppercase tracking-[0.18em] text-blue-700 font-semibold mb-2">Reference Architecture</div>
-                <h2 class="text-2xl font-semibold">A simple GitOps release model for control-heavy environments</h2>
+                <h2 class="text-2xl font-semibold">A D2 GitOps release model for control-heavy environments</h2>
             </div>
             <figure class="mb-8">
                 <img src="assets/diagrams/insights/insights-gitops-regulated-releases.svg" alt="GitOps regulated release flow showing change request, pull request review, GitOps source of truth, controlled promotion, and release evidence" class="w-full rounded-2xl border border-slate-200 bg-slate-50">
                 <figcaption class="mt-3 text-sm text-slate-500">
-                    A simplified WaterApps reference flow: GitOps works best when work definition, review, source-of-truth changes, and promotion controls all reinforce each other.
+                    This D2 release-control view makes the operating path visible: request, review, desired-state change, controlled promotion, and evidence for audit and rollback.
                 </figcaption>
             </figure>
             <div class="grid md:grid-cols-3 gap-4">
@@ -140,6 +140,7 @@
                 <li>Define promotion criteria per environment instead of treating all environments as one continuous sync path</li>
                 <li>Record which evidence is required for production promotion: checks, approvals, release notes, and rollback path</li>
                 <li>Prefer a small number of explicit environment patterns over many bespoke exceptions</li>
+                <li>Keep the reference architecture in D2 so release-control discussions and article updates stay aligned with the same source model</li>
             </ul>
         </section>
 

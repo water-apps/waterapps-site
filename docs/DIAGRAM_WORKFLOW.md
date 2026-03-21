@@ -1,58 +1,63 @@
 # WaterApps Diagram Workflow
 
-Use a free, source-controlled workflow for architecture diagrams.
+Use a free, source-controlled D2 workflow for architecture diagrams.
 
 ## Standard
 
-1. Keep diagram source specs in:
+1. Keep diagram sources in:
    - `assets/diagrams/src/`
-2. Render website-ready SVG outputs into:
+2. Write insight diagrams as `.d2` files.
+3. Render website-ready SVG outputs into:
    - `assets/diagrams/insights/`
-3. Prefer simple left-to-right architecture or delivery flows for insight articles.
+4. Prefer simple left-to-right architecture or delivery flows for insight articles.
 
-## Current Renderer
+## Tooling
 
-This repo includes:
+This repo now uses:
 
-- `scripts/render_insight_diagram.py`
+- `D2` for diagram authoring
+- `scripts/render_insight_diagrams.sh` for reproducible SVG output
 
-The script reads a JSON spec and produces a WaterApps-styled SVG with:
+Current source files:
 
-- soft blue background
-- white cards with blue stroke
-- horizontal arrows
-- clean sans-serif labels
+- `assets/diagrams/src/insights-aks-scaling-enterprise.d2`
+- `assets/diagrams/src/insights-gitops-regulated-releases.d2`
 
-## Render Command
+## Render Commands
 
-```bash
-python3 scripts/render_insight_diagram.py \
-  --spec assets/diagrams/src/insights-aks-scaling-enterprise.json \
-  --output assets/diagrams/insights/insights-aks-scaling-enterprise.svg
-```
+Render all maintained insight diagrams:
 
 ```bash
-python3 scripts/render_insight_diagram.py \
-  --spec assets/diagrams/src/insights-gitops-regulated-releases.json \
-  --output assets/diagrams/insights/insights-gitops-regulated-releases.svg
+./scripts/render_insight_diagrams.sh
 ```
+
+Validate individual source files:
+
+```bash
+d2 validate assets/diagrams/src/insights-aks-scaling-enterprise.d2
+d2 validate assets/diagrams/src/insights-gitops-regulated-releases.d2
+```
+
+## Rendering Defaults
+
+The render script uses:
+
+- theme `5` (`Mixed Berry Blue`)
+- `dagre` layout
+- `48px` padding
+- unique salts per diagram so SVG IDs stay stable when multiple diagrams appear on one page
 
 ## Design Rules
 
 - 4 to 6 blocks max
-- one flow direction
-- short labels
+- one clear flow direction
+- short labels with outcome-oriented edge text
 - architecture first, implementation second
 - diagrams should explain the operating model, not decorate the page
 
-## Tooling Direction
+## Why D2
 
-Preferred long-term authoring option:
-
-- `D2` for source-controlled diagrams when the CLI is available
-
-Current repo-native fallback:
-
-- JSON spec + Python SVG renderer
-
-This keeps the workflow free, version-controlled, and easy to automate in CI.
+- free and source-controlled
+- cleaner architecture layouts than ad hoc hand-drawn blocks
+- easy to review in Git
+- fast to regenerate for website, PDF, or article updates
