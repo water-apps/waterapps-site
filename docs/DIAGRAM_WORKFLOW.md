@@ -31,6 +31,12 @@ python3 scripts/render_insight_diagram.py \
   --output assets/diagrams/insights/insights-aks-scaling-enterprise.svg
 ```
 
+```bash
+python3 scripts/render_insight_diagram.py \
+  --spec assets/diagrams/src/insights-gitops-regulated-releases.json \
+  --output assets/diagrams/insights/insights-gitops-regulated-releases.svg
+```
+
 ## Design Rules
 
 - 4 to 6 blocks max
