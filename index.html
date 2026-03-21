@@ -26,14 +26,55 @@
     <script src="assets/js/analytics.js"></script>
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Instrument+Serif:ital@0;1&display=swap');
         
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'DM Sans', sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+        }
+
+        .display-accent {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            font-weight: 400;
         }
         
         .gradient-bg {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            background:
+                radial-gradient(circle at top left, rgba(59, 130, 246, 0.24), transparent 30%),
+                radial-gradient(circle at 80% 20%, rgba(14, 165, 233, 0.18), transparent 24%),
+                linear-gradient(135deg, #0f172a 0%, #172554 55%, #0f172a 100%);
+        }
+
+        .nav-shell {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+        }
+
+        .hero-panel {
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.06) 100%);
+            border: 1px solid rgba(191, 219, 254, 0.22);
+            box-shadow: 0 28px 60px rgba(15, 23, 42, 0.28);
+            backdrop-filter: blur(14px);
+        }
+
+        .hero-mini-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(191, 219, 254, 0.18);
+        }
+
+        .hero-proof-card {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(191, 219, 254, 0.16);
+            backdrop-filter: blur(8px);
+        }
+
+        .proof-chip {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(191, 219, 254, 0.18);
         }
         
         .trust-badge {
@@ -83,88 +124,6 @@
             padding: 0.35rem 0.7rem;
             text-transform: uppercase;
         }
-
-        .positive-thought-shell {
-            background:
-                radial-gradient(circle at top left, rgba(96, 165, 250, 0.28), transparent 35%),
-                radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.22), transparent 30%),
-                linear-gradient(135deg, #f8fbff 0%, #eef6ff 50%, #ffffff 100%);
-            border: 1px solid rgba(147, 197, 253, 0.55);
-            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
-        }
-
-        .positive-thought-card {
-            background: rgba(255, 255, 255, 0.88);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(191, 219, 254, 0.85);
-            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
-        }
-
-        .positive-thought-visual {
-            min-height: 280px;
-            background:
-                radial-gradient(circle at 20% 20%, rgba(255,255,255,0.95), rgba(255,255,255,0) 30%),
-                linear-gradient(160deg, #0f172a 0%, #1d4ed8 50%, #38bdf8 100%);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .positive-thought-photo {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.6;
-        }
-
-        .positive-thought-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(15, 23, 42, 0.22) 0%, rgba(15, 23, 42, 0.72) 100%);
-        }
-
-        .positive-thought-visual::before,
-        .positive-thought-visual::after {
-            content: '';
-            position: absolute;
-            border-radius: 9999px;
-            opacity: 0.7;
-        }
-
-        .positive-thought-visual::before {
-            width: 220px;
-            height: 220px;
-            background: radial-gradient(circle, rgba(255,255,255,0.45), rgba(255,255,255,0));
-            top: -60px;
-            right: -20px;
-        }
-
-        .positive-thought-visual::after {
-            width: 260px;
-            height: 260px;
-            background: radial-gradient(circle, rgba(125,211,252,0.35), rgba(125,211,252,0));
-            bottom: -120px;
-            left: -40px;
-        }
-
-        .positive-thought-wave {
-            position: absolute;
-            inset: auto -8% 10% -8%;
-            height: 120px;
-            border-radius: 9999px;
-            background: rgba(255,255,255,0.13);
-            filter: blur(1px);
-            transform: rotate(-7deg);
-        }
-
-        .positive-thought-wave.wave-two {
-            bottom: 24%;
-            left: -14%;
-            right: -2%;
-            background: rgba(255,255,255,0.18);
-            transform: rotate(9deg);
-        }
         
         .nav-link {
             position: relative;
@@ -197,6 +156,18 @@
             background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
             margin: 4rem 0;
         }
+
+        .mobile-menu-link {
+            display: block;
+            padding: 0.9rem 0;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+            color: #1f2937;
+            font-weight: 500;
+        }
+
+        .mobile-menu-link:last-child {
+            border-bottom: 0;
+        }
         
         /* Wave logo animation */
         @keyframes wave-flow {
@@ -228,9 +199,9 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="bg-white shadow-sm sticky top-0 z-50">
+    <nav class="nav-shell sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
+            <div class="flex justify-between items-center h-16 gap-4">
                 <div class="flex items-center">
                     <a href="#" class="flex items-center group">
                         <svg width="50" height="50" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" class="mr-3">
@@ -297,171 +268,151 @@
                     <a href="#approach" class="nav-link text-gray-700 hover:text-blue-600">Our Approach</a>
                     <a href="#contact" class="nav-link text-gray-700 hover:text-blue-600">Contact</a>
                 </div>
-                <a href="#contact" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
-                    Get Started
-                </a>
+                <div class="flex items-center gap-3">
+                    <a href="#contact" class="hidden md:inline-flex bg-blue-600 text-white px-6 py-2.5 rounded-lg hover:bg-blue-700 transition font-semibold shadow-sm">
+                        Book Discovery
+                    </a>
+                    <button
+                        id="mobile-menu-toggle"
+                        type="button"
+                        class="md:hidden inline-flex items-center justify-center w-11 h-11 rounded-xl border border-gray-200 text-gray-900 hover:bg-blue-50 hover:text-blue-700 transition"
+                        aria-expanded="false"
+                        aria-controls="mobile-menu"
+                        aria-label="Open site navigation"
+                    >
+                        <i class="fas fa-bars text-lg"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="mobile-menu" class="hidden md:hidden pb-5" aria-label="Mobile site navigation">
+                <div class="rounded-2xl border border-slate-200 bg-white px-5 py-3 shadow-lg">
+                    <a href="#services" class="mobile-menu-link">Services</a>
+                    <a href="#products" class="mobile-menu-link">Products</a>
+                    <a href="#case-studies" class="mobile-menu-link">Case Studies</a>
+                    <a href="insights.html" class="mobile-menu-link">Insights</a>
+                    <a href="#credentials" class="mobile-menu-link">Credentials</a>
+                    <a href="enterprise-readiness.html" class="mobile-menu-link">Enterprise Readiness</a>
+                    <a href="#approach" class="mobile-menu-link">Our Approach</a>
+                    <a href="#contact" class="mobile-menu-link">Contact</a>
+                    <div class="pt-4">
+                        <a href="#contact" class="inline-flex items-center justify-center w-full bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl font-semibold transition">
+                            Book Discovery Call
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
 
     <main id="main-content">
     <!-- Hero Section -->
-    <section class="gradient-bg text-white py-20">
+    <section class="gradient-bg text-white pt-16 pb-14 md:pt-24 md:pb-20 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-2 gap-12 items-center">
+            <div class="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
                 <div>
-                    <div class="inline-block bg-blue-500 text-white px-4 py-2 rounded-full text-sm mb-6">
-                        <i class="fas fa-award mr-2"></i>Enterprise Platform Delivery for Regulated Organizations
+                    <div class="inline-flex items-center gap-2 bg-white/10 border border-white/15 text-blue-100 px-4 py-2 rounded-full text-sm mb-6">
+                        <i class="fas fa-award"></i>
+                        Enterprise platform delivery for control-heavy environments
                     </div>
-                    <h1 class="text-5xl font-bold mb-6 leading-tight">
-                        Ship Faster in Regulated Environments <span class="text-blue-400">Without Losing Audit Control</span>
+                    <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+                        Ship faster with
+                        <span class="display-accent text-blue-200">clear architecture</span>
+                        and audit-ready delivery.
                     </h1>
-                    <p class="text-xl text-gray-300 mb-8 leading-relaxed">
-                        WaterApps helps banks, government, and enterprise teams modernize delivery platforms, release pipelines, and cloud infrastructure while preserving traceability, security gates, and production reliability.
+                    <p class="text-xl text-blue-100 mb-8 leading-relaxed max-w-2xl">
+                        WaterApps helps banks, government, and enterprise teams modernize delivery platforms, release pipelines, and cloud infrastructure without losing traceability, security gates, or operational confidence.
                     </p>
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <a href="#contact" class="bg-blue-500 hover:bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold text-center transition">
+                    <div class="flex flex-col sm:flex-row gap-4 mb-8">
+                        <a href="#contact" class="bg-blue-500 hover:bg-blue-600 text-white px-8 py-4 rounded-xl font-semibold text-center transition shadow-lg">
                             <i class="fas fa-calendar-check mr-2"></i>Book Discovery Call
                         </a>
-                        <a href="#products" class="bg-white text-gray-900 px-8 py-4 rounded-lg font-semibold text-center hover:bg-gray-100 transition">
-                            <i class="fas fa-box-open mr-2"></i>Explore Productized Offers
+                        <a href="capability-statement.html" class="bg-white text-gray-900 px-8 py-4 rounded-xl font-semibold text-center hover:bg-gray-100 transition">
+                            <i class="fas fa-file-alt mr-2"></i>View Capability Statement
                         </a>
                     </div>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="metric-card p-6 rounded-lg">
-                        <div class="text-4xl font-bold text-blue-600 mb-2">20+</div>
-                        <div class="text-gray-700 font-medium">Years Platform & DevSecOps Delivery</div>
-                    </div>
-                    <div class="metric-card p-6 rounded-lg">
-                        <div class="text-4xl font-bold text-blue-600 mb-2">50+</div>
-                        <div class="text-gray-700 font-medium">Approval Gates Navigated in Enterprise CI/CD</div>
-                    </div>
-                    <div class="metric-card p-6 rounded-lg">
-                        <div class="text-4xl font-bold text-blue-600 mb-2">12</div>
-                        <div class="text-gray-700 font-medium">Teams Onboarded to Platform Delivery Patterns</div>
-                    </div>
-                    <div class="metric-card p-6 rounded-lg">
-                        <div class="text-4xl font-bold text-blue-600 mb-2">3×</div>
-                        <div class="text-gray-700 font-medium">Release Frequency in Platform Modernization Programs</div>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="proof-chip inline-flex items-center px-4 py-2 rounded-full text-sm text-blue-50">
+                            <i class="fas fa-shield-check mr-2 text-blue-200"></i>Principal-led delivery
+                        </span>
+                        <span class="proof-chip inline-flex items-center px-4 py-2 rounded-full text-sm text-blue-50">
+                            <i class="fas fa-diagram-project mr-2 text-blue-200"></i>Reusable architecture patterns
+                        </span>
+                        <span class="proof-chip inline-flex items-center px-4 py-2 rounded-full text-sm text-blue-50">
+                            <i class="fas fa-clipboard-check mr-2 text-blue-200"></i>Procurement-friendly readiness
+                        </span>
                     </div>
                 </div>
-            </div>
 
-            <div class="mt-10 text-center">
-                <a href="enterprise-readiness.html" class="inline-flex items-center text-blue-600 hover:text-blue-700 font-semibold">
-                    <i class="fas fa-shield-check mr-2"></i>Review Enterprise Readiness & Procurement Information
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Positive Thoughts -->
-    <section id="positive-thoughts" class="py-16 bg-white border-b border-blue-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="positive-thought-shell rounded-3xl p-6 lg:p-8">
-                <div class="grid lg:grid-cols-[1.35fr_0.95fr] gap-6 items-stretch">
-                    <div class="positive-thought-card rounded-2xl p-6 lg:p-8">
-                        <div class="flex flex-wrap items-center gap-3 mb-5">
-                            <span class="inline-flex items-center rounded-full bg-blue-100 text-blue-700 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em]">
-                                Positive Thought
-                            </span>
-                            <span id="positive-thought-count" class="text-sm text-gray-500">1200 original thoughts ready</span>
+                <div class="hero-panel rounded-3xl p-6 sm:p-8">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+                        <div>
+                            <p class="text-xs uppercase tracking-[0.22em] text-blue-200 font-semibold mb-2">What clients get first</p>
+                            <h2 class="text-3xl font-bold text-white">A fast path from review to action</h2>
                         </div>
-                        <blockquote class="space-y-4">
-                            <p id="positive-thought-text" class="text-2xl lg:text-3xl font-semibold text-gray-900 leading-relaxed">
-                                Small, steady progress still changes the shape of the future.
-                            </p>
-                            <footer class="space-y-2">
-                                <p id="positive-thought-theme" class="text-sm font-semibold uppercase tracking-[0.16em] text-blue-700">Momentum</p>
-                                <p id="positive-thought-source" class="text-sm text-gray-500">Source: WaterApps original positive thoughts collection</p>
-                            </footer>
-                        </blockquote>
-                        <div class="mt-6 flex flex-col sm:flex-row sm:items-center gap-3">
-                            <button
-                                id="positive-thought-next"
-                                type="button"
-                                class="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg font-semibold transition"
-                            >
-                                <i class="fas fa-sparkles mr-2"></i>Show Another Thought
-                            </button>
-                            <p class="text-sm text-gray-600">
-                                New visitors start in a different place, and returning visitors keep moving through the collection.
-                            </p>
+                        <a href="enterprise-readiness.html" class="inline-flex items-center text-sm font-semibold text-blue-100 hover:text-white">
+                            Enterprise readiness <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+
+                    <div class="grid gap-4 mb-6">
+                        <div class="hero-mini-card rounded-2xl p-5">
+                            <div class="flex items-start gap-4">
+                                <div class="w-11 h-11 rounded-xl bg-blue-500/25 text-blue-100 flex items-center justify-center shrink-0">
+                                    <i class="fas fa-magnifying-glass-chart"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-semibold text-white mb-2">Architecture and delivery assessment</h3>
+                                    <p class="text-sm text-blue-100">We map the current state, identify delivery bottlenecks, and turn risk into a practical improvement sequence.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hero-mini-card rounded-2xl p-5">
+                            <div class="flex items-start gap-4">
+                                <div class="w-11 h-11 rounded-xl bg-sky-500/25 text-blue-100 flex items-center justify-center shrink-0">
+                                    <i class="fas fa-layer-group"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-semibold text-white mb-2">Modernization without unnecessary rebuilds</h3>
+                                    <p class="text-sm text-blue-100">The focus is better flow, cleaner controls, and reusable patterns, not tool churn for its own sake.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <aside class="positive-thought-visual rounded-2xl p-6 lg:p-8 text-white flex flex-col justify-between">
-                        <img
-                            id="positive-thought-image"
-                            class="positive-thought-photo"
-                            src="https://commons.wikimedia.org/wiki/Special:FilePath/Ocean%20waves%20water.jpg"
-                            alt="Ocean wave photography from Wikimedia Commons"
-                            loading="lazy"
-                        >
-                        <div class="positive-thought-overlay"></div>
-                        <div class="relative z-10">
-                            <p class="text-xs uppercase tracking-[0.2em] text-blue-100 font-semibold mb-3">Calm Energy for the Page</p>
-                            <h2 class="text-3xl font-bold leading-tight max-w-md">A small lift near the top of the site for every fresh visit.</h2>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="hero-proof-card rounded-2xl p-5">
+                            <div class="text-4xl font-bold text-blue-100 mb-2">20+</div>
+                            <div class="text-sm text-blue-50">Years in platform, DevSecOps, and enterprise delivery</div>
                         </div>
-                        <div class="relative z-10 max-w-sm space-y-3">
-                            <p class="text-blue-50 text-base leading-relaxed">
-                                This panel now rotates through public-domain water imagery with an on-page source credit, so the visuals stay calming and properly attributable.
-                            </p>
-                            <p id="positive-thought-image-credit" class="text-sm text-blue-100">
-                                Photo: public-domain image via Wikimedia Commons
-                            </p>
+                        <div class="hero-proof-card rounded-2xl p-5">
+                            <div class="text-4xl font-bold text-blue-100 mb-2">50+</div>
+                            <div class="text-sm text-blue-50">Approval gates navigated in enterprise CI/CD</div>
                         </div>
-                        <div class="positive-thought-wave"></div>
-                        <div class="positive-thought-wave wave-two"></div>
-                    </aside>
+                        <div class="hero-proof-card rounded-2xl p-5">
+                            <div class="text-4xl font-bold text-blue-100 mb-2">12</div>
+                            <div class="text-sm text-blue-50">Teams onboarded to stronger delivery patterns</div>
+                        </div>
+                        <div class="hero-proof-card rounded-2xl p-5">
+                            <div class="text-4xl font-bold text-blue-100 mb-2">3×</div>
+                            <div class="text-sm text-blue-50">Release frequency in modernization programs</div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Insights Spotlight -->
-    <section class="py-16 bg-blue-50 border-y border-blue-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
-                <div>
-                    <span class="insight-pill">New and Useful</span>
-                    <h2 class="text-3xl font-bold text-gray-900 mt-3 mb-3">Start with the Articles Buyers and Delivery Leads Actually Need</h2>
-                    <p class="text-lg text-gray-700 max-w-3xl">
-                        If you are assessing platform modernization, release controls, or Infrastructure as Code maturity, these are the fastest entry points into the WaterApps knowledge base.
-                    </p>
+            <div class="grid sm:grid-cols-3 gap-4 mt-10">
+                <div class="hero-proof-card rounded-2xl p-5">
+                    <p class="text-xs uppercase tracking-[0.18em] text-blue-200 font-semibold mb-2">Banking</p>
+                    <p class="text-sm text-blue-50">Tier-1 and central-banking delivery shaped by real approval, traceability, and uptime constraints.</p>
                 </div>
-                <a href="insights.html" class="inline-flex items-center text-blue-700 hover:text-blue-800 font-semibold">
-                    Browse the full insights library <i class="fas fa-arrow-right ml-2"></i>
-                </a>
-            </div>
-
-            <div class="grid lg:grid-cols-3 gap-6">
-                <article class="insight-spotlight-card rounded-xl p-6">
-                    <span class="insight-pill">Infrastructure as Code</span>
-                    <h3 class="text-xl font-bold text-gray-900 mt-4 mb-3">Beyond the "Apply" Button: Lessons from 300,000 Lines of Infrastructure Code</h3>
-                    <p class="text-gray-700 mb-4">
-                        Why large Terraform estates become a software engineering problem: module boundaries, state discipline, testing, and release management.
-                    </p>
-                    <a href="insights-beyond-apply-button-infrastructure-code.html" class="text-blue-700 hover:text-blue-800 font-semibold">Read the article &rarr;</a>
-                </article>
-
-                <article class="insight-spotlight-card rounded-xl p-6">
-                    <span class="insight-pill">Delivery Governance</span>
-                    <h3 class="text-xl font-bold text-gray-900 mt-4 mb-3">GitHub Best Practices: Features That Actually Improve Delivery</h3>
-                    <p class="text-gray-700 mb-4">
-                        A practical operating model for using GitHub Issues, PRs, Actions, Environments, and branch protection without creating workflow drag.
-                    </p>
-                    <a href="insights-github-best-practices-features.html" class="text-blue-700 hover:text-blue-800 font-semibold">Read the article &rarr;</a>
-                </article>
-
-                <article class="insight-spotlight-card rounded-xl p-6">
-                    <span class="insight-pill">Release Assurance</span>
-                    <h3 class="text-xl font-bold text-gray-900 mt-4 mb-3">Test Automation in Regulated CI/CD: What to Automate First</h3>
-                    <p class="text-gray-700 mb-4">
-                        A risk-based sequence for test automation when audit evidence, release speed, and delivery confidence all matter at once.
-                    </p>
-                    <a href="insights-test-automation-regulated-cicd.html" class="text-blue-700 hover:text-blue-800 font-semibold">Read the article &rarr;</a>
-                </article>
+                <div class="hero-proof-card rounded-2xl p-5">
+                    <p class="text-xs uppercase tracking-[0.18em] text-blue-200 font-semibold mb-2">Government</p>
+                    <p class="text-sm text-blue-50">Procurement-friendly documentation paths for buyers who need readiness evidence before they engage.</p>
+                </div>
+                <div class="hero-proof-card rounded-2xl p-5">
+                    <p class="text-xs uppercase tracking-[0.18em] text-blue-200 font-semibold mb-2">Platform Uplift</p>
+                    <p class="text-sm text-blue-50">Reusable Terraform, workflow, and logging patterns that reduce custom rebuilds and simplify growth.</p>
+                </div>
             </div>
         </div>
     </section>
@@ -726,7 +677,7 @@
                         <li><i class="fas fa-check text-blue-600 mr-2"></i>Fractional technical leadership for high-risk programs</li>
                     </ul>
                     <div class="mt-6">
-                        <a href="insights-beyond-apply-button-infrastructure-code.html" class="inline-flex items-center text-blue-700 hover:text-blue-800 font-semibold text-sm">
+                        <a href="insights-terraform-apra-regulated.html" class="inline-flex items-center text-blue-700 hover:text-blue-800 font-semibold text-sm">
                             Read the Infrastructure as Code article <i class="fas fa-arrow-right ml-2"></i>
                         </a>
                     </div>
@@ -1318,6 +1269,7 @@
 
                             <div class="relative min-h-[220px]">
                                 <article data-recommendation-slide class="space-y-3">
+                                    <h6 class="text-xs font-semibold uppercase tracking-wide text-blue-700">Recommendation 1</h6>
                                     <p class="text-sm text-gray-700 italic">
                                         "Varun was instrumental in achieving outcomes and deliverables with the quality of his work and timely completion... commitment to 'make it happen' even working during weekends or public holidays as required."
                                     </p>
@@ -1328,6 +1280,7 @@
                                 </article>
 
                                 <article data-recommendation-slide class="space-y-3 hidden">
+                                    <h6 class="text-xs font-semibold uppercase tracking-wide text-blue-700">Recommendation 2</h6>
                                     <p class="text-sm text-gray-700 italic">
                                         "Varun is very professional and always wanted to help and solve our challenges. He is responsible, self motivated and will be valuable asset to any organisation."
                                     </p>
@@ -1338,6 +1291,7 @@
                                 </article>
 
                                 <article data-recommendation-slide class="space-y-3 hidden">
+                                    <h6 class="text-xs font-semibold uppercase tracking-wide text-blue-700">Recommendation 3</h6>
                                     <p class="text-sm text-gray-700 italic">
                                         "Varun was our DevOps TechLead... designed and implemented our DevOps tools, including Docker, Jenkins, Artifactory, SonarQube and Ansible, allowing us to automate our deployments."
                                     </p>
@@ -1348,6 +1302,7 @@
                                 </article>
 
                                 <article data-recommendation-slide class="space-y-3 hidden">
+                                    <h6 class="text-xs font-semibold uppercase tracking-wide text-blue-700">Recommendation 4</h6>
                                     <p class="text-sm text-gray-700 italic">
                                         "His knowledge and experience with AWS was invaluable in migrating our services to AWS in timely and cost effective manner."
                                     </p>
@@ -1358,6 +1313,7 @@
                                 </article>
 
                                 <article data-recommendation-slide class="space-y-3 hidden">
+                                    <h6 class="text-xs font-semibold uppercase tracking-wide text-blue-700">Recommendation 5</h6>
                                     <p class="text-sm text-gray-700 italic">
                                         "Varun is technically strong and process oriented... led from the front on implementing new tools and defining processes... very good mentor and guide to team members."
                                     </p>
@@ -1368,6 +1324,7 @@
                                 </article>
 
                                 <article data-recommendation-slide class="space-y-3 hidden">
+                                    <h6 class="text-xs font-semibold uppercase tracking-wide text-blue-700">Recommendation 6</h6>
                                     <p class="text-sm text-gray-700 italic">
                                         "Few people have the opportunity to report to a manager who is also a coach and mentor... Varun would be an asset to any team."
                                     </p>
@@ -1378,7 +1335,7 @@
                                 </article>
                             </div>
 
-                            <div id="recommendation-dots" class="mt-4 flex items-center gap-2" aria-label="Recommendation slide navigation"></div>
+                            <div id="recommendation-dots" class="mt-4 flex items-center gap-2" role="tablist" aria-label="Recommendation slide navigation"></div>
 
                             <p class="text-xs text-gray-500 mt-3">
                                 Recommendations and engagement outcomes reflect specific contexts and do not guarantee future results. Wording and identifying details may be generalized to respect confidentiality obligations and contract terms.
@@ -1774,7 +1731,7 @@
                     <p class="text-gray-400 text-sm">Enterprise DevSecOps, AIOps & Cloud Consulting for Regulated Industries</p>
                 </div>
                 <div>
-                    <h5 class="font-bold mb-4">Services</h5>
+                    <h4 class="font-bold mb-4">Services</h4>
                     <ul class="space-y-2 text-gray-400 text-sm">
                         <li><a href="#services" class="hover:text-white">DevSecOps Transformation</a></li>
                         <li><a href="#services" class="hover:text-white">Platform Engineering</a></li>
@@ -1785,7 +1742,7 @@
                     </ul>
                 </div>
                 <div>
-                    <h5 class="font-bold mb-4">Company</h5>
+                    <h4 class="font-bold mb-4">Company</h4>
                     <ul class="space-y-2 text-gray-400 text-sm">
                         <li><a href="#products" class="hover:text-white">Products</a></li>
                         <li><a href="schedulease.html" class="hover:text-white">SchedulEase</a></li>
@@ -1799,7 +1756,7 @@
                     </ul>
                 </div>
                 <div>
-                    <h5 class="font-bold mb-4">Legal</h5>
+                    <h4 class="font-bold mb-4">Legal</h4>
                     <ul class="space-y-2 text-gray-400 text-sm">
                         <li>Water Apps Pty Ltd</li>
                         <li>ABN: 63 632 823 084</li>
@@ -1831,7 +1788,6 @@
     </footer>
     </main>
 
-    <script src="assets/js/positive-thoughts.js"></script>
     <script src="assets/js/index.js"></script>
 </body>
 </html>

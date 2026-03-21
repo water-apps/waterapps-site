@@ -4,6 +4,54 @@ function trackEvent(eventName, params) {
     }
 }
 
+(function setupMobileMenu() {
+    const toggleButton = document.getElementById('mobile-menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (!toggleButton || !mobileMenu) return;
+
+    const menuLinks = mobileMenu.querySelectorAll('a');
+
+    function closeMenu() {
+        mobileMenu.classList.add('hidden');
+        toggleButton.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+        toggleButton.innerHTML = '<i class="fas fa-bars text-lg"></i>';
+    }
+
+    function openMenu() {
+        mobileMenu.classList.remove('hidden');
+        toggleButton.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+        toggleButton.innerHTML = '<i class="fas fa-xmark text-lg"></i>';
+    }
+
+    toggleButton.addEventListener('click', () => {
+        const isOpen = toggleButton.getAttribute('aria-expanded') === 'true';
+        if (isOpen) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
+    });
+
+    menuLinks.forEach((link) => {
+        link.addEventListener('click', closeMenu);
+    });
+
+    window.addEventListener('resize', () => {
+        if (window.innerWidth >= 768) {
+            closeMenu();
+        }
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            closeMenu();
+        }
+    });
+})();
+
 function localDateKeyFromDate(date) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
