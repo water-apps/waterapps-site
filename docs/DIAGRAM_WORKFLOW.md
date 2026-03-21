@@ -67,6 +67,7 @@ The render script uses:
 ## Vendor Icon Rule
 
 - Use official vendor architecture icons when the diagram represents a named cloud service.
+- Use official GitHub icons when a workflow step specifically represents GitHub concepts like issues, pull requests, or repository state.
 - Keep only the minimum SVG subset needed in-repo under `assets/icons/vendors/`.
 - Prefer Azure icons for Azure service diagrams and AWS icons for AWS service diagrams.
 - Do not mix unofficial logo packs with official architecture icon sets.
