@@ -96,6 +96,7 @@ if (typeof window !== 'undefined') {
     const slotSelect = document.getElementById('booking-slot');
     const dateInput = document.getElementById('booking-date');
     const timezoneInput = document.getElementById('booking-timezone');
+    const timezoneSummary = document.getElementById('booking-timezone-summary');
     const fieldNames = ['name', 'email', 'company', 'timezone', 'date', 'slotStart', 'notes'];
     let latestSlots = [];
 
@@ -122,6 +123,24 @@ if (typeof window !== 'undefined') {
 
     if (timezoneInput && !timezoneInput.value) {
         timezoneInput.value = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+    }
+
+    function resolveDisplayTimeZone() {
+        const candidate = (timezoneInput?.value || '').trim();
+        if (!candidate) {
+            return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+        }
+        try {
+            new Intl.DateTimeFormat(undefined, { timeZone: candidate }).format(new Date());
+            return candidate;
+        } catch {
+            return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+        }
+    }
+
+    function updateTimezoneSummary() {
+        if (!timezoneSummary) return;
+        timezoneSummary.textContent = `Slots are shown in your selected timezone: ${resolveDisplayTimeZone()}.`;
     }
 
     function setStatus(kind, message) {
@@ -188,12 +207,14 @@ if (typeof window !== 'undefined') {
     function slotLabel(slotStart) {
         const date = new Date(slotStart);
         if (Number.isNaN(date.getTime())) return slotStart;
+        const timeZone = resolveDisplayTimeZone();
         return date.toLocaleString(undefined, {
             weekday: 'short',
             month: 'short',
             day: 'numeric',
             hour: 'numeric',
             minute: '2-digit',
+            timeZone,
             timeZoneName: 'short'
         });
     }
@@ -225,6 +246,11 @@ if (typeof window !== 'undefined') {
 
     function filterSlotsByDate(dateValue) {
         return filterSlotsByLocalDate(latestSlots, dateValue);
+    }
+
+    function refreshRenderedSlots() {
+        renderSlotOptions(filterSlotsByDate(dateInput?.value || ''));
+        updateTimezoneSummary();
     }
 
     async function loadSlots(options = {}) {
@@ -262,6 +288,7 @@ if (typeof window !== 'undefined') {
             latestSlots = Array.isArray(data?.slots) ? data.slots : [];
             const filtered = filterSlotsByDate(selectedDate);
             renderSlotOptions(filtered);
+            updateTimezoneSummary();
             if (!silent && filtered.length > 0) {
                 setStatus('success', `Loaded ${filtered.length} available slot${filtered.length === 1 ? '' : 's'}.`);
             } else if (!silent) {
@@ -299,6 +326,11 @@ if (typeof window !== 'undefined') {
         dateInput.addEventListener('change', async () => {
             await loadSlots();
         });
+    }
+
+    if (timezoneInput) {
+        timezoneInput.addEventListener('change', refreshRenderedSlots);
+        timezoneInput.addEventListener('blur', refreshRenderedSlots);
     }
 
     form.addEventListener('submit', async (event) => {
@@ -391,6 +423,7 @@ if (typeof window !== 'undefined') {
         }
     });
 
+    updateTimezoneSummary();
     loadSlots();
 })();
 

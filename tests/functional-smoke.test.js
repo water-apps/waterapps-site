@@ -24,6 +24,7 @@ test("booking flow critical UI exists on homepage", () => {
     assert.match(indexHtml, /id="booking-slot"/);
     assert.match(indexHtml, /id="booking-submit"/);
     assert.match(indexHtml, /id="booking-refresh"/);
+    assert.match(indexHtml, /id="booking-timezone-summary"/);
 });
 
 test("booking form is wired to availability and booking APIs", () => {
