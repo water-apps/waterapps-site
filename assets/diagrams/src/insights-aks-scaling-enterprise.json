@@ -1,0 +1,25 @@
+{
+  "aria_label": "Flow diagram for AKS scaling in enterprise environments",
+  "steps": [
+    {
+      "title": "Workload Signal",
+      "subtitle": "HPA or KEDA"
+    },
+    {
+      "title": "Placement Intent",
+      "subtitle": "Labels, taints, zones"
+    },
+    {
+      "title": "Policy and Scheduling Validation",
+      "subtitle": "Admission control"
+    },
+    {
+      "title": "Node Pool Scale Decision",
+      "subtitle": "Cluster Autoscaler"
+    },
+    {
+      "title": "Validated Capacity",
+      "subtitle": "Predictable workload landing"
+    }
+  ]
+}
