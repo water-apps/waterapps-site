@@ -15,4 +15,5 @@ render() {
 
 mkdir -p "$OUT_DIR"
 render "$SRC_DIR/insights-aks-scaling-enterprise.d2" "$OUT_DIR/insights-aks-scaling-enterprise.svg"
+render "$SRC_DIR/insights-400-enterprise-aws-stack.d2" "$OUT_DIR/insights-400-enterprise-aws-stack.svg"
 render "$SRC_DIR/insights-gitops-regulated-releases.d2" "$OUT_DIR/insights-gitops-regulated-releases.svg"

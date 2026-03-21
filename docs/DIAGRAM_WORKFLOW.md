@@ -20,6 +20,7 @@ This repo now uses:
 
 Current source files:
 
+- `assets/diagrams/src/insights-400-enterprise-aws-stack.d2`
 - `assets/diagrams/src/insights-aks-scaling-enterprise.d2`
 - `assets/diagrams/src/insights-gitops-regulated-releases.d2`
 
@@ -34,6 +35,7 @@ Render all maintained insight diagrams:
 Validate individual source files:
 
 ```bash
+d2 validate assets/diagrams/src/insights-400-enterprise-aws-stack.d2
 d2 validate assets/diagrams/src/insights-aks-scaling-enterprise.d2
 d2 validate assets/diagrams/src/insights-gitops-regulated-releases.d2
 ```
@@ -61,3 +63,10 @@ The render script uses:
 - cleaner architecture layouts than ad hoc hand-drawn blocks
 - easy to review in Git
 - fast to regenerate for website, PDF, or article updates
+
+## Vendor Icon Rule
+
+- Use official vendor architecture icons when the diagram represents a named cloud service.
+- Keep only the minimum SVG subset needed in-repo under `assets/icons/vendors/`.
+- Prefer Azure icons for Azure service diagrams and AWS icons for AWS service diagrams.
+- Do not mix unofficial logo packs with official architecture icon sets.

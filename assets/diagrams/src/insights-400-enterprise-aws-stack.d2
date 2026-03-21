@@ -1,0 +1,67 @@
+direction: right
+
+classes: {
+  foundation: {
+    style: {
+      fill: "#fff7ed"
+      stroke: "#c2410c"
+      font-color: "#431407"
+      shadow: true
+    }
+  }
+  platform: {
+    style: {
+      fill: "#fff1f2"
+      stroke: "#be123c"
+      font-color: "#4c0519"
+      shadow: true
+    }
+  }
+  data: {
+    style: {
+      fill: "#ecfdf5"
+      stroke: "#047857"
+      font-color: "#052e16"
+      shadow: true
+    }
+  }
+  control: {
+    style: {
+      fill: "#eff6ff"
+      stroke: "#1d4ed8"
+      font-color: "#0f172a"
+      shadow: true
+    }
+  }
+}
+
+vpc: {
+  label: "VPC foundation\nprivate, public, isolated"
+  class: foundation
+  icon: ../../icons/vendors/aws/Virtual-private-cloud-VPC_32.svg
+}
+fargate: {
+  label: "Fargate services\ncontainerized application tier"
+  class: platform
+  icon: ../../icons/vendors/aws/Arch_AWS-Fargate_32.svg
+}
+rds: {
+  label: "RDS PostgreSQL\nstateful data tier"
+  class: data
+  icon: ../../icons/vendors/aws/Arch_Amazon-RDS_32.svg
+}
+edge: {
+  label: "CloudFront edge\nTLS, cache, WAF-ready"
+  class: control
+  icon: ../../icons/vendors/aws/Arch_Amazon-CloudFront_32.svg
+}
+observe: {
+  label: "CloudWatch visibility\nlogs, alarms, audit clues"
+  class: control
+  icon: ../../icons/vendors/aws/Arch_Amazon-CloudWatch_32.svg
+}
+
+vpc -> fargate: "segmented network\nboundary"
+fargate -> rds: "application traffic\nto data"
+rds -> edge: "protected delivery\npath"
+edge -> observe: "operational signals\nand alerts"
