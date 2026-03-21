@@ -1,6 +1,10 @@
 # Third-Party Icon Sources
 
-WaterApps stores a small, curated subset of official vendor architecture icons for website diagrams.
+WaterApps stores a curated subset of vendor and tool icons for website diagrams, docs, and architecture content.
+
+Refresh script:
+
+- `scripts/fetch_curated_icons.sh`
 
 ## Azure
 
@@ -41,3 +45,32 @@ Current subset:
 - `github/issue-opened-16.svg`
 - `github/git-pull-request-16.svg`
 - `github/mark-github-16.svg`
+
+## Generic Tooling
+
+- Source: Simple Icons
+- Official page: https://simpleicons.org/
+- CDN source used: `unpkg.com/simple-icons`
+
+Current subset:
+
+- `simple/kubernetes.svg`
+- `simple/terraform.svg`
+- `simple/docker.svg`
+- `simple/python.svg`
+- `simple/n8n.svg`
+- `simple/prometheus.svg`
+- `simple/grafana.svg`
+- `simple/githubactions.svg`
+- `simple/postgresql.svg`
+- `simple/nginx.svg`
+- `simple/react.svg`
+- `simple/nodejs.svg`
+- `simple/typescript.svg`
+
+## Selection Rule
+
+- Prefer official cloud architecture icons for Azure and AWS services.
+- Prefer official GitHub icons for GitHub concepts such as issues, pull requests, and repository state.
+- Use Simple Icons for general tools and open-source technologies where a cloud-vendor pack does not apply.
+- Keep the pack curated. Add icons with intent, not in bulk.
