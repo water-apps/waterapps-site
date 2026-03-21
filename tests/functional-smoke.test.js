@@ -10,6 +10,12 @@ const MANAGEMENT_DASHBOARD_PATH = path.join(__dirname, "..", "management-dashboa
 const MANAGEMENT_DASHBOARD_JS_PATH = path.join(__dirname, "..", "scripts", "management-dashboard.js");
 const PORTAL_LOGIN_PATH = path.join(__dirname, "..", "portal-login.html");
 const PORTAL_AUTH_CONFIG_PATH = path.join(__dirname, "..", "scripts", "portal-auth-config.js");
+const CAPABILITY_DOWNLOAD_PATH = path.join(__dirname, "..", "capability-statement-download.html");
+const SERVICE_OVERVIEW_PATH = path.join(__dirname, "..", "service-overview.html");
+const REFERENCE_ARCHITECTURE_PATH = path.join(__dirname, "..", "reference-architecture.html");
+const CAPABILITY_PDF_PATH = path.join(__dirname, "..", "assets", "docs", "capability-statement.pdf");
+const SERVICE_OVERVIEW_PDF_PATH = path.join(__dirname, "..", "assets", "docs", "service-overview.pdf");
+const REFERENCE_ARCHITECTURE_PDF_PATH = path.join(__dirname, "..", "assets", "docs", "reference-architecture.pdf");
 
 const indexHtml = fs.readFileSync(INDEX_PATH, "utf8");
 const indexJs = fs.readFileSync(INDEX_JS_PATH, "utf8");
@@ -18,6 +24,9 @@ const managementDashboardHtml = fs.readFileSync(MANAGEMENT_DASHBOARD_PATH, "utf8
 const managementDashboardJs = fs.readFileSync(MANAGEMENT_DASHBOARD_JS_PATH, "utf8");
 const portalLoginHtml = fs.readFileSync(PORTAL_LOGIN_PATH, "utf8");
 const portalAuthConfigJs = fs.readFileSync(PORTAL_AUTH_CONFIG_PATH, "utf8");
+const capabilityDownloadHtml = fs.readFileSync(CAPABILITY_DOWNLOAD_PATH, "utf8");
+const serviceOverviewHtml = fs.readFileSync(SERVICE_OVERVIEW_PATH, "utf8");
+const referenceArchitectureHtml = fs.readFileSync(REFERENCE_ARCHITECTURE_PATH, "utf8");
 
 test("booking flow critical UI exists on homepage", () => {
     assert.match(indexHtml, /id="booking-form"/);
@@ -107,4 +116,23 @@ test("management dashboard sanitizes external review profile links", () => {
     assert.match(managementDashboardJs, /function sanitizeExternalUrl/);
     assert.match(managementDashboardJs, /parsed\.protocol !== 'http:' && parsed\.protocol !== 'https:'/);
     assert.match(managementDashboardJs, /LinkedIn profile unavailable/);
+});
+
+test("public PDF assets exist", () => {
+    assert.ok(fs.existsSync(CAPABILITY_PDF_PATH));
+    assert.ok(fs.existsSync(SERVICE_OVERVIEW_PDF_PATH));
+    assert.ok(fs.existsSync(REFERENCE_ARCHITECTURE_PDF_PATH));
+});
+
+test("capability statement download route points to assets/docs", () => {
+    assert.match(capabilityDownloadHtml, /assets\/docs\/capability-statement\.pdf/);
+    assert.match(capabilityDownloadHtml, /assets\/docs\/service-overview\.pdf/);
+    assert.match(capabilityDownloadHtml, /assets\/docs\/reference-architecture\.pdf/);
+});
+
+test("service overview and reference architecture public pages exist", () => {
+    assert.match(serviceOverviewHtml, /<h1[^>]*>\s*Service Overview\s*<\/h1>/);
+    assert.match(serviceOverviewHtml, /Download Service Overview \(PDF\)/);
+    assert.match(referenceArchitectureHtml, /<h1[^>]*>\s*Reference Architecture\s*<\/h1>/);
+    assert.match(referenceArchitectureHtml, /Download Reference Architecture \(PDF\)/);
 });
