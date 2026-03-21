@@ -1,0 +1,124 @@
+name: Deploy Site to CloudFront
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Git ref to deploy
+        required: true
+        default: main
+      dry_run:
+        description: Build and package only
+        required: true
+        type: boolean
+        default: true
+
+concurrency:
+  group: deploy-cloudfront-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+  AWS_REGION: ${{ vars.AWS_REGION != '' && vars.AWS_REGION || 'ap-southeast-2' }}
+  FRONTEND_S3_BUCKET: ${{ vars.WATERAPPS_FRONTEND_S3_BUCKET }}
+  CLOUDFRONT_DISTRIBUTION_ID: ${{ vars.WATERAPPS_CLOUDFRONT_DISTRIBUTION_ID }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          ref: ${{ inputs.ref }}
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build stylesheet
+        run: npm run build:css
+
+      - name: Run portal auth unit tests
+        run: node --test tests/portal-auth.test.js
+
+      - name: Run site quality checks
+        run: bash scripts/check-site.sh
+
+      - name: Build deployment bundle
+        run: bash scripts/build-deploy-bundle.sh
+
+      - name: Upload deployment bundle artifact
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
+        with:
+          name: site-cloudfront-bundle
+          path: dist/
+          if-no-files-found: error
+
+      - name: Validate deploy inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${FRONTEND_S3_BUCKET}" ]; then
+            echo "::error::Missing repository variable WATERAPPS_FRONTEND_S3_BUCKET."
+            exit 1
+          fi
+
+          if [ "${{ inputs.dry_run }}" != "true" ] && [ -z "${{ secrets.AWS_OIDC_ROLE_ARN }}" ]; then
+            echo "::error::Missing repository secret AWS_OIDC_ROLE_ARN."
+            exit 1
+          fi
+
+      - name: Configure AWS credentials
+        if: ${{ inputs.dry_run != true }}
+        uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
+          role-session-name: gha-site-cloudfront-deploy
+
+      - name: Sync site bundle to S3
+        if: ${{ inputs.dry_run != true }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          aws s3 sync dist/ "s3://${FRONTEND_S3_BUCKET}" --delete
+          aws s3 cp dist/ "s3://${FRONTEND_S3_BUCKET}" \
+            --recursive \
+            --exclude "*" \
+            --include "*.html" \
+            --include "robots.txt" \
+            --include "sitemap.xml" \
+            --metadata-directive REPLACE \
+            --cache-control "public,max-age=300,must-revalidate"
+          aws s3 cp dist/assets/ "s3://${FRONTEND_S3_BUCKET}/assets/" \
+            --recursive \
+            --metadata-directive REPLACE \
+            --cache-control "public,max-age=31536000,immutable"
+
+      - name: Invalidate CloudFront cache
+        if: ${{ inputs.dry_run != true && env.CLOUDFRONT_DISTRIBUTION_ID != '' }}
+        run: aws cloudfront create-invalidation --distribution-id "${CLOUDFRONT_DISTRIBUTION_ID}" --paths "/*"
+
+      - name: Publish deploy summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Site CloudFront Deploy"
+            echo "- Ref: ${{ inputs.ref }}"
+            echo "- Dry run: ${{ inputs.dry_run }}"
+            echo "- S3 bucket configured: ${{ env.FRONTEND_S3_BUCKET != '' }}"
+            echo "- CloudFront distribution configured: ${{ env.CLOUDFRONT_DISTRIBUTION_ID != '' }}"
+          } >> "${GITHUB_STEP_SUMMARY}"
