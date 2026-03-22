@@ -1,6 +1,10 @@
 name: Deploy Site to CloudFront
 
 on:
+  workflow_run:
+    workflows: ["Site Quality"]
+    types: [completed]
+    branches: [main]
   workflow_dispatch:
     inputs:
       ref:
@@ -29,13 +33,31 @@ env:
 
 jobs:
   deploy:
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_branch == 'main') }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
+      - name: Resolve deploy context
+        id: context
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "workflow_run" ]; then
+            echo "checkout_ref=${{ github.event.workflow_run.head_sha }}" >> "$GITHUB_OUTPUT"
+            echo "release_ref=${{ github.event.workflow_run.head_branch }}" >> "$GITHUB_OUTPUT"
+            echo "dry_run=false" >> "$GITHUB_OUTPUT"
+            echo "trigger_label=workflow_run" >> "$GITHUB_OUTPUT"
+          else
+            echo "checkout_ref=${{ inputs.ref }}" >> "$GITHUB_OUTPUT"
+            echo "release_ref=${{ inputs.ref }}" >> "$GITHUB_OUTPUT"
+            echo "dry_run=${{ inputs.dry_run }}" >> "$GITHUB_OUTPUT"
+            echo "trigger_label=workflow_dispatch" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
-          ref: ${{ inputs.ref }}
+          ref: ${{ steps.context.outputs.checkout_ref }}
           persist-credentials: false
 
       - name: Determine release metadata
@@ -45,7 +67,7 @@ jobs:
           set -euo pipefail
           release_sha="$(git log -1 --format=%H)"
           release_version="$(git describe --tags --always --dirty 2>/dev/null || git rev-parse --short=12 HEAD)"
-          release_ref="$(git rev-parse --abbrev-ref HEAD)"
+          release_ref="${{ steps.context.outputs.release_ref }}"
           release_id="${release_sha}"
           release_created_at="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
           release_bucket_prefix="releases/${release_id}"
@@ -106,13 +128,13 @@ jobs:
             exit 1
           fi
 
-          if [ "${{ inputs.dry_run }}" != "true" ] && [ -z "${{ secrets.AWS_OIDC_ROLE_ARN }}" ]; then
+          if [ "${{ steps.context.outputs.dry_run }}" != "true" ] && [ -z "${{ secrets.AWS_OIDC_ROLE_ARN }}" ]; then
             echo "::error::Missing repository secret AWS_OIDC_ROLE_ARN."
             exit 1
           fi
 
       - name: Configure AWS credentials
-        if: ${{ inputs.dry_run != true }}
+        if: ${{ steps.context.outputs.dry_run != 'true' }}
         uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708
         with:
           aws-region: ${{ env.AWS_REGION }}
@@ -120,7 +142,7 @@ jobs:
           role-session-name: gha-site-cloudfront-deploy
 
       - name: Sync site bundle to S3
-        if: ${{ inputs.dry_run != true }}
+        if: ${{ steps.context.outputs.dry_run != 'true' }}
         shell: bash
         run: |
           set -euo pipefail
@@ -147,7 +169,7 @@ jobs:
             --cache-control "public,max-age=31536000,immutable"
 
       - name: Invalidate CloudFront cache
-        if: ${{ inputs.dry_run != true && env.CLOUDFRONT_DISTRIBUTION_ID != '' }}
+        if: ${{ steps.context.outputs.dry_run != 'true' && env.CLOUDFRONT_DISTRIBUTION_ID != '' }}
         run: aws cloudfront create-invalidation --distribution-id "${CLOUDFRONT_DISTRIBUTION_ID}" --paths "/*"
 
       - name: Publish deploy summary
@@ -159,8 +181,9 @@ jobs:
             echo "- Release id: ${{ steps.release.outputs.release_id }}"
             echo "- Release version: ${{ steps.release.outputs.release_version }}"
             echo "- Release ref: ${{ steps.release.outputs.release_ref }}"
-            echo "- Ref: ${{ inputs.ref }}"
-            echo "- Dry run: ${{ inputs.dry_run }}"
+            echo "- Trigger: ${{ steps.context.outputs.trigger_label }}"
+            echo "- Ref: ${{ steps.context.outputs.checkout_ref }}"
+            echo "- Dry run: ${{ steps.context.outputs.dry_run }}"
             echo "- S3 bucket configured: ${{ env.FRONTEND_S3_BUCKET != '' }}"
             echo "- CloudFront distribution configured: ${{ env.CLOUDFRONT_DISTRIBUTION_ID != '' }}"
             echo "- Immutable bundle prefix: ${{ steps.release.outputs.release_bucket_prefix }}"
