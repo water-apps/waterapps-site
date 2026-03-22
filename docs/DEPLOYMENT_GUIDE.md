@@ -27,10 +27,29 @@ Required repository configuration:
 1. Keep GitHub Pages live until the CloudFront path is validated.
 2. Build and package the site with a workflow dry run.
 3. Create the S3 + CloudFront infrastructure from the owning infra repo.
-4. Run the deploy workflow with `dry_run = false` to upload the site bundle to S3.
+4. Run the deploy workflow with `dry_run = false` to upload the stamped site bundle to S3.
 5. Validate the CloudFront hostname first.
 6. Update Cloudflare DNS/proxy to point production traffic at CloudFront.
 7. Disable GitHub Pages only after cutover is confirmed healthy.
+
+## Release Artifact Model
+
+The deployment path now produces a stamped bundle rather than an anonymous copy of the working tree.
+
+Each bundle contains:
+- `release.json`
+- `release.txt`
+
+CloudFront deploys also keep an immutable copy at:
+
+`s3://<frontend-bucket>/releases/<commit-sha>/`
+
+The bucket root still serves the active site, but the `releases/` prefix provides:
+- commit-level rollback targets
+- evidence of what was deployed
+- a stable way to compare live content against a known artifact
+
+Use `https://www.waterapps.com.au/release.json` to verify the currently served release metadata after deployment.
 
 ## Pre-Deploy Checks
 
@@ -47,5 +66,6 @@ If the CloudFront cutover fails:
 
 1. point Cloudflare traffic back to the GitHub Pages origin
 2. keep the repo public until the site is stable again
-3. fix the CloudFront stack or deploy pipeline
-4. retry cutover only after revalidation
+3. if the infrastructure is healthy but the current bundle is bad, redeploy a previously known-good `ref` or restore the matching bundle from `releases/<commit-sha>/`
+4. fix the CloudFront stack or deploy pipeline
+5. retry cutover only after revalidation

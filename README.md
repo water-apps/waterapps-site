@@ -8,7 +8,7 @@ Live site: [www.waterapps.com.au](https://www.waterapps.com.au)
 
 ## Architecture
 
-Static HTML/CSS/JS site hosted on GitHub Pages with a custom domain. No build step required — all assets are checked in and served directly.
+Static HTML/CSS/JS site with release-stamped deployment bundles. GitHub Pages remains the public recovery path, while CloudFront is the target production delivery path.
 
 ```
 Browser → GitHub Pages (waterapps.com.au) → HTML/CSS/JS
@@ -60,9 +60,24 @@ All changes flow through pull request → CI → merge to `main` → auto-deploy
 1. Branch from `main` — use a clean checkout or worktree, not the local `main` directly
 2. Make changes, push, open PR
 3. Wait for `site-quality` to pass
-4. Merge to `main` — GitHub Pages deploys within 1–2 minutes
-5. Verify at [https://www.waterapps.com.au](https://www.waterapps.com.au)
-6. Run smoke test if contact form or portal auth was changed: [`docs/STAGING_SMOKE_RUNBOOK.md`](docs/STAGING_SMOKE_RUNBOOK.md)
+4. Merge to `main` — GitHub Pages deploys within 1–2 minutes with a stamped release bundle
+5. For CloudFront, run `deploy-cloudfront.yml` against the approved ref
+6. Verify at [https://www.waterapps.com.au](https://www.waterapps.com.au) and confirm `/release.json`
+7. Run smoke test if contact form or portal auth was changed: [`docs/STAGING_SMOKE_RUNBOOK.md`](docs/STAGING_SMOKE_RUNBOOK.md)
+
+## Release metadata
+
+Every deployment bundle now includes:
+- `release.json`
+- `release.txt`
+
+These files expose the deployed commit SHA, release version string, build timestamp, target, and workflow run metadata.
+
+For CloudFront deployments, the workflow also stores an immutable copy of the bundle under:
+
+`s3://<frontend-bucket>/releases/<commit-sha>/`
+
+That gives WaterApps a cleaner rollback path and a verifiable release record without depending on rebuilding from the branch later.
 
 ---
 

@@ -38,6 +38,26 @@ jobs:
           ref: ${{ inputs.ref }}
           persist-credentials: false
 
+      - name: Determine release metadata
+        id: release
+        shell: bash
+        run: |
+          set -euo pipefail
+          release_sha="$(git log -1 --format=%H)"
+          release_version="$(git describe --tags --always --dirty 2>/dev/null || git rev-parse --short=12 HEAD)"
+          release_ref="$(git rev-parse --abbrev-ref HEAD)"
+          release_id="${release_sha}"
+          release_created_at="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+          release_bucket_prefix="releases/${release_id}"
+          {
+            echo "release_sha=${release_sha}"
+            echo "release_version=${release_version}"
+            echo "release_ref=${release_ref}"
+            echo "release_id=${release_id}"
+            echo "release_created_at=${release_created_at}"
+            echo "release_bucket_prefix=${release_bucket_prefix}"
+          } >> "$GITHUB_OUTPUT"
+
       - name: Setup Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
@@ -57,12 +77,23 @@ jobs:
         run: bash scripts/check-site.sh
 
       - name: Build deployment bundle
+        env:
+          BUILD_RELEASE_SHA: ${{ steps.release.outputs.release_sha }}
+          BUILD_RELEASE_VERSION: ${{ steps.release.outputs.release_version }}
+          BUILD_RELEASE_REF: ${{ steps.release.outputs.release_ref }}
+          BUILD_RELEASE_ID: ${{ steps.release.outputs.release_id }}
+          BUILD_RELEASE_CREATED_AT: ${{ steps.release.outputs.release_created_at }}
+          BUILD_RELEASE_TARGET: cloudfront
+          BUILD_RELEASE_RUN_ID: ${{ github.run_id }}
+          BUILD_RELEASE_RUN_ATTEMPT: ${{ github.run_attempt }}
+          BUILD_RELEASE_RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          BUILD_RELEASE_BUCKET_PREFIX: ${{ steps.release.outputs.release_bucket_prefix }}
         run: bash scripts/build-deploy-bundle.sh
 
       - name: Upload deployment bundle artifact
         uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
         with:
-          name: site-cloudfront-bundle
+          name: site-cloudfront-bundle-${{ steps.release.outputs.release_id }}
           path: dist/
           if-no-files-found: error
 
@@ -93,7 +124,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          aws s3 sync dist/ "s3://${FRONTEND_S3_BUCKET}" --delete
+          aws s3 sync dist/ "s3://${FRONTEND_S3_BUCKET}/${{ steps.release.outputs.release_bucket_prefix }}/" --delete
+          aws s3 sync dist/ "s3://${FRONTEND_S3_BUCKET}" --delete --exclude "releases/*"
           aws s3 cp dist/ "s3://${FRONTEND_S3_BUCKET}" \
             --recursive \
             --exclude "*" \
@@ -102,6 +134,13 @@ jobs:
             --include "sitemap.xml" \
             --metadata-directive REPLACE \
             --cache-control "public,max-age=300,must-revalidate"
+          aws s3 cp dist/ "s3://${FRONTEND_S3_BUCKET}" \
+            --recursive \
+            --exclude "*" \
+            --include "release.json" \
+            --include "release.txt" \
+            --metadata-directive REPLACE \
+            --cache-control "no-store,max-age=0,must-revalidate"
           aws s3 cp dist/assets/ "s3://${FRONTEND_S3_BUCKET}/assets/" \
             --recursive \
             --metadata-directive REPLACE \
@@ -117,8 +156,13 @@ jobs:
         run: |
           {
             echo "## Site CloudFront Deploy"
+            echo "- Release id: ${{ steps.release.outputs.release_id }}"
+            echo "- Release version: ${{ steps.release.outputs.release_version }}"
+            echo "- Release ref: ${{ steps.release.outputs.release_ref }}"
             echo "- Ref: ${{ inputs.ref }}"
             echo "- Dry run: ${{ inputs.dry_run }}"
             echo "- S3 bucket configured: ${{ env.FRONTEND_S3_BUCKET != '' }}"
             echo "- CloudFront distribution configured: ${{ env.CLOUDFRONT_DISTRIBUTION_ID != '' }}"
+            echo "- Immutable bundle prefix: ${{ steps.release.outputs.release_bucket_prefix }}"
+            echo "- Release manifest: /release.json"
           } >> "${GITHUB_STEP_SUMMARY}"

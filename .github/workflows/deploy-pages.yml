@@ -25,20 +25,40 @@ jobs:
       - name: Checkout
         uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
 
+      - name: Determine release metadata
+        id: release
+        shell: bash
+        run: |
+          set -euo pipefail
+          release_sha="$(git log -1 --format=%H)"
+          release_version="$(git describe --tags --always --dirty 2>/dev/null || git rev-parse --short=12 HEAD)"
+          release_ref="$(git rev-parse --abbrev-ref HEAD)"
+          release_id="${release_sha}"
+          release_created_at="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+          {
+            echo "release_sha=${release_sha}"
+            echo "release_version=${release_version}"
+            echo "release_ref=${release_ref}"
+            echo "release_id=${release_id}"
+            echo "release_created_at=${release_created_at}"
+          } >> "$GITHUB_OUTPUT"
+
       - name: Configure Pages
         uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b
 
       - name: Assemble static site artifact
+        env:
+          BUILD_RELEASE_SHA: ${{ steps.release.outputs.release_sha }}
+          BUILD_RELEASE_VERSION: ${{ steps.release.outputs.release_version }}
+          BUILD_RELEASE_REF: ${{ steps.release.outputs.release_ref }}
+          BUILD_RELEASE_ID: ${{ steps.release.outputs.release_id }}
+          BUILD_RELEASE_CREATED_AT: ${{ steps.release.outputs.release_created_at }}
+          BUILD_RELEASE_TARGET: github-pages
+          BUILD_RELEASE_RUN_ID: ${{ github.run_id }}
+          BUILD_RELEASE_RUN_ATTEMPT: ${{ github.run_attempt }}
+          BUILD_RELEASE_RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
-          rm -rf _site
-          mkdir -p _site
-          rsync -a --delete \
-            --exclude '.git/' \
-            --exclude '.github/' \
-            --exclude 'node_modules/' \
-            --exclude 'test-results/' \
-            --exclude '.DS_Store' \
-            ./ _site/
+          bash scripts/build-deploy-bundle.sh _site
           touch _site/.nojekyll
 
       - name: Upload Pages artifact
