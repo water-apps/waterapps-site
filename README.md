@@ -49,7 +49,7 @@ All changes flow through pull request → CI → merge to `main` → auto-deploy
 | `site-quality.yml` | push to `main`, PR | Static quality checks + portal auth unit tests |
 | `deploy-pages.yml` | push to `main`, manual | Deploy to GitHub Pages |
 | `owasp-zap-baseline.yml` | scheduled | OWASP ZAP security baseline scan |
-| `deploy-cloudfront.yml` | manual | CloudFront distribution (migration path) |
+| `deploy-cloudfront.yml` | successful `Site Quality` on `main`, manual | Deploy stamped bundle to S3 + invalidate CloudFront |
 
 **Required checks on `main`**: `site-quality` must pass before merge.
 
@@ -61,9 +61,10 @@ All changes flow through pull request → CI → merge to `main` → auto-deploy
 2. Make changes, push, open PR
 3. Wait for `site-quality` to pass
 4. Merge to `main` — GitHub Pages deploys within 1–2 minutes with a stamped release bundle
-5. For CloudFront, run `deploy-cloudfront.yml` against the approved ref
-6. Verify at [https://www.waterapps.com.au](https://www.waterapps.com.au) and confirm `/release.json`
-7. Run smoke test if contact form or portal auth was changed: [`docs/STAGING_SMOKE_RUNBOOK.md`](docs/STAGING_SMOKE_RUNBOOK.md)
+5. After `Site Quality` succeeds on `main`, CloudFront deploys the same release automatically when production variables/secrets are configured
+6. Use manual `deploy-cloudfront.yml` only for dry runs, backfills, or explicit redeploys of an approved ref
+7. Verify at [https://www.waterapps.com.au](https://www.waterapps.com.au) and confirm `/release.json`
+8. Run smoke test if contact form or portal auth was changed: [`docs/STAGING_SMOKE_RUNBOOK.md`](docs/STAGING_SMOKE_RUNBOOK.md)
 
 ## Release metadata
 

@@ -13,7 +13,10 @@ This is the short-term recovery path only. The target state is:
 
 ## CloudFront Deployment Workflow
 
-The repo includes a manual workflow at `.github/workflows/deploy-cloudfront.yml`.
+The repo includes `.github/workflows/deploy-cloudfront.yml` with two paths:
+
+- automatic deploy after `Site Quality` succeeds on a push to `main`
+- manual `workflow_dispatch` for dry runs, backfills, or explicit redeploys
 
 Required repository configuration:
 
@@ -25,12 +28,13 @@ Required repository configuration:
 ## Safe Rollout Sequence
 
 1. Keep GitHub Pages live until the CloudFront path is validated.
-2. Build and package the site with a workflow dry run.
+2. Validate the automatic CloudFront deploy path from a merged `main` change.
 3. Create the S3 + CloudFront infrastructure from the owning infra repo.
-4. Run the deploy workflow with `dry_run = false` to upload the stamped site bundle to S3.
-5. Validate the CloudFront hostname first.
-6. Update Cloudflare DNS/proxy to point production traffic at CloudFront.
-7. Disable GitHub Pages only after cutover is confirmed healthy.
+4. Use `workflow_dispatch` with `dry_run = true` when you want a packaging-only rehearsal.
+5. Use `workflow_dispatch` with `dry_run = false` only when you need to redeploy a specific approved ref.
+6. Validate the CloudFront hostname first.
+7. Update Cloudflare DNS/proxy to point production traffic at CloudFront.
+8. Disable GitHub Pages only after cutover is confirmed healthy.
 
 ## Release Artifact Model
 
@@ -59,6 +63,13 @@ Before any CloudFront deploy:
 2. run `npm run build:css`
 3. run `node --test tests/portal-auth.test.js`
 4. confirm the S3 bucket and CloudFront distribution variables match the production frontend stack
+
+For automatic deploys, these checks are enforced by the CI flow:
+
+1. PR `Site Quality`
+2. merge to `main`
+3. push `Site Quality` on `main`
+4. CloudFront deploy workflow triggered from the successful `main` quality run
 
 ## Rollback
 
