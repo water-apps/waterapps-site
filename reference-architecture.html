@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reference Architecture | WaterApps</title>
+    <meta name="description" content="Client-safe WaterApps reference architecture summary covering secure delivery, cloud runtime, observability, and governance-aligned controls.">
+    <link rel="icon" type="image/png" href="logo.png">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EVEC7YRTYC"></script>
+    <script src="assets/js/analytics.js"></script>
+    <link rel="stylesheet" href="assets/css/tailwind.generated.css">
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <a href="index.html" class="text-blue-600 hover:text-blue-700 text-sm">&larr; Back to WaterApps</a>
+        <h1 class="text-4xl font-bold mt-4 mb-4">Reference Architecture</h1>
+        <p class="text-lg text-gray-600 mb-8">
+            A public summary of the delivery and runtime architecture WaterApps uses as a client-safe reference for regulated cloud programs.
+        </p>
+        <p class="text-sm text-gray-500 mb-6">Last updated: March 21, 2026 (AEDT)</p>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Architecture Goals</h2>
+            <ul class="list-disc pl-6 space-y-2 text-gray-700">
+                <li>Repeatable environment builds using Infrastructure as Code</li>
+                <li>Traceable CI/CD with testing and release gates before promotion</li>
+                <li>Strong identity, secrets, and change-control patterns</li>
+                <li>Operational visibility through logging, monitoring, and documented handover</li>
+            </ul>
+        </section>
+
+        <section class="grid md:grid-cols-2 gap-8 mb-8">
+            <div class="bg-white rounded-xl border border-gray-200 p-8">
+                <h2 class="text-2xl font-semibold mb-4">Core Layers</h2>
+                <ol class="list-decimal pl-6 space-y-2 text-gray-700">
+                    <li>Edge and presentation layer for public entry and controlled delivery</li>
+                    <li>Application runtime layer for APIs, services, and isolated workloads</li>
+                    <li>Data and integration layer for persistence, messaging, and external systems</li>
+                    <li>Monitoring and audit layer for operational visibility and incident response</li>
+                </ol>
+            </div>
+            <div class="bg-white rounded-xl border border-gray-200 p-8">
+                <h2 class="text-2xl font-semibold mb-4">Delivery Controls</h2>
+                <ul class="list-disc pl-6 space-y-2 text-gray-700">
+                    <li>Branch protection and required CI checks</li>
+                    <li>Automated functional and security testing</li>
+                    <li>Identity-aware automation and least-privilege access</li>
+                    <li>Environment-specific release controls and documentation</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Typical Building Blocks</h2>
+            <div class="grid md:grid-cols-3 gap-6 text-gray-700">
+                <div>
+                    <h3 class="font-semibold text-lg mb-2">Cloud Runtime</h3>
+                    <p>Managed compute, controlled networking, encrypted persistence, and controlled API exposure.</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-lg mb-2">Delivery Platform</h3>
+                    <p>Reusable workflows, policy checks, test automation, and release evidence for governed change.</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-lg mb-2">Operational Layer</h3>
+                    <p>Monitoring, alerting, logging, runbooks, and cost visibility to support ongoing ownership.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-blue-900 text-white rounded-xl p-8">
+            <h2 class="text-2xl font-semibold mb-3">Use This as a Conversation Starter</h2>
+            <p class="text-blue-100 mb-6">
+                This is a public summary, not a customer-specific solution design. The detailed architecture and delivery scope should be shaped to your environment, risk profile, and operating model.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a href="assets/docs/reference-architecture.pdf" class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-lg font-semibold text-center">
+                    Download Reference Architecture (PDF)
+                </a>
+                <a href="insights-400-enterprise-aws-stack.html" class="bg-white text-gray-900 px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-100">
+                    Read the Cost Breakdown Article
+                </a>
+                <a href="index.html#contact" class="bg-transparent border border-blue-300 text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-blue-800">
+                    Discuss Your Environment
+                </a>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
