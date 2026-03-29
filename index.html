@@ -281,7 +281,7 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="nav-shell sticky top-0 z-50 shadow-sm">
+    <nav class="nav-shell sticky top-0 z-50 shadow-sm" aria-label="Primary site navigation">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16 gap-4">
                 <div class="flex items-center">
@@ -367,7 +367,7 @@
                     </button>
                 </div>
             </div>
-            <div id="mobile-menu" class="hidden md:hidden pb-5" aria-label="Mobile site navigation">
+            <div id="mobile-menu" class="hidden md:hidden pb-5" role="navigation" aria-label="Mobile site navigation">
                 <div class="rounded-2xl border border-slate-200 bg-white px-5 py-3 shadow-lg">
                     <a href="#services" class="mobile-menu-link">Services</a>
                     <a href="#products" class="mobile-menu-link">Products</a>
@@ -620,9 +620,9 @@
                     </div>
                 </article>
 
-                <aside class="bg-gray-900 text-white rounded-3xl p-8 md:p-10">
+                <aside class="bg-gray-900 text-white rounded-3xl p-8 md:p-10" aria-labelledby="aks-scaling-hero-aside-title">
                     <div class="text-xs uppercase tracking-[0.18em] text-blue-300 font-semibold mb-3">What the article covers</div>
-                    <h3 class="text-2xl font-bold mb-5">A design-led view of AKS scaling for enterprise teams</h3>
+                    <h3 id="aks-scaling-hero-aside-title" class="text-2xl font-bold mb-5">A design-led view of AKS scaling for enterprise teams</h3>
                     <div class="grid gap-4">
                         <div class="hero-mini-card rounded-2xl p-5">
                             <h4 class="text-lg font-semibold text-white mb-2">Current AKS scaling stack</h4>
@@ -2200,13 +2200,13 @@
 
     <div id="guide-backdrop" class="hidden fixed inset-0 bg-slate-950/45 z-[65]" aria-hidden="true"></div>
 
-    <aside id="guide-panel" class="guide-panel hidden fixed right-0 top-0 z-[70] h-full w-full max-w-xl border-l border-slate-200">
+    <aside id="guide-panel" class="guide-panel hidden fixed right-0 top-0 z-[70] h-full w-full max-w-xl border-l border-slate-200" aria-labelledby="guide-panel-title">
         <div class="flex h-full flex-col">
             <div class="border-b border-slate-200 px-6 py-5">
                 <div class="flex items-start justify-between gap-4">
                     <div>
                         <p class="text-xs font-semibold uppercase tracking-[0.2em] text-blue-700">Website Guide Agent</p>
-                        <h2 class="mt-2 text-2xl font-bold text-slate-950">Let me guide you to the right WaterApps path.</h2>
+                        <h2 id="guide-panel-title" class="mt-2 text-2xl font-bold text-slate-950">Let me guide you to the right WaterApps path.</h2>
                         <p id="guide-summary" class="mt-2 text-sm text-slate-600">Choose a path and I will point you to the best page or next action.</p>
                     </div>
                     <button id="guide-close" type="button" class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 hover:bg-slate-50" aria-label="Close site guide">
@@ -2224,7 +2224,7 @@
                 <section id="guide-step-shell">
                     <div class="mb-4">
                         <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Current question</p>
-                        <h3 id="guide-question-title" class="mt-2 text-2xl font-bold text-slate-950"></h3>
+                        <h3 id="guide-question-title" class="mt-2 text-2xl font-bold text-slate-950">Choose your next step</h3>
                         <p id="guide-question-body" class="mt-3 text-sm leading-6 text-slate-600"></p>
                     </div>
                     <div id="guide-choice-list" class="grid gap-3"></div>
@@ -2233,7 +2233,7 @@
                 <section id="guide-result-shell" class="hidden">
                     <div class="guide-result-card rounded-3xl p-6">
                         <p id="guide-result-eyebrow" class="text-xs font-semibold uppercase tracking-[0.2em] text-blue-700"></p>
-                        <h3 id="guide-result-title" class="mt-2 text-3xl font-bold text-slate-950"></h3>
+                        <h3 id="guide-result-title" class="mt-2 text-3xl font-bold text-slate-950">Recommended next action</h3>
                         <p id="guide-result-summary" class="mt-4 text-sm leading-6 text-slate-600"></p>
                         <ul id="guide-result-reasons" class="mt-5 space-y-3 text-sm leading-6 text-slate-700 list-disc pl-5"></ul>
 
@@ -2243,8 +2243,8 @@
                         </div>
 
                         <div class="mt-6 flex flex-col gap-3">
-                            <button id="guide-result-primary" type="button" class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white hover:bg-blue-700"></button>
-                            <button id="guide-result-secondary" type="button" class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 font-semibold text-slate-900 hover:bg-slate-50"></button>
+                            <button id="guide-result-primary" type="button" class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white hover:bg-blue-700" aria-label="Open recommended page">Open recommended page</button>
+                            <button id="guide-result-secondary" type="button" class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 font-semibold text-slate-900 hover:bg-slate-50" aria-label="Open alternate option">Open alternate option</button>
                         </div>
                     </div>
                 </section>
