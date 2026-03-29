@@ -1,0 +1,168 @@
+direction: right
+
+classes: {
+  actor: {
+    style: {
+      fill: "#fff7ed"
+      stroke: "#c2410c"
+      font-color: "#431407"
+      shadow: true
+    }
+  }
+  edge: {
+    style: {
+      fill: "#eff6ff"
+      stroke: "#2563eb"
+      font-color: "#0f172a"
+      shadow: true
+    }
+  }
+  runtime: {
+    style: {
+      fill: "#f5f3ff"
+      stroke: "#7c3aed"
+      font-color: "#2e1065"
+      shadow: true
+    }
+  }
+  async: {
+    style: {
+      fill: "#fff1f2"
+      stroke: "#e11d48"
+      font-color: "#4c0519"
+      shadow: true
+    }
+  }
+  data: {
+    style: {
+      fill: "#ecfdf5"
+      stroke: "#047857"
+      font-color: "#052e16"
+      shadow: true
+    }
+  }
+  control: {
+    style: {
+      fill: "#f8fafc"
+      stroke: "#475569"
+      font-color: "#0f172a"
+      shadow: true
+    }
+  }
+  observe: {
+    style: {
+      fill: "#e0f2fe"
+      stroke: "#0284c7"
+      font-color: "#082f49"
+      shadow: true
+    }
+  }
+  boundary: {
+    style: {
+      stroke: "#94a3b8"
+      stroke-dash: 4
+      fill: "#ffffff"
+    }
+  }
+}
+
+users: {
+  label: "Tenant users\nadmins and operators"
+  class: actor
+}
+
+edge_boundary: {
+  label: "Public edge"
+  class: boundary
+  web: {
+    label: "React or Next.js frontend"
+    class: edge
+    icon: ../../icons/vendors/simple/react.svg
+  }
+  edge: {
+    label: "CDN / edge ingress\nTLS, caching, WAF"
+    class: edge
+    icon: ../../icons/vendors/aws/Arch_Amazon-CloudFront_32.svg
+  }
+}
+
+runtime_boundary: {
+  label: "Private runtime"
+  class: boundary
+  api: {
+    label: "FastAPI service\nstateless product API"
+    class: runtime
+    icon: ../../icons/vendors/simple/python.svg
+  }
+  jobs: {
+    label: "Queue / job handoff\nretry-safe async work"
+    class: async
+  }
+  worker: {
+    label: "Worker runtime\nnotifications, sync, retries"
+    class: runtime
+    icon: ../../icons/vendors/simple/docker.svg
+  }
+  secrets: {
+    label: "Secrets + config"
+    class: control
+  }
+}
+
+data_boundary: {
+  label: "Durable state"
+  class: boundary
+  postgres: {
+    label: "PostgreSQL\nsystem of record"
+    class: data
+    icon: ../../icons/vendors/simple/postgresql.svg
+  }
+  objectstore: {
+    label: "Object storage\nfiles and exports"
+    class: data
+  }
+}
+
+observe_boundary: {
+  label: "Observability plane"
+  class: boundary
+  observe: {
+    label: "Logs, metrics, audit events\nalerts and runbooks"
+    class: observe
+    icon: ../../icons/vendors/aws/Arch_Amazon-CloudWatch_32.svg
+  }
+}
+
+control_boundary: {
+  label: "Control plane"
+  class: boundary
+  git: {
+    label: "GitHub Actions + OIDC\nvalidated delivery"
+    class: control
+    icon: ../../icons/vendors/simple/githubactions.svg
+  }
+  tf: {
+    label: "Terraform\ninfrastructure source of truth"
+    class: control
+    icon: ../../icons/vendors/simple/terraform.svg
+  }
+}
+
+users -> web: "browser flow"
+web -> edge: "HTTPS"
+edge -> api: "application requests"
+api -> postgres: "transactional reads and writes"
+api -> objectstore: "documents and exports"
+api -> jobs: "async side effects"
+jobs -> worker: "queued work"
+worker -> postgres: "status updates"
+worker -> objectstore: "generated artifacts"
+api -> observe: "request, error, audit signals"
+worker -> observe: "job and provider outcomes"
+git -> tf: "approved delivery"
+tf -> edge: "provision edge and runtime"
+tf -> api: "deploy service infrastructure"
+tf -> postgres: "managed data platform"
+tf -> observe: "alarms and dashboards"
+secrets -> api: "runtime config"
+secrets -> worker: "provider credentials"

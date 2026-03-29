@@ -5,6 +5,7 @@ const path = require("node:path");
 
 const INDEX_PATH = path.join(__dirname, "..", "index.html");
 const INDEX_JS_PATH = path.join(__dirname, "..", "assets", "js", "index.js");
+const SITE_GUIDE_JS_PATH = path.join(__dirname, "..", "assets", "js", "site-guide.js");
 const SCHEDULEASE_PATH = path.join(__dirname, "..", "schedulease.html");
 const MANAGEMENT_DASHBOARD_PATH = path.join(__dirname, "..", "management-dashboard.html");
 const MANAGEMENT_DASHBOARD_JS_PATH = path.join(__dirname, "..", "scripts", "management-dashboard.js");
@@ -13,6 +14,7 @@ const PORTAL_AUTH_CONFIG_PATH = path.join(__dirname, "..", "scripts", "portal-au
 
 const indexHtml = fs.readFileSync(INDEX_PATH, "utf8");
 const indexJs = fs.readFileSync(INDEX_JS_PATH, "utf8");
+const siteGuideJs = fs.readFileSync(SITE_GUIDE_JS_PATH, "utf8");
 const scheduleaseHtml = fs.readFileSync(SCHEDULEASE_PATH, "utf8");
 const managementDashboardHtml = fs.readFileSync(MANAGEMENT_DASHBOARD_PATH, "utf8");
 const managementDashboardJs = fs.readFileSync(MANAGEMENT_DASHBOARD_JS_PATH, "utf8");
@@ -61,6 +63,30 @@ test("homepage includes client recommendation carousel", () => {
     assert.match(indexHtml, /id="recommendation-next"/);
     assert.match(indexJs, /setupRecommendationCarousel/);
     assert.match(indexJs, /recommendation_carousel_navigate/);
+});
+
+test("homepage includes the website guide agent shell", () => {
+    assert.match(indexHtml, /id="guide-launcher"/);
+    assert.match(indexHtml, /id="guide-panel"/);
+    assert.match(indexHtml, /id="guide-choice-list"/);
+    assert.match(indexHtml, /data-guide-open="hero_cta"/);
+    assert.match(indexHtml, /assets\/js\/site-guide\.js/);
+});
+
+test("website guide script exposes structured guidance flows", () => {
+    assert.match(siteGuideJs, /GUIDE_STEPS/);
+    assert.match(siteGuideJs, /GUIDE_RECOMMENDATIONS/);
+    assert.match(siteGuideJs, /site_guide_recommendation/);
+    assert.match(siteGuideJs, /buildGuideBrief/);
+});
+
+test("homepage exposes public architecture library section with reference diagrams", () => {
+    assert.match(indexHtml, /id="architecture-library"/);
+    assert.match(indexHtml, /Reference architectures we use to reduce custom rebuilds/);
+    assert.match(indexHtml, /reference-waterapps-default-product-stack\.svg/);
+    assert.match(indexHtml, /reference-waterapps-serverless-intake\.svg/);
+    assert.match(indexHtml, /reference-waterapps-hosted-api-worker\.svg/);
+    assert.match(indexHtml, /reference-waterapps-observability-stack\.svg/);
 });
 
 test("analytics tracks google calendar fallback click", () => {

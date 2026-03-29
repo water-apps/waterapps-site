@@ -12,6 +12,7 @@ Static HTML/CSS/JS site with release-stamped deployment bundles. GitHub Pages re
 
 ```
 Browser → GitHub Pages (waterapps.com.au) → HTML/CSS/JS
+                                           → Website Guide Agent (guided site assistant)
                                            → Contact Form → AWS API Gateway → Lambda → SES
                                            → Portal Login → Auth gate (JWT, client-side)
                                            → Management Dashboard (protected)
@@ -28,6 +29,8 @@ Browser → GitHub Pages (waterapps.com.au) → HTML/CSS/JS
 | Page | Path | Notes |
 |---|---|---|
 | Homepage | `index.html` | Primary conversion page |
+| Website Guide Agent | `index.html` | Guided site assistant embedded in homepage |
+| Architecture Library | `index.html#architecture-library` | Public reference-architecture section with reusable D2 diagrams |
 | Insights library | `insights.html` + `insights-*.html` | ~20 articles |
 | Capability statement | `capability-statement.html` | PDF download variant available |
 | Enterprise readiness | `enterprise-readiness.html` | Buyer-facing trust page |
@@ -90,6 +93,8 @@ Endpoint is configured via `window.WATERAPPS_CONFIG.contactApiEndpoint` or the `
 
 Expected responses: `200` success, `400` field errors, `403` origin mismatch, `429` throttle, `500` fallback.
 
+The homepage also includes the Website Guide Agent MVP. In the current phase it is a structured guided assistant that recommends pages and can prefill a summary into the existing contact path. Pilot plan: [`docs/WEBSITE_GUIDE_AGENT_PILOT_PLAN.md`](docs/WEBSITE_GUIDE_AGENT_PILOT_PLAN.md).
+
 ---
 
 ## Local development
@@ -116,6 +121,7 @@ npm run build:css
 | Doc | Purpose |
 |---|---|
 | [`docs/DEPLOYMENT_GUIDE.md`](docs/DEPLOYMENT_GUIDE.md) | Deploy steps, GitHub Pages config, CloudFront migration path |
+| [`docs/WEBSITE_GUIDE_AGENT_PILOT_PLAN.md`](docs/WEBSITE_GUIDE_AGENT_PILOT_PLAN.md) | MVP scope, estimate, test path, and pilot plan for the guided website assistant |
 | [`docs/STAGING_SMOKE_RUNBOOK.md`](docs/STAGING_SMOKE_RUNBOOK.md) | Post-deploy smoke test procedure |
 | [`docs/RELEASE_TESTING_POLICY.md`](docs/RELEASE_TESTING_POLICY.md) | Release gate policy |
 | [`docs/cloudflare-security-headers-rollout.md`](docs/cloudflare-security-headers-rollout.md) | Security header improvement via Cloudflare |
