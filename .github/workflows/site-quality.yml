@@ -27,3 +27,39 @@ jobs:
 
       - name: Run portal auth unit tests
         run: node --test tests/portal-auth.test.js
+
+  booking-availability-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+
+      - name: Setup Node.js
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+        with:
+          node-version: "24"
+
+      - name: Install dependencies
+        if: ${{ hashFiles('package-lock.json') != '' }}
+        run: npm ci --prefer-offline --no-audit
+
+      - name: Run booking availability unit tests
+        run: node --test tests/booking-availability.test.js
+
+  accessibility-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+
+      - name: Setup Node.js
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+        with:
+          node-version: "24"
+
+      - name: Install dependencies
+        if: ${{ hashFiles('package-lock.json') != '' }}
+        run: npm ci --prefer-offline --no-audit
+
+      - name: Run accessibility validation
+        run: npm run test:accessibility

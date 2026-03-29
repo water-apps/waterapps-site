@@ -1,7 +1,7 @@
 # Release Testing Policy
 
-Status: Active
-Last updated: 2026-03-20
+Status: Active  
+Last updated: 2026-03-30  
 Owner: Website Engineering
 
 ## Mandatory Rule
@@ -15,31 +15,38 @@ If functional testing is not complete, release is blocked.
 All pull requests to `main` must pass:
 
 1. `author-email-guard`
-1. `checks` workflow job
-2. `portal-auth-tests`
+2. `site-quality`
 3. `booking-availability-tests`
-4. `zap-baseline`
+4. `accessibility-checks`
+5. `zap-baseline`
 
 Identity guard requirements:
 
 1. Commits must use an approved WaterApps email or approved GitHub noreply identity.
 2. Cross-account author/committer emails are blocked before merge.
 
-The `checks` job must include:
+The `site-quality` job must include:
 
 1. `scripts/check-site.sh`
-2. `tests/functional-smoke.test.js`
-3. Playwright e2e tests (`tests/e2e/*.spec.js`) against a local web server
-4. Playwright HTML artifact upload on every CI run
-5. Containerized execution using the Playwright Docker image to avoid per-run browser bootstrap drift
+2. `tests/portal-auth.test.js`
+3. Node dependency installation when a lockfile is present
 
-The CI workflow must also publish an MCP-ready quality context artifact so downstream agent/reporting workflows can consume release status without scraping raw logs.
+The `booking-availability-tests` job must:
+
+1. Run `tests/booking-availability.test.js` on every pull request.
+2. Fail on booking slot regressions before merge.
 
 The `zap-baseline` job must:
 
 1. Scan the pull request build against a local web server before merge.
 2. Scan `https://www.waterapps.com.au` weekly for drift and production regressions.
 3. Upload report artifacts on every run.
+
+The `accessibility-checks` job must:
+
+1. Run `html-validate` against all root HTML pages.
+2. Fail on accessibility-related markup regressions before merge.
+3. Enforce the repository accessibility baseline through `.htmlvalidate.json`.
 
 ## Required Functional Coverage (Minimum)
 
@@ -62,6 +69,7 @@ npm run test:functional-smoke
 npm run test:playwright
 npm run test:booking-availability
 npm run test:portal-auth
+npm run test:accessibility
 ```
 
 ## Post-Deploy Smoke Validation
