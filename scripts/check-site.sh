@@ -88,6 +88,22 @@ if grep -q 'calendly-inline-widget' index.html; then
 fi
 pass "booking flow markers present"
 
+# Website guide assistant regression guards
+grep -q 'id="guide-launcher"' index.html || fail "Expected website guide launcher on homepage"
+grep -q 'id="guide-panel"' index.html || fail "Expected website guide panel on homepage"
+grep -q 'data-guide-open="hero_cta"' index.html || fail "Expected hero CTA to open website guide"
+[[ -f "assets/js/site-guide.js" ]] || fail "Expected website guide script"
+grep -q 'site_guide_recommendation' assets/js/site-guide.js || fail "Expected website guide recommendation tracking"
+pass "website guide markers present"
+
+# Architecture library regression guards
+grep -q 'id="architecture-library"' index.html || fail "Expected architecture library section on homepage"
+grep -q 'reference-waterapps-default-product-stack.svg' index.html || fail "Expected default product stack diagram on homepage"
+grep -q 'reference-waterapps-serverless-intake.svg' index.html || fail "Expected serverless intake diagram on homepage"
+grep -q 'reference-waterapps-hosted-api-worker.svg' index.html || fail "Expected hosted api worker diagram on homepage"
+grep -q 'reference-waterapps-observability-stack.svg' index.html || fail "Expected observability diagram on homepage"
+pass "architecture library markers present"
+
 # Dashboard moderation regression guards
 [[ -f "scripts/management-dashboard.js" ]] || fail "Expected dashboard moderation script"
 grep -q 'id="reviews-moderation"' management-dashboard.html || fail "Expected reviews moderation section in management dashboard"

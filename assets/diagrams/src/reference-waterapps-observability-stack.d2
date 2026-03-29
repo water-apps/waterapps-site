@@ -1,0 +1,129 @@
+direction: right
+
+classes: {
+  source: {
+    style: {
+      fill: "#f5f3ff"
+      stroke: "#7c3aed"
+      font-color: "#2e1065"
+      shadow: true
+    }
+  }
+  observe: {
+    style: {
+      fill: "#e0f2fe"
+      stroke: "#0284c7"
+      font-color: "#082f49"
+      shadow: true
+    }
+  }
+  control: {
+    style: {
+      fill: "#f8fafc"
+      stroke: "#475569"
+      font-color: "#0f172a"
+      shadow: true
+    }
+  }
+  response: {
+    style: {
+      fill: "#ecfdf5"
+      stroke: "#047857"
+      font-color: "#052e16"
+      shadow: true
+    }
+  }
+  boundary: {
+    style: {
+      stroke: "#94a3b8"
+      stroke-dash: 4
+      fill: "#ffffff"
+    }
+  }
+}
+
+source_boundary: {
+  label: "Signal producers"
+  class: boundary
+  edge: {
+    label: "Edge / gateway logs"
+    class: source
+  }
+  api: {
+    label: "API logs\nrequest_id + api_error"
+    class: source
+    icon: ../../icons/vendors/simple/python.svg
+  }
+  worker: {
+    label: "Worker logs\njob envelope outcomes"
+    class: source
+    icon: ../../icons/vendors/simple/docker.svg
+  }
+  serverless: {
+    label: "Serverless logs\naudit_event and request flow"
+    class: source
+  }
+}
+
+observe_boundary: {
+  label: "Observability plane"
+  class: boundary
+  logs: {
+    label: "Central log groups"
+    class: observe
+    icon: ../../icons/vendors/aws/Arch_Amazon-CloudWatch_32.svg
+  }
+  metrics: {
+    label: "Metric filters + dashboards"
+    class: observe
+  }
+  alerts: {
+    label: "Alarms and escalation signals"
+    class: observe
+  }
+  evidence: {
+    label: "Audit evidence and release clues"
+    class: observe
+  }
+}
+
+response_boundary: {
+  label: "Operational response"
+  class: boundary
+  runbook: {
+    label: "Runbooks and operator triage"
+    class: response
+  }
+  release: {
+    label: "Release decisions and rollback"
+    class: response
+  }
+}
+
+control_boundary: {
+  label: "Control inputs"
+  class: boundary
+  tf: {
+    label: "Terraform alarms\nretention and policies"
+    class: control
+    icon: ../../icons/vendors/simple/terraform.svg
+  }
+  ci: {
+    label: "CI quality gates"
+    class: control
+    icon: ../../icons/vendors/simple/githubactions.svg
+  }
+}
+
+edge -> logs: "access and edge events"
+api -> logs: "structured request logs"
+worker -> logs: "job signals"
+serverless -> logs: "public intake logs"
+logs -> metrics: "filters and queries"
+metrics -> alerts: "thresholds and anomaly signals"
+logs -> evidence: "audit_event and error evidence"
+alerts -> runbook: "operator response"
+evidence -> release: "go / no-go context"
+tf -> metrics: "managed dashboards and alarms"
+tf -> logs: "retention and permissions"
+ci -> release: "quality gate outcomes"

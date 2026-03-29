@@ -1,0 +1,121 @@
+direction: right
+
+classes: {
+  actor: {
+    style: {
+      fill: "#fff7ed"
+      stroke: "#c2410c"
+      font-color: "#431407"
+      shadow: true
+    }
+  }
+  edge: {
+    style: {
+      fill: "#eff6ff"
+      stroke: "#2563eb"
+      font-color: "#0f172a"
+      shadow: true
+    }
+  }
+  runtime: {
+    style: {
+      fill: "#f5f3ff"
+      stroke: "#7c3aed"
+      font-color: "#2e1065"
+      shadow: true
+    }
+  }
+  async: {
+    style: {
+      fill: "#fff1f2"
+      stroke: "#e11d48"
+      font-color: "#4c0519"
+      shadow: true
+    }
+  }
+  data: {
+    style: {
+      fill: "#ecfdf5"
+      stroke: "#047857"
+      font-color: "#052e16"
+      shadow: true
+    }
+  }
+  observe: {
+    style: {
+      fill: "#e0f2fe"
+      stroke: "#0284c7"
+      font-color: "#082f49"
+      shadow: true
+    }
+  }
+  boundary: {
+    style: {
+      stroke: "#94a3b8"
+      stroke-dash: 4
+      fill: "#ffffff"
+    }
+  }
+}
+
+tenant: {
+  label: "Tenant user or operator"
+  class: actor
+}
+
+ingress_boundary: {
+  label: "Ingress boundary"
+  class: boundary
+  edge: {
+    label: "Edge + gateway\nTLS, auth handoff, WAF"
+    class: edge
+    icon: ../../icons/vendors/aws/Arch_Amazon-CloudFront_32.svg
+  }
+}
+
+runtime_boundary: {
+  label: "Hosted product runtime"
+  class: boundary
+  api: {
+    label: "FastAPI service\nrequest validation + writes"
+    class: runtime
+    icon: ../../icons/vendors/simple/python.svg
+  }
+  queue: {
+    label: "Queue / event bus\nretry boundary"
+    class: async
+  }
+  worker: {
+    label: "Worker service\nnotifications, sync, fan-out"
+    class: runtime
+    icon: ../../icons/vendors/simple/docker.svg
+  }
+  providers: {
+    label: "External providers\nemail, calendar, webhook targets"
+    class: edge
+  }
+}
+
+state_boundary: {
+  label: "State boundary"
+  class: boundary
+  db: {
+    label: "PostgreSQL\nbooking and tenant state"
+    class: data
+    icon: ../../icons/vendors/simple/postgresql.svg
+  }
+  audit: {
+    label: "Audit and job outcomes"
+    class: observe
+  }
+}
+
+tenant -> edge: "authenticated request"
+edge -> api: "runtime traffic"
+api -> db: "system-of-record write"
+api -> queue: "job envelope with correlation_id"
+queue -> worker: "retry-safe processing"
+worker -> db: "status and side-effect state"
+worker -> providers: "outbound integrations"
+api -> audit: "request logs and api_error"
+worker -> audit: "job_started / job_completed"

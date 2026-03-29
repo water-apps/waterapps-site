@@ -1,0 +1,132 @@
+direction: right
+
+classes: {
+  actor: {
+    style: {
+      fill: "#fff7ed"
+      stroke: "#c2410c"
+      font-color: "#431407"
+      shadow: true
+    }
+  }
+  edge: {
+    style: {
+      fill: "#eff6ff"
+      stroke: "#2563eb"
+      font-color: "#0f172a"
+      shadow: true
+    }
+  }
+  runtime: {
+    style: {
+      fill: "#f5f3ff"
+      stroke: "#7c3aed"
+      font-color: "#2e1065"
+      shadow: true
+    }
+  }
+  data: {
+    style: {
+      fill: "#ecfdf5"
+      stroke: "#047857"
+      font-color: "#052e16"
+      shadow: true
+    }
+  }
+  control: {
+    style: {
+      fill: "#f8fafc"
+      stroke: "#475569"
+      font-color: "#0f172a"
+      shadow: true
+    }
+  }
+  observe: {
+    style: {
+      fill: "#e0f2fe"
+      stroke: "#0284c7"
+      font-color: "#082f49"
+      shadow: true
+    }
+  }
+  boundary: {
+    style: {
+      stroke: "#94a3b8"
+      stroke-dash: 4
+      fill: "#ffffff"
+    }
+  }
+}
+
+visitor: {
+  label: "Website visitor"
+  class: actor
+}
+
+public_boundary: {
+  label: "Public edge"
+  class: boundary
+  site: {
+    label: "Static website"
+    class: edge
+    icon: ../../icons/vendors/simple/react.svg
+  }
+  gateway: {
+    label: "API Gateway\norigin and throttle guard"
+    class: edge
+  }
+}
+
+runtime_boundary: {
+  label: "Serverless runtime"
+  class: boundary
+  lambda: {
+    label: "Lambda handler\nvalidation + request contract"
+    class: runtime
+  }
+  email: {
+    label: "SES notification path"
+    class: data
+  }
+  reviews: {
+    label: "Optional moderation store"
+    class: data
+  }
+}
+
+observe_boundary: {
+  label: "Operational visibility"
+  class: boundary
+  logs: {
+    label: "CloudWatch logs\napi_error and audit_event"
+    class: observe
+    icon: ../../icons/vendors/aws/Arch_Amazon-CloudWatch_32.svg
+  }
+}
+
+control_boundary: {
+  label: "Delivery control plane"
+  class: boundary
+  gha: {
+    label: "GitHub Actions + OIDC"
+    class: control
+    icon: ../../icons/vendors/simple/githubactions.svg
+  }
+  tf: {
+    label: "Terraform-managed API,\nLambda, IAM, and logs"
+    class: control
+    icon: ../../icons/vendors/simple/terraform.svg
+  }
+}
+
+visitor -> site: "browser interaction"
+site -> gateway: "public API request"
+gateway -> lambda: "invoke handler"
+lambda -> email: "send notification"
+lambda -> reviews: "persist optional review flow"
+gateway -> logs: "access logs"
+lambda -> logs: "request_id, api_error,\naudit_event"
+gha -> tf: "approved release"
+tf -> gateway: "provision and update"
+tf -> lambda: "deploy handler"
+tf -> logs: "retention and access logs"
