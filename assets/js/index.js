@@ -389,7 +389,8 @@ if (typeof window !== 'undefined') {
                 setStatus('success', data?.message || 'Booking request submitted successfully.');
                 trackEvent('booking_request_submit', {
                     result: 'success',
-                    section: 'contact'
+                    section: 'contact',
+                    ...(form.dataset.pilotSource ? { cta_source: form.dataset.pilotSource } : {})
                 });
                 return;
             }
@@ -737,10 +738,16 @@ document.querySelectorAll('a').forEach(link => {
             });
         }
 
-        if (text.includes('Book SchedulEase Demo')) {
+        if (text.includes('Book SchedulEase Pilot Call') || text.includes('Book SchedulEase Demo')) {
+            const utmCampaign = this.dataset.utmCampaign || 'schedulease_pilot';
+            const bookingForm = document.getElementById('booking-form');
+            if (bookingForm) {
+                bookingForm.dataset.pilotSource = utmCampaign;
+            }
             trackEvent('cta_click', {
-                cta_type: 'book_schedulease_demo',
+                cta_type: 'book_schedulease_pilot',
                 cta_section: section,
+                cta_source: utmCampaign,
                 link_text: text
             });
         }
