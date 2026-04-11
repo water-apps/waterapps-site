@@ -23,7 +23,7 @@ rsync -a --delete \
   --exclude '.github/' \
   --exclude '.DS_Store' \
   --exclude 'dist/' \
-  --exclude 'docs/' \
+  --exclude '/docs/' \
   --exclude 'node_modules/' \
   --exclude 'scripts/' \
   --exclude 'test-results/' \

@@ -199,6 +199,35 @@ test.describe("asset integrity", () => {
     }
 });
 
+// ── Public PDF downloads ────────────────────────────────────────
+
+test.describe("public PDF downloads", () => {
+    const pdfs = [
+        "assets/docs/capability-statement.pdf",
+        "assets/docs/service-overview.pdf",
+        "assets/docs/reference-architecture.pdf",
+    ];
+
+    for (const pdfPath of pdfs) {
+        test(`${pdfPath} is downloadable (200)`, async ({ request }) => {
+            const response = await request.head(`/${pdfPath}`);
+            expect(response.status(), `${pdfPath} returned ${response.status()}`).toBe(200);
+        });
+    }
+
+    test("capability-statement-download.html loads and has download links", async ({ browser }) => {
+        const context = await browser.newContext({ javaScriptEnabled: false });
+        const page = await context.newPage();
+        await page.goto("/capability-statement-download.html");
+        await expect(page.locator("h1")).toContainText("Capability Statement");
+        const primaryLink = page.locator("#primaryPdfLink");
+        await expect(primaryLink).toBeVisible();
+        const href = await primaryLink.getAttribute("href");
+        expect(href).toContain("capability-statement.pdf");
+        await context.close();
+    });
+});
+
 // ── Accessibility basics ────────────────────────────────────────
 
 test.describe("accessibility basics", () => {
