@@ -389,7 +389,8 @@ if (typeof window !== 'undefined') {
                 setStatus('success', data?.message || 'Booking request submitted successfully.');
                 trackEvent('booking_request_submit', {
                     result: 'success',
-                    section: 'contact'
+                    section: 'contact',
+                    ...(pilotBookingSource ? { cta_source: pilotBookingSource } : {})
                 });
                 return;
             }
@@ -723,6 +724,8 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // Track CTA/contact clicks (GA4)
+let pilotBookingSource = null;
+
 document.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', function () {
         const href = this.getAttribute('href') || '';
@@ -737,10 +740,13 @@ document.querySelectorAll('a').forEach(link => {
             });
         }
 
-        if (text.includes('Book SchedulEase Demo')) {
+        if (text.includes('Book SchedulEase Pilot Call') || text.includes('Book SchedulEase Demo')) {
+            const utmCampaign = this.dataset.utmCampaign || 'schedulease_pilot';
+            pilotBookingSource = utmCampaign;
             trackEvent('cta_click', {
-                cta_type: 'book_schedulease_demo',
+                cta_type: 'book_schedulease_pilot',
                 cta_section: section,
+                cta_source: utmCampaign,
                 link_text: text
             });
         }
