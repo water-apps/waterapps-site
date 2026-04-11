@@ -17,7 +17,7 @@ test.describe("homepage blackbox checks", () => {
     });
 
     test("navigation links are visible and reachable", async ({ page }) => {
-        const navLinks = ["Services", "Products", "Insights", "Contact"];
+        const navLinks = ["Services", "Case Studies", "Insights", "Contact"];
         for (const label of navLinks) {
             const link = page.getByRole("link", { name: new RegExp(label, "i") }).first();
             await expect(link).toBeVisible();
