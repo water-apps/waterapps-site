@@ -65,13 +65,10 @@ test("contact form endpoint is present", () => {
     );
 });
 
-test("homepage includes client recommendation carousel", () => {
-    assert.match(indexHtml, /id="recommendation-carousel"/);
-    assert.match(indexHtml, /data-recommendation-slide/);
-    assert.match(indexHtml, /id="recommendation-prev"/);
-    assert.match(indexHtml, /id="recommendation-next"/);
-    assert.match(indexJs, /setupRecommendationCarousel/);
-    assert.match(indexJs, /recommendation_carousel_navigate/);
+test("homepage includes credentials section with company details", () => {
+    assert.match(indexHtml, /id="credentials"/);
+    assert.match(indexHtml, /Water Apps Pty Ltd/);
+    assert.match(indexHtml, /63 632 823 084/);
 });
 
 test("homepage includes the website guide agent shell", () => {
@@ -89,13 +86,9 @@ test("website guide script exposes structured guidance flows", () => {
     assert.match(siteGuideJs, /buildGuideBrief/);
 });
 
-test("homepage exposes public architecture library section with reference diagrams", () => {
-    assert.match(indexHtml, /id="architecture-library"/);
-    assert.match(indexHtml, /Reference architectures we use to reduce custom rebuilds/);
-    assert.match(indexHtml, /reference-waterapps-default-product-stack\.svg/);
-    assert.match(indexHtml, /reference-waterapps-serverless-intake\.svg/);
-    assert.match(indexHtml, /reference-waterapps-hosted-api-worker\.svg/);
-    assert.match(indexHtml, /reference-waterapps-observability-stack\.svg/);
+test("homepage exposes case studies section", () => {
+    assert.match(indexHtml, /id="case-studies"/);
+    assert.match(indexHtml, /Proven Impact in Regulated Environments/);
 });
 
 test("analytics tracks google calendar fallback click", () => {
