@@ -94,14 +94,21 @@ test("contact form submits successfully", async ({ page }) => {
 
     await page.goto("/#contact");
 
-    await page.fill("#contact-name", "Contact Test");
-    await page.fill("#contact-email", "contact.test@example.com");
-    await page.fill("#contact-company", "QA Org");
-    await page.fill("#contact-phone", "+61400000000");
-    await page.fill("#contact-message", "Playwright contact regression test.");
-    await page.click("#contact-submit");
+    // Step 1: Select a service chip
+    await page.locator('#guided-service-chips [data-chip]').first().click();
 
-    await expect(page.locator("#contact-form-status")).toContainText("Thank you for contacting WaterApps.");
+    // Step 2: Select an industry chip
+    await page.locator('#guided-industry-chips [data-chip]').first().click();
+
+    // Step 3: Fill contact details
+    await page.fill("#guided-name", "Contact Test");
+    await page.fill("#guided-email", "contact.test@example.com");
+    await page.fill("#guided-company", "QA Org");
+    await page.fill("#guided-phone", "+61400000000");
+    await page.fill("#guided-challenge", "Playwright contact regression test.");
+    await page.click("#guided-submit");
+
+    await expect(page.locator("#guided-step-3")).toContainText("Enquiry received");
     expect(contactPayload).not.toBeNull();
     expect(contactPayload.name).toBe("Contact Test");
     expect(contactPayload.email).toBe("contact.test@example.com");

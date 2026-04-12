@@ -399,7 +399,7 @@
     }
 
     function prefillContactFromGuide(recommendationId, answers) {
-        const messageField = document.getElementById('contact-message');
+        const messageField = document.getElementById('guided-challenge') || document.getElementById('contact-message');
         if (!messageField) return;
 
         const brief = buildGuideBrief(recommendationId, answers);
@@ -540,6 +540,7 @@
             button.hidden = !action;
             if (!action) return;
             button.textContent = action.label;
+            button.setAttribute('aria-label', action.label);
             button.onclick = () => {
                 emitGuideEvent('site_guide_cta', {
                     recommendation_id: recommendationId,

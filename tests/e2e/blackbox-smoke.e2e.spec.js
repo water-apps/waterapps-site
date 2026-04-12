@@ -33,8 +33,8 @@ test.describe("homepage blackbox checks", () => {
     test("contact form exists with required fields", async ({ page }) => {
         const contact = page.locator("#contact");
         await expect(contact).toBeVisible();
-        await expect(page.locator("#contact-name")).toBeVisible();
-        await expect(page.locator("#contact-email")).toBeVisible();
+        await expect(page.locator("#guided-intake")).toBeVisible();
+        await expect(page.locator("#guided-service-chips")).toBeVisible();
     });
 
     test("JSON-LD Organization schema is present", async ({ page }) => {
