@@ -399,7 +399,7 @@
     }
 
     function prefillContactFromGuide(recommendationId, answers) {
-        const messageField = document.getElementById('contact-message');
+        const messageField = document.getElementById('guided-challenge') || document.getElementById('contact-message');
         if (!messageField) return;
 
         const brief = buildGuideBrief(recommendationId, answers);

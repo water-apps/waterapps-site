@@ -13,6 +13,6 @@ test("website guide recommends a path and prefills the contact brief", async ({ 
 
     await page.getByRole("button", { name: /send a guided website enquiry/i }).click();
 
-    await expect(page.locator("#contact-message")).toHaveValue(/Website Guide summary/);
-    await expect(page.locator("#contact-message")).toHaveValue(/guided website assistant and lead qualification/i);
+    await expect(page.locator("#guided-challenge")).toHaveValue(/Website Guide summary/);
+    await expect(page.locator("#guided-challenge")).toHaveValue(/guided website assistant and lead qualification/i);
 });
