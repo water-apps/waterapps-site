@@ -441,10 +441,10 @@ if (typeof window !== 'undefined') {
     const SERVICES = [
         'DevSecOps & Cloud Transformation',
         'Platform Engineering',
-        'Quality Engineering & Release',
-        'Security & Compliance',
-        'AIOps & Observability',
-        'Workforce / Operating Model',
+        'Security & Compliance Automation',
+        'AIOps & Intelligent Automation',
+        'Quality Engineering & Release Assurance',
+        'Modernization Advisory',
         'Something Else',
     ];
 
