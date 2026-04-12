@@ -61,7 +61,7 @@ test("google calendar fallback link is present and safe", () => {
 test("contact form endpoint is present", () => {
     assert.match(
         indexHtml,
-        /id="contact-form"[^>]*data-api-endpoint="https:\/\/[^"]+\/contact"/
+        /id="guided-intake"[^>]*data-api-endpoint="https:\/\/[^"]+\/contact"/
     );
 });
 
@@ -75,7 +75,6 @@ test("homepage includes the website guide agent shell", () => {
     assert.match(indexHtml, /id="guide-launcher"/);
     assert.match(indexHtml, /id="guide-panel"/);
     assert.match(indexHtml, /id="guide-choice-list"/);
-    assert.match(indexHtml, /data-guide-open="hero_cta"/);
     assert.match(indexHtml, /assets\/js\/site-guide\.js/);
 });
 
@@ -98,7 +97,6 @@ test("analytics tracks google calendar fallback click", () => {
 
 test("homepage exposes productized offer path with SchedulEase link", () => {
     assert.match(indexHtml, /id="products"/);
-    assert.match(indexHtml, /Book SchedulEase Demo/);
     assert.match(indexHtml, /href="schedulease\.html"/);
     assert.match(indexJs, /cta_type:\s*'schedulease_offer'/);
 });

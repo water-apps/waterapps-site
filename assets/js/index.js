@@ -428,31 +428,136 @@ if (typeof window !== 'undefined') {
     loadSlots();
 })();
 
-(function setupContactForm() {
-    const form = document.getElementById('contact-form');
-    if (!form) return;
+(function setupGuidedIntake() {
+    const container = document.getElementById('guided-intake');
+    if (!container) return;
 
-    const statusEl = document.getElementById('contact-form-status');
-    const submitButton = document.getElementById('contact-submit');
-    const fieldNames = ['name', 'email', 'company', 'phone', 'message'];
     const endpoint = (
-        form.dataset.apiEndpoint ||
+        container.dataset.apiEndpoint ||
         (window.WATERAPPS_CONFIG && window.WATERAPPS_CONFIG.contactApiEndpoint) ||
-        window.WATERAPPS_CONTACT_API_ENDPOINT ||
         ''
     ).trim();
 
-    function setStatus(kind, message) {
-        if (!statusEl) return;
-        statusEl.className = 'rounded-lg px-4 py-3 text-sm';
-        if (kind === 'success') {
-            statusEl.classList.add('bg-green-50', 'text-green-800', 'border', 'border-green-200');
-        } else if (kind === 'warn') {
-            statusEl.classList.add('bg-amber-50', 'text-amber-900', 'border', 'border-amber-200');
+    const SERVICES = [
+        'DevSecOps & Cloud Transformation',
+        'Platform Engineering',
+        'Quality Engineering & Release',
+        'Security & Compliance',
+        'AIOps & Observability',
+        'Workforce / Operating Model',
+        'Something Else',
+    ];
+
+    const INDUSTRIES = [
+        'Banking & Financial Services',
+        'Government & Public Sector',
+        'Telco & Utilities',
+        'Insurance',
+        'Healthcare',
+        'Technology / SaaS',
+        'Other',
+    ];
+
+    const state = { service: null, industry: null };
+
+    const step1El = document.getElementById('guided-step-1');
+    const step2El = document.getElementById('guided-step-2');
+    const step3El = document.getElementById('guided-step-3');
+    const serviceChipsEl = document.getElementById('guided-service-chips');
+    const industryChipsEl = document.getElementById('guided-industry-chips');
+    const summaryEl = document.getElementById('guided-summary');
+    const statusEl = document.getElementById('guided-status');
+    const submitBtn = document.getElementById('guided-submit');
+    const back2Btn = document.getElementById('guided-back-2');
+    const back3Btn = document.getElementById('guided-back-3');
+
+    const dots = {
+        1: document.querySelector('[data-step-dot="1"]'),
+        2: document.querySelector('[data-step-dot="2"]'),
+        3: document.querySelector('[data-step-dot="3"]'),
+    };
+
+    function safeHtml(str) {
+        const d = document.createElement('div');
+        d.textContent = str;
+        return d.innerHTML;
+    }
+
+    function renderChips(container, items, selected, onSelect) {
+        container.innerHTML = items.map((item) => {
+            const active = item === selected;
+            return `<button type="button"
+                data-chip="${safeHtml(item)}"
+                class="px-4 py-2 rounded-full border text-sm font-medium transition
+                    ${active
+                        ? 'bg-blue-600 border-blue-600 text-white'
+                        : 'bg-white border-gray-300 text-gray-700 hover:border-blue-400 hover:text-blue-700'
+                    }">
+                ${safeHtml(item)}
+            </button>`;
+        }).join('');
+
+        container.querySelectorAll('[data-chip]').forEach((btn) => {
+            btn.addEventListener('click', () => onSelect(btn.dataset.chip));
+        });
+    }
+
+    function updateDots(activeStep) {
+        [1, 2, 3].forEach((n) => {
+            const dot = dots[n];
+            if (!dot) return;
+            const done = n < activeStep;
+            const active = n === activeStep;
+            dot.className = 'w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ' + (
+                done    ? 'bg-blue-200 text-blue-800' :
+                active  ? 'bg-blue-600 text-white' :
+                          'bg-gray-200 text-gray-500'
+            );
+            dot.textContent = done ? '✓' : String(n);
+        });
+    }
+
+    function showStep(n) {
+        [step1El, step2El, step3El].forEach((el, i) => {
+            if (el) el.classList.toggle('hidden', i + 1 !== n);
+        });
+        updateDots(n);
+    }
+
+    function updateSummary() {
+        if (!summaryEl) return;
+        if (state.service || state.industry) {
+            const parts = [];
+            if (state.service) parts.push('Service: <strong>' + safeHtml(state.service) + '</strong>');
+            if (state.industry) parts.push('Industry: <strong>' + safeHtml(state.industry) + '</strong>');
+            summaryEl.innerHTML = parts.join(' &nbsp;·&nbsp; ');
+            summaryEl.classList.remove('hidden');
         } else {
-            statusEl.classList.add('bg-red-50', 'text-red-800', 'border', 'border-red-200');
+            summaryEl.classList.add('hidden');
         }
-        statusEl.textContent = message;
+    }
+
+    function buildMessage() {
+        const challenge = (document.getElementById('guided-challenge')?.value || '').trim();
+        return [
+            state.service  ? 'Enquiry type: ' + state.service : null,
+            state.industry ? 'Industry: ' + state.industry    : null,
+            '',
+            'Challenge / goal:',
+            challenge,
+        ].filter((l) => l !== null).join('\n');
+    }
+
+    function setStatus(kind, msg) {
+        if (!statusEl) return;
+        statusEl.className = 'rounded-lg px-4 py-3 text-sm mb-4';
+        statusEl.classList.add(
+            kind === 'success' ? 'bg-green-50'  : kind === 'warn' ? 'bg-amber-50'  : 'bg-red-50',
+            kind === 'success' ? 'text-green-800' : kind === 'warn' ? 'text-amber-900' : 'text-red-800',
+            kind === 'success' ? 'border-green-200' : kind === 'warn' ? 'border-amber-200' : 'border-red-200',
+            'border'
+        );
+        statusEl.textContent = msg;
         statusEl.classList.remove('hidden');
     }
 
@@ -462,123 +567,126 @@ if (typeof window !== 'undefined') {
         statusEl.classList.add('hidden');
     }
 
+    function showFieldError(fieldId, msg) {
+        const el = document.getElementById('guided-error-' + fieldId);
+        if (!el) return;
+        el.textContent = msg;
+        el.classList.remove('hidden');
+    }
+
     function clearFieldErrors() {
-        fieldNames.forEach((name) => {
-            const input = form.elements.namedItem(name);
-            const errorEl = document.getElementById(`contact-error-${name}`);
-            if (input && typeof input.removeAttribute === 'function') {
-                input.removeAttribute('aria-invalid');
-            }
-            if (errorEl) {
-                errorEl.textContent = '';
-                errorEl.classList.add('hidden');
-            }
+        ['name', 'email', 'challenge'].forEach((f) => {
+            const el = document.getElementById('guided-error-' + f);
+            if (el) { el.textContent = ''; el.classList.add('hidden'); }
         });
     }
 
-    function applyFieldErrors(fieldErrors) {
-        if (!fieldErrors || typeof fieldErrors !== 'object') return;
-        Object.entries(fieldErrors).forEach(([name, message]) => {
-            const input = form.elements.namedItem(name);
-            const errorEl = document.getElementById(`contact-error-${name}`);
-            if (input && typeof input.setAttribute === 'function') {
-                input.setAttribute('aria-invalid', 'true');
-            }
-            if (errorEl) {
-                errorEl.textContent = String(message || 'Please check this field.');
-                errorEl.classList.remove('hidden');
-            }
-        });
+    function setSubmitting(busy) {
+        if (!submitBtn) return;
+        submitBtn.disabled = busy;
+        submitBtn.textContent = busy ? 'Sending…' : 'Send Enquiry';
     }
 
-    function setSubmitting(isSubmitting) {
-        if (!submitButton) return;
-        submitButton.disabled = isSubmitting;
-        submitButton.textContent = isSubmitting ? 'Sending...' : 'Send Message';
+    // ── Chip render ──────────────────────────────────────────
+
+    function onIndustrySelect(value) {
+        state.industry = value;
+        renderChips(industryChipsEl, INDUSTRIES, state.industry, onIndustrySelect);
+        setTimeout(() => { updateSummary(); showStep(3); }, 120);
     }
 
-    form.addEventListener('submit', async (event) => {
-        event.preventDefault();
+    function onServiceSelect(value) {
+        state.service = value;
+        renderChips(serviceChipsEl, SERVICES, state.service, onServiceSelect);
+        renderChips(industryChipsEl, INDUSTRIES, state.industry, onIndustrySelect);
+        setTimeout(() => showStep(2), 120);
+    }
+
+    renderChips(serviceChipsEl, SERVICES, state.service, onServiceSelect);
+    renderChips(industryChipsEl, INDUSTRIES, state.industry, onIndustrySelect);
+
+    // ── Navigation ───────────────────────────────────────────
+
+    back2Btn && back2Btn.addEventListener('click', () => showStep(1));
+    back3Btn && back3Btn.addEventListener('click', () => showStep(2));
+
+    // ── Submit ───────────────────────────────────────────────
+
+    submitBtn && submitBtn.addEventListener('click', async () => {
         clearStatus();
         clearFieldErrors();
 
+        const name      = (document.getElementById('guided-name')?.value      || '').trim();
+        const email     = (document.getElementById('guided-email')?.value     || '').trim();
+        const company   = (document.getElementById('guided-company')?.value   || '').trim();
+        const phone     = (document.getElementById('guided-phone')?.value     || '').trim();
+        const challenge = (document.getElementById('guided-challenge')?.value || '').trim();
+
+        let hasError = false;
+        if (!name)      { showFieldError('name', 'Name is required.');          hasError = true; }
+        if (!email)     { showFieldError('email', 'Work email is required.');    hasError = true; }
+        if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                          showFieldError('email', 'Enter a valid email address.'); hasError = true; }
+        if (!challenge) { showFieldError('challenge', 'Please describe your challenge or goal.'); hasError = true; }
+        if (hasError) return;
+
         if (!endpoint) {
-            setStatus('warn', 'Contact form API is not configured yet. Please email varun@waterapps.com.au or use the booking link above.');
-            trackEvent('contact_form_submit', {
-                result: 'blocked',
-                reason: 'endpoint_not_configured',
-                section: 'contact'
-            });
+            setStatus('warn', 'Form endpoint not configured. Please email varun@waterapps.com.au directly.');
+            trackEvent('contact_form_submit', { result: 'blocked', reason: 'endpoint_not_configured', section: 'guided_intake' });
             return;
         }
 
-        const formData = new FormData(form);
-        const payload = {
-            name: (formData.get('name') || '').toString(),
-            email: (formData.get('email') || '').toString(),
-            company: (formData.get('company') || '').toString(),
-            phone: (formData.get('phone') || '').toString(),
-            message: (formData.get('message') || '').toString()
-        };
+        const message = buildMessage();
+        const payload = { name, email, company, phone, message };
 
         setSubmitting(true);
-
         try {
             const response = await fetch(endpoint, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
             });
 
             let data = null;
-            try {
-                data = await response.json();
-            } catch {
-                data = null;
-            }
+            try { data = await response.json(); } catch { data = null; }
 
             if (response.ok) {
-                setStatus('success', data?.message || "Thank you for contacting WaterApps. We'll be in touch shortly.");
-                form.reset();
-                trackEvent('contact_form_submit', {
-                    result: 'success',
-                    section: 'contact'
-                });
+                step3El.innerHTML = `
+                    <div class="text-center py-8">
+                        <svg class="w-14 h-14 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Enquiry received</h3>
+                        <p class="text-gray-600 text-sm max-w-xs mx-auto">
+                            ${safeHtml(data?.message || "Thanks for reaching out. We'll be in touch shortly.")}
+                        </p>
+                    </div>`;
+                updateDots(4);
+                trackEvent('contact_form_submit', { result: 'success', section: 'guided_intake', service: state.service, industry: state.industry });
                 return;
             }
 
             if (response.status === 400 && data?.fieldErrors) {
-                applyFieldErrors(data.fieldErrors);
-                setStatus('error', data?.message || 'Please correct the highlighted fields and try again.');
+                Object.entries(data.fieldErrors).forEach(([k, v]) => showFieldError(k, v));
+                setStatus('error', data?.message || 'Please correct the highlighted fields.');
             } else if (response.status === 403) {
-                setStatus('error', 'This form cannot be submitted from the current site origin. Please email varun@waterapps.com.au directly.');
+                setStatus('error', 'This form cannot be submitted from the current origin. Please email varun@waterapps.com.au.');
             } else if (response.status === 429) {
                 setStatus('error', 'Too many requests. Please wait a moment and try again.');
             } else {
-                setStatus('error', data?.message || 'Something went wrong. Please email varun@waterapps.com.au directly.');
+                setStatus('error', data?.message || 'Something went wrong. Please email varun@waterapps.com.au.');
             }
-
-            trackEvent('contact_form_submit', {
-                result: 'error',
-                status_code: response.status,
-                error_code: data?.code || 'unknown',
-                section: 'contact'
-            });
+            trackEvent('contact_form_submit', { result: 'error', status_code: response.status, section: 'guided_intake' });
         } catch (err) {
-            setStatus('error', 'Unable to submit the form right now. Please check your connection or email varun@waterapps.com.au directly.');
-            trackEvent('contact_form_submit', {
-                result: 'error',
-                status_code: 0,
-                error_code: 'network_error',
-                section: 'contact'
-            });
-            console.error('Contact form submit failed', err);
+            setStatus('error', 'Unable to submit right now. Check your connection or email varun@waterapps.com.au.');
+            trackEvent('contact_form_submit', { result: 'error', status_code: 0, error_code: 'network_error', section: 'guided_intake' });
+            console.error('Guided intake submit failed', err);
         } finally {
             setSubmitting(false);
         }
     });
+
+    showStep(1);
 })();
 
 (function setupRecommendationCarousel() {

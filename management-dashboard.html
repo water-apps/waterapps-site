@@ -6,7 +6,6 @@
     <title>WaterApps Management Dashboard</title>
     <meta name="description" content="WaterApps management dashboard for delivery, security, operations, and commercial governance.">
     <meta name="robots" content="noindex,nofollow">
-    <meta id="dashboardMetaRedirect" http-equiv="refresh" content="0;url=portal-login.html">
     <link rel="icon" type="image/png" href="logo.png">
     <script>
         (function enforceCanonicalHost() {
@@ -15,6 +14,10 @@
                 window.location.replace("https://www.waterapps.com.au" + window.location.pathname + window.location.search + window.location.hash);
             }
         })();
+        // JS-based fallback redirect (cancellable, unlike meta http-equiv="refresh")
+        window.__dashboardFallbackTimer = setTimeout(function () {
+            window.location.replace('portal-login.html');
+        }, 2000);
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -36,10 +39,7 @@
                     return;
                 }
 
-                const fallbackRedirect = document.getElementById('dashboardMetaRedirect');
-                if (fallbackRedirect) {
-                    fallbackRedirect.remove();
-                }
+                clearTimeout(window.__dashboardFallbackTimer);
 
                 window.__WATERAPPS_PORTAL_AUTH_STATUS = authStatus;
                 document.documentElement.setAttribute('data-portal-auth', 'ok');

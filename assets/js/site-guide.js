@@ -540,6 +540,7 @@
             button.hidden = !action;
             if (!action) return;
             button.textContent = action.label;
+            button.setAttribute('aria-label', action.label);
             button.onclick = () => {
                 emitGuideEvent('site_guide_cta', {
                     recommendation_id: recommendationId,
